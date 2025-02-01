@@ -1,0 +1,191 @@
+/* body {
+    background: url('../images/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Arial', sans-serif;
+} */
+
+.card {
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: #4e73df;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 10px 10px 0 0;
+}
+
+.btn-success {
+    background: #1cc88a;
+    border: none;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn-success:hover {
+    background: #17a673;
+}
+
+.container-fluid {
+    padding-top: 100px;
+}
+
+h1 {
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-control-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #aaa;
+    transition: all 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+.form-control:focus+.form-control-placeholder,
+.form-control-placeholder.active {
+    top: -10px;
+    left: 10px;
+    font-size: 12px;
+    color: green;
+}
+                /* body {
+                    background: url('../../frontend/images/bppmddtt.jpg') no-repeat center bottom fixed;
+                    background-size: cover;
+                    background-position: center bottom;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                }
+          */
+                  .background-container {
+                      background: url('../../frontend/images/bppmddtt.jpg') no-repeat center center;
+                      background-size: cover;
+                      /* Menutupi seluruh elemen dengan gambar */
+                      background-position: center center;
+                      /* Pastikan gambar berada di tengah */
+                      padding: 50px;
+                      /* Memberikan padding agar teks tidak terlalu menempel ke tepi */
+                      border-radius: 10px;
+                      /* Memberikan sudut melengkung jika diperlukan */
+                      position: relative;
+                      /* Agar transparansi berfungsi pada teks */
+                      z-index: 1;
+                      /* Agar teks berada di atas gambar */
+                  }
+        
+                  .background-container h1,
+                  .background-container h2,
+                  .background-container p,
+                  .background-container .btn {
+                      position: relative;
+                      z-index: 2;
+                      /* Memastikan teks dan tombol berada di atas gambar */
+                  }
+        
+                  /* Tambahkan transparansi di latar belakang agar teks lebih terbaca */
+                  .background-container::before {
+                      content: '';
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      width: 100%;
+                      height: 100%;
+                      background: rgba(255, 255, 255, 0.7);
+                      /* Transparansi putih */
+                      z-index: 1;
+                      /* Letakkan di bawah teks */
+                      border-radius: 10px;
+                      /* Sudut melengkung jika perlu */
+                  }
+    
+         .content-container {
+             background: rgba(255, 255, 255, 0.9);
+             padding: 20px;
+             border-radius: 10px;
+             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+         }
+    
+         .half-circle {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #28a745, #218838);
+            border-bottom-left-radius: 100% 120px;
+            border-bottom-right-radius: 100% 120px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            margin-top: 0;
+         }
+    
+         .navbar {
+             background: rgba(255, 255, 255, 0.8) !important;
+             backdrop-filter: blur(10px);
+         }
+    
+         .btn-primary {
+             background: #00ffd0;
+             border: none;
+             transition: all 0.3s ease-in-out;
+         }
+    
+         .btn-primary:hover {
+             background: #00ffd0;
+         }
+
+#content-wrapper {
+    flex: 1;
+}
+
+                 footer.sticky-footer {
+                     background: linear-gradient(135deg, #00ffd0, #0056b3);
+                     /* Latar belakang gradasi */
+                     color: white;
+                     /* Teks putih untuk kontras */
+                     padding: 20px 0;
+                     /* Memberikan padding vertikal */
+                     box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+                     /* Memberikan bayangan lembut */
+                     position: relative;
+                     z-index: 10;
+                     /* Pastikan footer tidak tertutup elemen lain */
+                 }
+        
+                 footer .container {
+                     display: flex;
+                     justify-content: center;
+                     align-items: center;
+                 }
+        
+                 footer .copyright {
+                     font-size: 14px;
+                     font-weight: 400;
+                     letter-spacing: 1px;
+                     text-align: center;
+                     text-transform: capitalize;
+                 }
+        
+                 footer .copyright span {
+                     display: inline-block;
+                     padding: 5px 10px;
+                 }
+        
+                 /* Efek hover pada teks copyright */
+                 footer .copyright span:hover {
+                     color: #28a745;
+                     transition: color 0.3s ease;
+                 }
+         
