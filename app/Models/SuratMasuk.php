@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SuratMasuk extends Model
 {
     use HasFactory;
+    protected $fillable = ['tanggal_terima', 'disposisi'];
 
     protected $table = 'surat_masuk';
     protected $primaryKey = 'id_masuk';

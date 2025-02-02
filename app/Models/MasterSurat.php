@@ -9,6 +9,8 @@ class MasterSurat extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['nomor_surat', 'tanggal_surat', 'pengirim', 'perihal'];
+
     protected $table = 'master_surat';
     protected $primaryKey = 'id_surat';
 

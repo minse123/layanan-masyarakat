@@ -41,7 +41,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/filter-data', [AdminController::class, 'filterData'])->name('admin.filter-data');
     Route::get('/cetak-pdf', [AdminController::class, 'cetakPDF'])->name('admin.cetak-pdf');
 
-    Route::get('/surat-masuk', [SuratController::class, 'Masukindex'])->name('admin.surat-masuk.index');
+    Route::get('/surat-masuk', [SuratController::class, 'Masukindex'])->name('admin.surat-masuk');
     Route::post('/surat-masuk/simpan', [SuratController::class, 'simpanData'])->name('admin.surat-masuk.simpan');
     Route::post('/surat-masuk/update', [SuratController::class, 'updateData'])->name('admin.surat-masuk.update');
     Route::post('/surat-masuk/hapus', [SuratController::class, 'hapusData'])->name('admin.surat-masuk.hapus');

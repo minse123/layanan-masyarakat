@@ -19,7 +19,7 @@
             <!-- Filter Data -->
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
-                    <form action="{{ url('admin/surat-masuk/filter-data') }}" method="GET">
+                    <form action="{{ route('admin.surat-masuk.filter') }}" method="GET">
                         <div class="row g-3 align-items-end">
                             <div class="col-md-3">
                                 <label for="filter" class="form-label">Pilih Periode</label>
@@ -44,7 +44,7 @@
                                 </button>
                             </div>
                             <div class="col-md-3">
-                                <a href="{{ url('admin/surat-masuk') }}" class="btn btn-outline-secondary w-100">
+                                <a href="{{ url('/surat-masuk') }}" class="btn btn-outline-secondary w-100">
                                     <i class="fas fa-sync me-2"></i> Reset
                                 </a>
                             </div>
@@ -60,10 +60,10 @@
                             <th>No.</th>
                             <th>Nomor Surat</th>
                             <th>Tanggal Surat</th>
+                            <th>Tanggal Terima</th>
                             <th>Pengirim</th>
                             <th>Perihal</th>
                             <th>Disposisi</th>
-                            <th>File</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -73,26 +73,17 @@
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $item->masterSurat->nomor_surat ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->tanggal_surat ?? '-' }}</td>
+                                <td>{{ $item->tanggal_terima ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->pengirim ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->perihal ?? '-' }}</td>
                                 <td>{{ $item->disposisi }}</td>
                                 <td>
-                                    @if ($item->file)
-                                        <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
-                                            class="btn btn-sm btn-info">
-                                            <i class="fas fa-download"></i> Download
-                                        </a>
-                                    @else
-                                        <span class="text-muted">Tidak ada file</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                        data-bs-target="#editModal{{ $item->id }}">
+                                    <button type="button" class="btn btn-warning" data-toggle="modal"
+                                        data-target="#editModal{{ $item->id }}">
                                         <i class="fas fa-edit"></i> Edit
                                     </button>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#hapusModal{{ $item->id }}">
+                                    <button type="button" class="btn btn-danger" data-toggle="modal"
+                                        data-target="#hapusModal{{ $item->id }}">
                                         <i class="fas fa-trash"></i> Hapus
                                     </button>
                                 </td>
@@ -103,16 +94,41 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Edit Surat Masuk</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                data-dismiss="modal">X</button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ url('admin/surat-masuk/update') }}" method="post">
+                                            <form action="{{ route('admin.surat-masuk.update') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $item->id }}">
                                                 <div class="form-group">
                                                     <label>Nomor Surat</label>
                                                     <input type="text" class="form-control" name="nomor_surat"
                                                         value="{{ $item->masterSurat->nomor_surat }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Tanggal Surat</label>
+                                                    <input type="date" class="form-control" name="tanggal_surat"
+                                                        value="{{ $item->masterSurat->tanggal_surat }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Tanggal Terima</label>
+                                                    <input type="date" class="form-control" name="tanggal_terima"
+                                                        value="{{ $item->tanggal_terima }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Pengirim</label>
+                                                    <input type="text" class="form-control" name="pengirim"
+                                                        value="{{ $item->masterSurat->pengirim }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Perihal</label>
+                                                    <input type="text" class="form-control" name="perihal"
+                                                        value="{{ $item->masterSurat->perihal }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Disposisi</label>
+                                                    <textarea class="form-control" name="disposisi">{{ $item->disposisi }}</textarea>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary">Update</button>
                                             </form>
@@ -126,7 +142,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Konfirmasi Hapus</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            <button type="button" class="btn-close" data -dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
                                             <p>Apakah Anda yakin ingin menghapus surat masuk ini?</p>
@@ -138,7 +154,7 @@
                                                 <button type="submit" class="btn btn-danger">Hapus</button>
                                             </form>
                                             <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Batal</button>
+                                                data-dismiss="modal">Batal</button>
                                         </div>
                                     </div>
                                 </div>

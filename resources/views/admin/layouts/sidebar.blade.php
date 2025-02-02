@@ -48,7 +48,7 @@
         </a>
         <div class="collapse" id="reportTamuCollapse">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.surat-masuk.index') }}">Surat Masuk</a>
+                <a class="collapse-item" href="{{ route('admin.surat-masuk') }}">Surat Masuk</a>
                 <a class="collapse-item" href="/">Tindak Lanjut Surat</a>
                 <a class="collapse-item" href="/">Surat Keluar</a>
             </div>
