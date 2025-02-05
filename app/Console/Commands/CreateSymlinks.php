@@ -1,26 +1,33 @@
 <?php
 
-namespace App\Providers;
+namespace App\Console\Commands;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-class AppServiceProvider extends ServiceProvider
+class CreateSymlinks extends Command
 {
     /**
-     * Register any application services.
+     * The name and signature of the console command.
+     *
+     * @var string
      */
-    public function register(): void
-    {
-        //
-    }
+    protected $signature = 'symlink:create';
 
     /**
-     * Bootstrap any application services.
+     * The console command description.
+     *
+     * @var string
      */
-    public function boot()
+    protected $description = 'Create symlinks for storage and images';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
     {
         $this->createSymlinks();
+        $this->info('Symlinks created successfully.');
     }
 
     public function createSymlinks()
@@ -33,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
             File::link($appPublicPath, $publicStoragePath);
         }
 
-        // Buat symlink untuk images (jika ada)
+        // // Buat symlink untuk images (jika ada)
         // $publicImagesPath = public_path('images');
         // $appImagesPath = storage_path('app/images');
 

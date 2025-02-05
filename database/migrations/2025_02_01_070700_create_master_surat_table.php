@@ -16,9 +16,10 @@ return new class extends Migration {
             $table->date('tanggal_surat');
             $table->text('perihal');
             $table->string('pengirim');
-            $table->string('penerima');
-            $table->enum('status', ['Masuk', 'Proses', 'Keluar']);
+            $table->enum('status', ['Proses', 'Terima', 'Tolak']);
             $table->text('keterangan')->nullable();
+            $table->unsignedBigInteger('id_user');
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

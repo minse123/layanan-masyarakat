@@ -4,10 +4,6 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Data Surat Masuk</span>
             <div class="d-flex">
-                <!-- Tombol Tambah Data -->
-                <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#tambahModal">
-                    <i class="fas fa-plus"></i> Tambah Data
-                </button>
                 <!-- Tombol Cetak PDF -->
                 <a href="{{ route('admin.surat-masuk.cetak-pdf', ['filter' => session('filter'), 'tanggal' => session('tanggal')]) }}"
                     class="btn btn-primary">
@@ -64,7 +60,6 @@
                             <th>Pengirim</th>
                             <th>Perihal</th>
                             <th>Disposisi</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,30 +72,21 @@
                                 <td>{{ $item->masterSurat->pengirim ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->perihal ?? '-' }}</td>
                                 <td>{{ $item->disposisi }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning" data-toggle="modal"
-                                        data-target="#editModal{{ $item->id }}">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </button>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal"
-                                        data-target="#hapusModal{{ $item->id }}">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </td>
                             </tr>
                             <!-- Modal Edit -->
-                            <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1">
+                            <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
+                                aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Edit Surat Masuk</h5>
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                data-dismiss="modal">X</button>
+                                            <button type="button" class="btn-close" data-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <form action="{{ route('admin.surat-masuk.update') }}" method="post">
                                                 @csrf
-                                                <input type="hidden" name="id" value="{{ $item->id }}">
+                                                <input type="hidden" name="id" value="{{ $item->id_masuk }}">
                                                 <div class="form-group">
                                                     <label>Nomor Surat</label>
                                                     <input type="text" class="form-control" name="nomor_surat"
@@ -137,12 +123,14 @@
                                 </div>
                             </div>
                             <!-- Modal Hapus -->
-                            <div class="modal fade" id="hapusModal{{ $item->id }}" tabindex="-1">
+                            <div class="modal fade" id="hapusModal{{ $item->id }}" tabindex="-1"
+                                aria-labelledby="hapusModalLabel{{ $item->id }}" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">Konfirmasi Hapus</h5>
-                                            <button type="button" class="btn-close" data -dismiss="modal"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <p>Apakah Anda yakin ingin menghapus surat masuk ini?</p>
@@ -154,7 +142,7 @@
                                                 <button type="submit" class="btn btn-danger">Hapus</button>
                                             </form>
                                             <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Batal</button>
+                                                data-bs-dismiss="modal">Batal</button>
                                         </div>
                                     </div>
                                 </div>
@@ -166,6 +154,7 @@
         </div>
     </div>
 @endsection
+
 @section('script')
     <script>
         let table = new DataTable('#myTable');

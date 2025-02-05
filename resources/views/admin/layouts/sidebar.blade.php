@@ -37,10 +37,27 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.tamu') }}">
             <i class="fas fa-fw fa-users"></i>
-            <span>Daftar Buku Tamu</span></a>
+            <span>Master Buku Tamu</span></a>
+        <a class="nav-link" href="{{ route('admin.master.surat') }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Master Administrasi Surat</span></a>
+        <a class="nav-link" href="{{ url('#') }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Master Konsultasi Pelatihan</span></a>
     </li>
 
+
+
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Report
+    </div>
     <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.report.tamu') }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Report Tamu</span></a>
         <a class="nav-link" data-toggle="collapse" href="#reportTamuCollapse" role="button" aria-expanded="false"
             aria-controls="reportTamuCollapse">
             <i class="fas fa-fw fa-users"></i>
@@ -48,21 +65,17 @@
         </a>
         <div class="collapse" id="reportTamuCollapse">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ route('admin.surat-masuk') }}">Surat Masuk</a>
-                <a class="collapse-item" href="/">Tindak Lanjut Surat</a>
-                <a class="collapse-item" href="/">Surat Keluar</a>
+                <a class="collapse-item" href="{{ route('admin.surat-masuk') }}">Report Surat Masuk</a>
+                <a class="collapse-item" href="{{ url('#') }}">Report Tindak Lanjut Surat</a>
+                <a class="collapse-item" href="{{ url('#') }}">Report Surat Keluar</a>
             </div>
         </div>
+        <a class="nav-link" href="{{ url('#') }}">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Report Konsultasi Pelatihan</span></a>
     </li>
 
-    <!-- Divider -->
     <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Manajemen Akun
-    </div>
-
     <!-- Nav Item - Charts -->
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.akun') }}">

@@ -39,10 +39,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/update-data', [AdminController::class, 'updateTamu'])->name('admin-update-data');
     Route::post('/hapus-data', [AdminController::class, 'hapusTamu'])->name('admin-hapus-data');
     Route::get('/filter-data', [AdminController::class, 'filterData'])->name('admin.filter-data');
-    Route::get('/cetak-pdf', [AdminController::class, 'cetakPDF'])->name('admin.cetak-pdf');
+
+    Route::get('/admin/report/tamu', [AdminController::class, 'reportdataTamu'])->name('admin.report.tamu');
+    Route::get('/admin/report/tamu/filter-data', [AdminController::class, 'reportfilterData'])->name('admin.report.tamu.filter-data');
+    Route::get('/admin/report/tamu/cetak-pdf', [AdminController::class, 'cetakPDF'])->name('admin.report.tamu.cetak-pdf');
+
+    Route::get('/admin/surat', [SuratController::class, 'Suratindex'])->name('admin.master.surat');
+    Route::put('/admin/surat/update/{id}', [SuratController::class, 'MasterUpdate'])->name('admin.master.surat.update');
+    Route::post('/admin/surat/store', [SuratController::class, 'store'])->name('admin.surat.store');
+    Route::post('/admin/surat/terima/{id}', [SuratController::class, 'terimaSurat'])->name('admin.surat.terima');
+    Route::post('/admin/surat/tolak/{id}', [SuratController::class, 'tolakSurat'])->name('admin.surat.tolak');
+
+
 
     Route::get('/surat-masuk', [SuratController::class, 'Masukindex'])->name('admin.surat-masuk');
-    Route::post('/surat-masuk/simpan', [SuratController::class, 'simpanData'])->name('admin.surat-masuk.simpan');
     Route::post('/surat-masuk/update', [SuratController::class, 'updateData'])->name('admin.surat-masuk.update');
     Route::post('/surat-masuk/hapus', [SuratController::class, 'hapusData'])->name('admin.surat-masuk.hapus');
     Route::get('/surat-masuk/filter', [SuratController::class, 'filterData'])->name('admin.surat-masuk.filter');

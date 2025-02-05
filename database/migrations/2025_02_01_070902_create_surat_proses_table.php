@@ -12,9 +12,8 @@ return new class extends Migration {
     {
         Schema::create('surat_proses', function (Blueprint $table) {
             $table->id('id_proses');
-            $table->foreignId('id_surat');
+            $table->unsignedBigInteger('id_surat');
             $table->date('tanggal_proses');
-            $table->string('penanggung_jawab');
             $table->text('catatan_proses')->nullable();
             $table->timestamps();
 

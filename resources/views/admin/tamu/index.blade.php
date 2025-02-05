@@ -8,11 +8,6 @@
                 <button type="button" class="btn btn-success me-2" data-toggle="modal" data-target="#tambahModal">
                     <i class="fas fa-plus"></i> Tambah Data
                 </button>
-                <!-- Tombol Cetak PDF -->
-                <a href="{{ route('admin.cetak-pdf', ['filter' => session('filter'), 'tanggal' => session('tanggal')]) }}"
-                    class="btn btn-primary">
-                    Cetak PDF
-                </a>
             </div>
         </div>
         <div class="card-body">
