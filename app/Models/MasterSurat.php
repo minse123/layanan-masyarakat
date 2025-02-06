@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\SuratTolak;
 use App\Models\SuratTerima;
 use App\Models\SuratProses;
+use Carbon\Carbon;
 class MasterSurat extends Model
 {
     use HasFactory;
@@ -30,7 +31,7 @@ class MasterSurat extends Model
         'id_user',
     ];
 
-    public function suratMasuk()
+    public function suratTerima()
     {
         return $this->hasMany(SuratTerima::class, 'id_surat');
     }
@@ -40,7 +41,7 @@ class MasterSurat extends Model
         return $this->hasMany(SuratProses::class, 'id_surat');
     }
 
-    public function suratKeluar()
+    public function suratTolak()
     {
         return $this->hasMany(SuratTolak::class, 'id_surat');
     }

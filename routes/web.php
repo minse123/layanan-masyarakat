@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\KasubagController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\SuratController;
+use App\Http\Controllers\KonsultasiController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -59,6 +60,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/surat-masuk/cetak-pdf', [SuratController::class, 'cetakPDF'])->name('admin.surat-masuk.cetak-pdf');
 
     // Route::get('/view-pdf', [AdminController::class, 'cetak'])->name('admin.view-pdf');
+    Route::get('/admin/konsultasi', [KonsultasiController::class, 'index'])->name('admin.konsultasi.index');
+    Route::post('/admin/konsultasi/store', [KonsultasiController::class, 'store'])->name('admin.konsultasi.store');
+    Route::get('/admin/konsultasi/{id}', [KonsultasiController::class, 'show'])->name('admin.konsultasi.show');
+    Route::post('/admin/konsultasi/update/{id}', [KonsultasiController::class, 'update'])->name('admin.konsultasi.update');
+    Route::post('/admin/konsultasi/destroy/{id}', [KonsultasiController::class, 'destroy'])->name('admin.konsultasi.destroy');
+    Route::get('/admin/konsultasi/cetak-pdf', [KonsultasiController::class, 'cetakPDF'])->name('admin.konsultasi.cetak-pdf');
 });
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/dashboard', [UserController::class, 'index']);

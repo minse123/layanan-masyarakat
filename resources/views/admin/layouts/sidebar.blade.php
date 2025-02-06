@@ -41,7 +41,7 @@
         <a class="nav-link" href="{{ route('admin.master.surat') }}">
             <i class="fas fa-fw fa-users"></i>
             <span>Master Administrasi Surat</span></a>
-        <a class="nav-link" href="{{ url('#') }}">
+        <a class="nav-link" href="{{ url('admin/konsultasi') }}">
             <i class="fas fa-fw fa-users"></i>
             <span>Master Konsultasi Pelatihan</span></a>
     </li>

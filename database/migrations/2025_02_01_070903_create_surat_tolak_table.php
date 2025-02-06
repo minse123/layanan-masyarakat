@@ -35,6 +35,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('surat_keluar');
+        Schema::dropIfExists('surat_tolak');
     }
 };

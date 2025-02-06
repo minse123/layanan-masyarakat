@@ -182,7 +182,7 @@
                                         </form>
 
                                         <form action="{{ route('admin.surat.tolak', $item->id_surat) }}" method="POST"
-                                            style="display:inline;">
+                                            style="display:inline;"enctype="multipart/form-data">
                                             @csrf
                                             <button type="submit" class="btn btn-danger btn-sm">
                                                 <i class="fas fa-times"></i> Tolak
@@ -321,10 +321,10 @@
                                     <label>Keterangan</label>
                                     <textarea name="keterangan" class="form-control" required></textarea>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="file">File</label>
                                     <input type="file" class="form-control" id="file" name="file" required>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -352,3 +352,8 @@
             });
         </script>
     @endsection
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif

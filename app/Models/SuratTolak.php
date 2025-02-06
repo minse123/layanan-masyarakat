@@ -10,21 +10,20 @@ use App\Models\SuratProses;
 class SuratTolak extends Model
 {
     use HasFactory;
+    protected $table = 'surat_tolak';
+    protected $primaryKey = 'id_tolak';
     protected $fillable = [
         'id_surat',
         'id_proses',
         'tanggal_tolak',
-        'catatan_tolak',
+        'alasan_tolak',
     ];
-    protected $table = 'surat_tolak';
-    protected $primaryKey = 'id_tolak';
-
     public function masterSurat()
     {
         return $this->belongsTo(MasterSurat::class, 'id_surat');
     }
 
-    public function SuratProses()
+    public function suratProses()
     {
         return $this->belongsTo(SuratProses::class, 'id_proses');
     }

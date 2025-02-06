@@ -56,13 +56,15 @@ class SuratController extends Controller
                 'file_path' => $filePath,
             ]);
 
+
             if ($surat) {
                 // Langsung masuk ke proses
-                SuratProses::create([
+                $suratProses = SuratProses::create([
                     'id_surat' => $surat->id_surat,
                     'tanggal_proses' => now(),
                     'catatan_proses' => $request->catatan_proses,
                 ]);
+                \Log::info('SuratProses ditemukan:', ['id_surat' => $suratProses]);
                 // dd($suratProses);
             } else {
                 return redirect()->back()->withErrors(['error' => 'Gagal menyimpan surat.']);
@@ -76,39 +78,75 @@ class SuratController extends Controller
     // Admin menerima surat
     public function terimaSurat($id)
     {
-        // dd($id);
-        // Ambil data surat dari `surat_proses`
-        $suratProses = SuratProses::where('id_surat', $id)->firstOrFail();
-        // dd($suratProses);
+        try {
+            \DB::beginTransaction(); // Mulai transaksi database
 
-        // Pindahkan ke `surat_terima`
-        SuratTerima::create([
-            'id_surat' => $suratProses->id_surat,
-            'id_proses' => $suratProses->id_proses,
-            'tanggal_terima' => Carbon::now(),
-            'catatan_terima' => 'Surat telah diterima.'
-        ]);
-        // Hapus dari `surat_proses`
-        $suratProses->delete();
+            // Ambil data surat dari surat_proses menggunakan Eloquent
+            $suratProses = SuratProses::where('id_surat', $id)->first();
+            if ($suratProses) {
+                \Log::info('SuratProses ditemukan:', ['id_surat' => $suratProses->id_surat]);
 
-        // Perbarui status di `master_surat`
-        MasterSurat::where('id_surat', $id)->update(['status' => 'Terima']);
+                // Simpan data ke surat_terima menggunakan Eloquent
+                $suratTerima = SuratTerima::create([
+                    'id_surat' => $suratProses->id_surat,
+                    'id_proses' => $suratProses->id_proses,
+                    'tanggal_terima' => now(),
+                    'catatan_terima' => 'Surat telah diterima.',
+                ]);
 
-        return redirect()->back()->with('success', 'Surat berhasil diterima.');
+                if ($suratTerima) {
+                    \Log::info('Surat berhasil disimpan ke surat_terima:', ['id_surat' => $suratTerima]);
+
+                    // Perbarui status di master_surat menggunakan Eloquent
+                    $masterSurat = MasterSurat::find($id);
+                    if ($masterSurat) {
+                        $masterSurat->update(['status' => 'Terima']);
+                        \Log::info('Status master_surat diperbarui:', ['id_surat' => $id]);
+
+                        // Hapus data surat dari surat_proses menggunakan Eloquent
+                        if ($suratProses->delete()) {
+                            \Log::info('SuratProses berhasil dihapus:', ['id_surat' => $id]);
+                            \DB::commit(); // Simpan transaksi jika semua berhasil
+                            return redirect()->back()->with('success', 'Surat berhasil diterima.');
+                        } else {
+                            throw new \Exception("Gagal menghapus data dari surat_proses.");
+                        }
+
+                    }
+
+                } else {
+                    throw new \Exception("Gagal menyimpan data ke surat_terima.");
+                }
+            } else {
+                return redirect()->back()->with('error', 'Surat tidak ditemukan di surat_proses.');
+            }
+        } catch (\Exception $e) {
+            \DB::rollBack(); // Batalkan transaksi jika ada kesalahan
+            \Log::error('Error terima surat: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
+
+
 
     public function tolakSurat($id)
     {
         // Ambil data surat dari `surat_proses`
-        $suratProses = SuratProses::where('id_surat', $id)->firstOrFail();
+        $suratProses = SuratProses::where('id_surat', $id)->first();
+
+        if (!$suratProses) {
+            return redirect()->back()->with('error', 'Surat tidak ditemukan dalam proses.');
+        }
 
         // Pindahkan ke `surat_tolak`
-        SuratTolak::create([
-            'id_surat' => $suratProses->id_surat,
-            'id_proses' => $suratProses->id_proses,
-            'tanggal_tolak' => Carbon::now(),
-            'alasan_tolak' => 'Surat ditolak karena alasan tertentu.'
-        ]);
+        SuratTolak::updateOrCreate(
+            ['id_surat' => $suratProses->id_surat],
+            [
+                'id_proses' => $suratProses->id_proses,
+                'tanggal_tolak' => Carbon::now(),
+                'alasan_tolak' => 'Surat ditolak karena alasan tertentu.',
+            ]
+        );
 
         // Hapus dari `surat_proses`
         $suratProses->delete();
@@ -123,9 +161,10 @@ class SuratController extends Controller
     {
         // Temukan surat berdasarkan ID
         $surat = MasterSurat::findOrFail($id);
-        $surat = SuratProses::findOrFail($id);
-        $surat = SuratTerima::findOrFail($id);
-        $surat = SuratTolak::findOrFail($id);
+
+        // Simpan status sebelum diubah
+        $currentStatus = $surat->getOriginal('status');
+
         // Validasi data yang diterima
         $request->validate([
             'nomor_surat' => 'required|string|max:255',
@@ -133,39 +172,77 @@ class SuratController extends Controller
             'pengirim' => 'required|string|max:255',
             'perihal' => 'required|string',
             'status' => 'required|string|in:Proses,Terima,Tolak',
-            'keterangan' => 'required|string',
-            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // Validasi file jika ada
+            'keterangan' => 'nullable|string',
+            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        // Temukan surat berdasarkan ID
-        $surat = MasterSurat::findOrFail($id);
-
         // Update data surat
-        $surat->nomor_surat = $request->nomor_surat;
-        $surat->tanggal_surat = $request->tanggal_surat;
-        $surat->pengirim = $request->pengirim;
-        $surat->perihal = $request->perihal;
-        $surat->status = $request->status;
-        $surat->keterangan = $request->keterangan;
+        $surat->update([
+            'nomor_surat' => $request->nomor_surat,
+            'tanggal_surat' => $request->tanggal_surat,
+            'pengirim' => $request->pengirim,
+            'perihal' => $request->perihal,
+            'status' => $request->status,
+            'keterangan' => $request->keterangan,
+        ]);
 
-        // Jika ada file yang diunggah, simpan file dan update path
+        // Jika ada file yang diunggah, simpan file baru dan hapus file lama
         if ($request->hasFile('file')) {
-            // Hapus file lama jika ada
             if ($surat->file_path) {
                 Storage::delete($surat->file_path);
             }
-            // Simpan file baru
             $filePath = $request->file('file')->store('uploads', 'public');
             $surat->file_path = $filePath;
+            $surat->save();
         }
 
-        // Simpan perubahan ke database
-        $surat->save();
+        // Jika status berubah, hapus data lama di tabel terkait
+        if ($request->status !== $currentStatus) {
+            if ($currentStatus == 'Terima') {
+                SuratTerima::where('id_surat', $id)->delete();
+            } elseif ($currentStatus == 'Tolak') {
+                SuratTolak::where('id_surat', $id)->delete();
+            } elseif ($currentStatus == 'Proses') {
+                SuratProses::where('id_surat', $id)->delete();
+            }
+
+            // Ambil id_proses dari SuratProses jika ada
+            $idProses = SuratProses::where('id_surat', $id)->value('id_proses');
+
+            // Simpan data baru sesuai status
+            if ($request->status == 'Terima') {
+                SuratTerima::updateOrCreate(
+                    ['id_surat' => $id],
+                    [
+                        'tanggal_terima' => now(),
+                        'catatan_terima' => $request->keterangan ?? null,
+                        'id_proses' => $idProses,
+                    ]
+                );
+            } elseif ($request->status == 'Tolak') {
+                SuratTolak::updateOrCreate(
+                    ['id_surat' => $id],
+                    [
+                        'tanggal_tolak' => now(),
+                        'alasan_tolak' => $request->keterangan ?? null,
+                        'id_proses' => $idProses,
+                    ]
+                );
+            } elseif ($request->status == 'Proses') {
+                SuratProses::updateOrCreate(
+                    ['id_surat' => $id],
+                    [
+                        'tanggal_proses' => now(),
+                        'catatan_proses' => $request->keterangan ?? null,
+                    ]
+                );
+            }
+        }
 
         // Redirect dengan pesan sukses
-        return redirect()->route('admin.surat.index')->with('success', 'Data surat berhasil diperbarui.');
-
+        return redirect()->route('admin.master.surat')->with('success', 'Data surat berhasil diperbarui.');
     }
+
 
 
 

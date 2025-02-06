@@ -15,7 +15,8 @@ class SuratProses extends Model
 
     protected $table = 'surat_proses';
     protected $primaryKey = 'id_proses';
-
+    public $incrementing = true; // ID auto-increment
+    protected $keyType = 'int';
     protected $fillable = [
         'id_surat',
         'tanggal_proses',
@@ -27,12 +28,12 @@ class SuratProses extends Model
         return $this->belongsTo(MasterSurat::class, 'id_surat');
     }
 
-    public function suratKeluar()
+    public function suratTolak()
     {
         return $this->hasMany(SuratTolak::class, 'id_proses');
     }
 
-    public function suratMasuk()
+    public function suratTerima()
     {
         return $this->hasMany(SuratTerima::class, 'id_proses');
     }
