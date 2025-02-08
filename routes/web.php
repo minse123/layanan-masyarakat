@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CetakPDFController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\SesiController;
 use App\Http\Controllers\UserController;
@@ -18,8 +19,6 @@ Route::get('/', [LandingController::class, 'landing']);
 Route::get('/buku-tamu', [GuestController::class, 'index'])->name('buku-tamu');
 Route::post('/buku-tamu', [GuestController::class, 'simpanData'])->name('simpan-tamu');
 
-
-
 // Route untuk sesi (login dan logout)
 Route::get('/login', [SesiController::class, 'index'])->name('login');
 Route::post('/login', [SesiController::class, 'login'])->name('login.process');
@@ -35,6 +34,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/auth/update/{id}', [AdminController::class, 'authUpdate'])->name('admin.auth.update');
     Route::post('/admin/auth/hapus', [AdminController::class, 'authHapus'])->name('admin.auth.hapus');
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
     Route::get('/tamu', [AdminController::class, 'dataTamu'])->name('admin.tamu');
     Route::post('/form-simpan', [AdminController::class, 'simpanData'])->name('admin-simpan-tamu');
     Route::post('/update-data', [AdminController::class, 'updateTamu'])->name('admin-update-data');
@@ -50,21 +50,26 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/surat/store', [SuratController::class, 'store'])->name('admin.surat.store');
     Route::post('/admin/surat/terima/{id}', [SuratController::class, 'terimaSurat'])->name('admin.surat.terima');
     Route::post('/admin/surat/tolak/{id}', [SuratController::class, 'tolakSurat'])->name('admin.surat.tolak');
+    route::post('/admin/surat/hapus/{id}', [SuratController::class, 'delete'])->name('admin.surat.hapus');
+    Route::get('/admin/surat/filter', [SuratController::class, 'filterSurat'])->name('admin.surat.filter');
 
 
+    Route::get('/admin/laporan/surat/proses', [SuratController::class, 'ProsesIndex'])->name('admin.proses.surat');
+    Route::get('/admin/laporan/surat/proses/filter', [SuratController::class, 'filterproses'])->name('admin.proses.surat.filter');
+    Route::get('/admin/laporan/surat/proses/resetfilter', [SuratController::class, 'resetfilterproses'])->name('admin.proses.surat.resetfilter');
 
-    Route::get('/surat-masuk', [SuratController::class, 'Masukindex'])->name('admin.surat-masuk');
-    Route::post('/surat-masuk/update', [SuratController::class, 'updateData'])->name('admin.surat-masuk.update');
-    Route::post('/surat-masuk/hapus', [SuratController::class, 'hapusData'])->name('admin.surat-masuk.hapus');
-    Route::get('/surat-masuk/filter', [SuratController::class, 'filterData'])->name('admin.surat-masuk.filter');
-    Route::get('/surat-masuk/cetak-pdf', [SuratController::class, 'cetakPDF'])->name('admin.surat-masuk.cetak-pdf');
+    Route::get('/admin/laporan/surat/terima', [SuratController::class, 'terimaindex'])->name('admin.terima.surat');
+    Route::get('/admin/laporan/surat/terima/filter', [SuratController::class, 'filterterima'])->name('admin.terima.surat.filter');
+    Route::get('/admin/laporan/surat/terima/resetfilter', [SuratController::class, 'resetfilterterima'])->name('admin.terima.surat.resetfilter');
+
 
     // Route::get('/view-pdf', [AdminController::class, 'cetak'])->name('admin.view-pdf');
     Route::get('/admin/konsultasi', [KonsultasiController::class, 'index'])->name('admin.konsultasi.index');
     Route::post('/admin/konsultasi/store', [KonsultasiController::class, 'store'])->name('admin.konsultasi.store');
     Route::get('/admin/konsultasi/{id}', [KonsultasiController::class, 'show'])->name('admin.konsultasi.show');
-    Route::post('/admin/konsultasi/update/{id}', [KonsultasiController::class, 'update'])->name('admin.konsultasi.update');
-    Route::post('/admin/konsultasi/destroy/{id}', [KonsultasiController::class, 'destroy'])->name('admin.konsultasi.destroy');
+    Route::put('/admin/konsultasi/update/{id}', [KonsultasiController::class, 'update'])->name('admin.konsultasi.update'); // Changed to PUT
+    Route::delete('/admin/konsultasi/destroy/{id}', [KonsultasiController::class, 'destroy'])->name('admin.konsultasi.destroy'); // Changed to DELETE
+    Route::post('/admin/konsultasi/{id}/answer', [KonsultasiController::class, 'answer'])->name('admin.konsultasi.answer');
     Route::get('/admin/konsultasi/cetak-pdf', [KonsultasiController::class, 'cetakPDF'])->name('admin.konsultasi.cetak-pdf');
 });
 Route::middleware(['auth', 'role:user'])->group(function () {
@@ -72,4 +77,14 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 });
 Route::middleware(['auth', 'role:kasubag'])->group(function () {
     Route::get('/kasubag/dashboard', [KasubagController::class, 'index']);
+});
+
+Route::middleware(['auth', 'role:admin,kasubag'])->group(function () {
+    // Route::get('/user/dashboard', [UserController::class, 'index']);
+
+    Route::get('/report/tamu/cetak-pdf', [CetakPDFController::class, 'tamucetakPDF'])->name('report.tamu.cetak-pdf');
+
+    Route::get('/report/surat/proses/cetak-pdf', [SuratController::class, 'cetakproses'])->name('report.surat.proses.cetak-pdf');
+    Route::get('/report/surat/terima/cetak-pdf', [SuratController::class, 'cetakterima'])->name('report.surat.terima.cetak-pdf');
+
 });

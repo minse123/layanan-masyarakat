@@ -33,8 +33,8 @@ class SuratProses extends Model
         return $this->hasMany(SuratTolak::class, 'id_proses');
     }
 
-    public function suratTerima()
-    {
-        return $this->hasMany(SuratTerima::class, 'id_proses');
-    }
+    // public function suratTerima()
+    // {
+    //     return $this->hasMany(SuratTerima::class, 'id_proses');
+    // }
 }

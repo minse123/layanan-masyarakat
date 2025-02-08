@@ -12,40 +12,29 @@
         </div>
         <div class="card-body">
             <!-- Filter Data -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <form action="{{ route('admin.filter-data') }}" method="GET">
-                        <div class="row g-3 align-items-end">
-                            <div class="col-md-3">
-                                <label for="filter" class="form-label">Pilih Periode</label>
-                                <select name="filter" id="filter" class="form-select">
-                                    <option value="harian" {{ request('filter') == 'harian' ? 'selected' : '' }}>Harian
-                                    </option>
-                                    <option value="mingguan" {{ request('filter') == 'mingguan' ? 'selected' : '' }}>
-                                        Mingguan</option>
-                                    <option value="bulanan" {{ request('filter') == 'bulanan' ? 'selected' : '' }}>Bulanan
-                                    </option>
-                                    <option value="tahunan" {{ request('filter') == 'tahunan' ? 'selected' : '' }}>Tahunan
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="date" name="tanggal" id="tanggal" class="form-control"
-                                    value="{{ request('tanggal') }}">
-                            </div>
-                            <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="fas fa-filter me-2"></i> Filter
-                                </button>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="{{ route('admin.filter-data') }}" class="btn btn-outline-secondary w-100">
-                                    <i class="fas fa-sync me-2"></i> Reset
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <div class="mb-4">
+                <form action="{{ route('admin.filter-data') }}" method="GET" class="form-inline">
+                    <div class="form-group mb-2">
+                        <label for="filter" class="mr-2">Pilih Periode</label>
+                        <select name="filter" id="filter" class="form-control">
+                            <option value="harian" {{ request('filter') == 'harian' ? 'selected' : '' }}>Harian</option>
+                            <option value="mingguan" {{ request('filter') == 'mingguan' ? 'selected' : '' }}>Mingguan
+                            </option>
+                            <option value="bulanan" {{ request('filter') == 'bulanan' ? 'selected' : '' }}>Bulanan</option>
+                            <option value="tahunan" {{ request('filter') == 'tahunan' ? 'selected' : '' }}>Tahunan</option>
+                        </select>
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="date" name="tanggal" id="tanggal" class="form-control"
+                            value="{{ request('tanggal') }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                    <a href="{{ url('/tamu') }}" class="btn btn-outline-secondary mb-2">
+                        <i class="fas fa-sync"></i> Reset
+                    </a>
+                </form>
             </div>
 
             <!-- Tabel Data -->

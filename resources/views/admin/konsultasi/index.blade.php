@@ -13,6 +13,22 @@
             </div>
         </div>
         <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <!-- Tabel Data -->
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -40,15 +56,15 @@
                                 <td>
                                     <span
                                         class="badge 
-                                        @if ($item->status == 'Pending') badge-warning 
-                                        @elseif ($item->status == 'Dijawab') badge-success @endif">
+                            @if ($item->status == 'Pending') badge-warning 
+                            @elseif ($item->status == 'Dijawab') badge-success @endif">
                                         {{ $item->status }}
                                     </span>
                                 </td>
                                 <td>
                                     @if ($item->konsultasiPending->isNotEmpty())
                                         @foreach ($item->konsultasiPending as $pending)
-                                            <p>{{ $pending->tanggal_pengajuan }}</p>
+                                            <p class="mb-1">{{ $pending->tanggal_pengajuan }}</p>
                                         @endforeach
                                     @else
                                         <p>Tidak ada pengajuan</p>
@@ -57,84 +73,265 @@
                                 <td>
                                     <!-- Tombol untuk membuka modal detail -->
                                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
-                                        data-target="#detailModal{{ $item->id }}">
+                                        data-target="#detailModal{{ $item->id_konsultasi }}" title="Lihat Detail">
                                         <i class="fas fa-eye"></i> Detail
                                     </button>
+                                </td>
+                                <td>
+                                    <!-- Tombol Edit -->
+                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                        data-target="#editModal{{ $item->id_konsultasi }}" title="Edit Konsultasi">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
 
-                                    <!-- Modal Detail -->
-                                    <div class="modal fade" id="detailModal{{ $item->id }}" tabindex="-1"
-                                        role="dialog" aria-labelledby="detailModalLabel{{ $item->id }}"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="detailModalLabel{{ $item->id }}">Detail
-                                                        Konsultasi</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label>Nama:</label>
-                                                        <p>{{ $item->nama }}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Telepon:</label>
-                                                        <p>{{ $item->telepon }}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Email:</label>
-                                                        <p>{{ $item->email }}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Judul Konsultasi:</label>
-                                                        <p>{{ $item->judul_konsultasi }}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Deskripsi:</label>
-                                                        <p>{{ $item->deskripsi }}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Status:</label>
-                                                        <p>{{ $item->status }}</p>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Tanggal Pengajuan:</label>
-                                                        @if ($item->konsultasiPending->isNotEmpty())
-                                                            @foreach ($item->konsultasiPending as $pending)
-                                                                <p>{{ $pending->tanggal_pengajuan }}</p>
-                                                            @endforeach
-                                                        @else
-                                                            <p>Tidak ada pengajuan</p>
-                                                        @endif
-                                                    </div>
-                                                    @if ($item->status == 'Dijawab')
-                                                        <div class="form-group">
-                                                            <label>Jawaban:</label>
-                                                            <p>{{ optional($item->konsultasiDijawab)->jawaban }}</p>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Tanggal Dijawab:</label>
-                                                            <p>{{ optional($item->konsultasiDijawab)->tanggal_dijawab }}
-                                                            </p>
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Tutup</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <!-- Tombol Hapus -->
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                        data-target="#deleteModal{{ $item->id_konsultasi }}" title="Hapus Konsultasi">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+
+                                    <!-- Button to Answer Consultation -->
+                                    @if ($item->status == 'Pending')
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                            data-target="#answerModal{{ $item->id_konsultasi }}" title="Jawab Konsultasi">
+                                            <i class="fas fa-reply"></i> Jawab
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
+
+                            <!-- Modal Detail -->
+                            <div class="modal fade" id="detailModal{{ $item->id_konsultasi }}" tabindex="-1"
+                                role="dialog" aria-labelledby="detailModalLabel{{ $item->id_konsultasi }}"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="detailModalLabel{{ $item->id_konsultasi }}">Detail
+                                                Konsultasi</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @if ($item->nama)
+                                                <div class="form-group">
+                                                    <label>Nama:</label>
+                                                    <p>{{ $item->nama }}</p>
+                                                </div>
+                                            @endif
+                                            @if ($item->telepon)
+                                                <div class="form-group">
+                                                    <label>Telepon:</label>
+                                                    <p>{{ $item->telepon }}</p>
+                                                </div>
+                                            @endif
+                                            @if ($item->email)
+                                                <div class="form-group">
+                                                    <label>Email:</label>
+                                                    <p>{{ $item->email }}</p>
+                                                </div>
+                                            @endif
+                                            @if ($item->judul_konsultasi)
+                                                <div class="form-group">
+                                                    <label>Judul Konsultasi:</label>
+                                                    <p>{{ $item->judul_konsultasi }}</p>
+                                                </div>
+                                            @endif
+                                            @if ($item->deskripsi)
+                                                <div class="form-group">
+                                                    <label>Deskripsi:</label>
+                                                    <p>{{ $item->deskripsi }}</p>
+                                                </div>
+                                            @endif
+                                            @if ($item->status)
+                                                <div class="form-group">
+                                                    <label>Status:</label>
+                                                    <p>{{ $item->status }}</p>
+                                                </div>
+                                            @endif
+                                            @if ($item->konsultasiPending->isNotEmpty())
+                                                <div class="form-group">
+                                                    <label>Tanggal Pengajuan:</label>
+                                                    @foreach ($item->konsultasiPending as $pending)
+                                                        <p>{{ $pending->tanggal_pengajuan }}</p>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <div class="form-group">
+                                                    <label>Tanggal Pengajuan:</label>
+                                                    <p>Tidak ada pengajuan</p>
+                                                </div>
+                                            @endif
+                                            @if ($item->status == 'Dijawab')
+                                                @if (optional($item->konsultasiDijawab)->jawaban)
+                                                    <div class="form-group">
+                                                        <label>Jawaban:</label>
+                                                        <p>{{ optional($item->konsultasiDijawab)->jawaban }}</p>
+                                                    </div>
+                                                @endif
+                                                @if (optional($item->konsultasiDijawab)->tanggal_dijawab)
+                                                    <div class="form-group">
+                                                        <label>Tanggal Dijawab:</label>
+                                                        <p>{{ optional($item->konsultasiDijawab)->tanggal_dijawab }}</p>
+                                                    </div>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Tutup</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Edit -->
+                            <div class="modal fade" id="editModal{{ $item->id_konsultasi }}" tabindex="-1" role="dialog"
+                                aria-labelledby="editModalLabel{{ $item->id_konsultasi }}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editModalLabel{{ $item->id_konsultasi }}">Edit
+                                                Konsultasi</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="{{ route('admin.konsultasi.update', $item->id_konsultasi) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label>Nama</label>
+                                                    <input type="text" name="nama" class="form-control"
+                                                        value="{{ $item->nama }}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Telepon</label>
+                                                    <input type="text" name="telepon" class="form-control"
+                                                        value="{{ $item->telepon }}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email</label>
+                                                    <input type="email" name="email" class="form-control"
+                                                        value="{{ $item->email }}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Judul Konsultasi</label>
+                                                    <input type="text" name="judul_konsultasi" class="form-control"
+                                                        value="{{ $item->judul_konsultasi }}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Deskripsi</label>
+                                                    <textarea name="deskripsi" class="form-control" required>{{ $item->deskripsi }}</textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="status">Status</label>
+                                                    <select name="status" id="status"
+                                                        onchange="toggleJawabanField()">
+                                                        <option value="Pending"
+                                                            {{ $item->status == 'Pending' ? 'selected' : '' }}>Pending
+                                                        </option>
+                                                        <option value="Dijawab"
+                                                            {{ $item->status == 'Dijawab' ? 'selected' : '' }}>Dijawab
+                                                        </option>
+                                                    </select>
+                                                    <div id="jawabanField"
+                                                        style="display: {{ $item->status == 'Dijawab' ? 'block' : 'none' }};">
+                                                        <label for="jawaban">Jawaban</label>
+                                                        <textarea name="jawaban" id="jawaban">{{ optional($item->konsultasiDijawab)->jawaban ?? '' }}</textarea>
+                                                    </div>
+                                                    <script>
+                                                        function toggleJawabanField() {
+                                                            const status = document.getElementById('status').value;
+                                                            const jawabanField = document.getElementById('jawabanField');
+                                                            jawabanField.style.display = (status === 'Dijawab') ? 'block' : 'none';
+                                                        }
+                                                        toggleJawabanField();
+                                                    </script>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal Konfirmasi Hapus -->
+                            <div class="modal fade" id="deleteModal{{ $item->id_konsultasi }}" tabindex="-1"
+                                role="dialog" aria-labelledby="deleteModalLabel{{ $item->id_konsultasi }}"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel{{ $item->id_konsultasi }}">
+                                                Konfirmasi Hapus</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Apakah Anda yakin ingin menghapus <strong>{{ $item->nomor_surat }}</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Batal</button>
+                                            <form action="{{ route('admin.konsultasi.destroy', $item->id_konsultasi) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal untuk Menjawab Konsultasi -->
+                            <div class="modal fade" id="answerModal{{ $item->id_konsultasi }}" tabindex="-1"
+                                role="dialog" aria-labelledby="answerModalLabel{{ $item->id_konsultasi }}"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <form action="{{ route('admin.konsultasi.answer', $item->id_konsultasi) }}"
+                                        method="POST" id="answerForm{{ $item->id_konsultasi }}">
+                                        @csrf
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="answerModalLabel{{ $item->id_konsultasi }}">
+                                                    Jawab Konsultasi dari {{ $item->nama }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="jawaban{{ $item->id_konsultasi }}">Jawaban</label>
+                                                    <textarea name="jawaban" id="jawaban" class="form-control" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         @endforeach
                     </tbody>
                 </table>
             </div>
+
+            <!-- Modal Tambah -->
             <div class="modal fade" id="tambahModal" tabindex="-1" role="dialog" aria-labelledby="tambahModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -178,28 +375,13 @@
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+@endsection
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    @section('script')
-        <script>
-            $(document).ready(function() {
-                $('#dataTable').DataTable();
-            });
-        </script>
-    @endsection
-
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    </script>
+@endsection

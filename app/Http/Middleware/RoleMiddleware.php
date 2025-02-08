@@ -13,19 +13,19 @@ class RoleMiddleware
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string  $role
+     * @param  string  ...$roles
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
         // Debugging (hapus setelah selesai)
         \Log::info('Role Middleware Triggered', [
             'user_role' => Auth::user()->role ?? null,
-            'required_role' => $role
+            'allowed_roles' => $roles
         ]);
 
-        // Periksa apakah user telah login dan memiliki role yang sesuai
-        if (Auth::check() && Auth::user()->role === $role) {
+        // Periksa apakah user telah login dan memiliki salah satu role yang sesuai
+        if (Auth::check() && in_array(Auth::user()->role, $roles)) {
             return $next($request);
         }
 

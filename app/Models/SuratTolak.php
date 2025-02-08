@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\MasterSurat;
-use App\Models\SuratProses;
+use Carbon\Carbon;
 
 class SuratTolak extends Model
 {
@@ -14,7 +14,7 @@ class SuratTolak extends Model
     protected $primaryKey = 'id_tolak';
     protected $fillable = [
         'id_surat',
-        'id_proses',
+
         'tanggal_tolak',
         'alasan_tolak',
     ];
@@ -23,8 +23,4 @@ class SuratTolak extends Model
         return $this->belongsTo(MasterSurat::class, 'id_surat');
     }
 
-    public function suratProses()
-    {
-        return $this->belongsTo(SuratProses::class, 'id_proses');
-    }
 }

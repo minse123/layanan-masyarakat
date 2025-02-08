@@ -10,7 +10,11 @@ class MasterKonsultasi extends Model
     use HasFactory;
 
     protected $table = 'master_konsultasi'; // Nama tabel jika berbeda dari konvensi
+    protected $primaryKey = 'id_konsultasi';
+    public $incrementing = true; // ID auto-increment
+    protected $keyType = 'int';
     protected $fillable = [
+        'id_konsultasi',
         'nama',
         'telepon',
         'email',
@@ -26,6 +30,6 @@ class MasterKonsultasi extends Model
 
     public function konsultasiDijawab()
     {
-        return $this->hasMany(KonsultasiDijawab::class, 'id_konsultasi');
+        return $this->hasOne(KonsultasiDijawab::class, 'id_konsultasi')->withDefault();
     }
 }

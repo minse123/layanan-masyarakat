@@ -48,7 +48,6 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         return view('admin.auth.auth-formEdit', compact('user'));
     }
-
     public function authUpdate(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -123,7 +122,6 @@ class AdminController extends Controller
 
         return redirect()->route('admin.tamu')->with('status', 'Data tamu berhasil dihapus!');
     }
-
     public function filterData(Request $request)
     {
         $filter = $request->filter;
@@ -154,7 +152,7 @@ class AdminController extends Controller
     public function reportdataTamu()
     {
         $data = Tamu::all();
-        return view('admin.tamu.report', compact('data'));
+        return view('admin.tamu.reporttamu', compact('data'));
     }
     public function reportfilterData(Request $request)
     {
@@ -178,7 +176,7 @@ class AdminController extends Controller
 
         session(['filter' => $filter, 'tanggal' => $tanggal]);
 
-        return view('admin.tamu.report', compact('data'));
+        return view('admin.tamu.reporttamu', compact('data'));
     }
 
     public function cetakPDF(Request $request)

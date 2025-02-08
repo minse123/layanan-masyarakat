@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\SuratTolak;
 use App\Models\SuratTerima;
 use App\Models\SuratProses;
-use Carbon\Carbon;
+// use Carbon\Carbon;
 class MasterSurat extends Model
 {
     use HasFactory;
-
-    // protected $fillable = ['nomor_surat', 'tanggal_surat', 'pengirim', 'perihal'];
-
     protected $table = 'master_surat';
     protected $primaryKey = 'id_surat';
     public $incrementing = true; // ID auto-increment

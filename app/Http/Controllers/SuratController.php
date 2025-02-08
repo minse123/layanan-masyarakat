@@ -13,16 +13,13 @@ use Illuminate\Support\Facades\Storage;
 
 class SuratController extends Controller
 {
-
     public function Suratindex()
     {
         $suratTolak = SuratTolak::all();
         $masterSurat = MasterSurat::all();
         $suratProses = SuratProses::all();
         $suratTerima = SuratTerima::all();
-
         return view('admin.surat.index', compact('suratTerima', 'masterSurat', 'suratProses', 'suratTolak'));
-
     }
     // MasterSurat View
     public function store(Request $request)
@@ -64,8 +61,6 @@ class SuratController extends Controller
                     'tanggal_proses' => now(),
                     'catatan_proses' => $request->catatan_proses,
                 ]);
-                \Log::info('SuratProses ditemukan:', ['id_surat' => $suratProses]);
-                // dd($suratProses);
             } else {
                 return redirect()->back()->withErrors(['error' => 'Gagal menyimpan surat.']);
             }
@@ -74,89 +69,37 @@ class SuratController extends Controller
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
     }
-
     // Admin menerima surat
     public function terimaSurat($id)
     {
-        try {
-            \DB::beginTransaction(); // Mulai transaksi database
-
-            // Ambil data surat dari surat_proses menggunakan Eloquent
-            $suratProses = SuratProses::where('id_surat', $id)->first();
-            if ($suratProses) {
-                \Log::info('SuratProses ditemukan:', ['id_surat' => $suratProses->id_surat]);
-
-                // Simpan data ke surat_terima menggunakan Eloquent
-                $suratTerima = SuratTerima::create([
-                    'id_surat' => $suratProses->id_surat,
-                    'id_proses' => $suratProses->id_proses,
-                    'tanggal_terima' => now(),
-                    'catatan_terima' => 'Surat telah diterima.',
-                ]);
-
-                if ($suratTerima) {
-                    \Log::info('Surat berhasil disimpan ke surat_terima:', ['id_surat' => $suratTerima]);
-
-                    // Perbarui status di master_surat menggunakan Eloquent
-                    $masterSurat = MasterSurat::find($id);
-                    if ($masterSurat) {
-                        $masterSurat->update(['status' => 'Terima']);
-                        \Log::info('Status master_surat diperbarui:', ['id_surat' => $id]);
-
-                        // Hapus data surat dari surat_proses menggunakan Eloquent
-                        if ($suratProses->delete()) {
-                            \Log::info('SuratProses berhasil dihapus:', ['id_surat' => $id]);
-                            \DB::commit(); // Simpan transaksi jika semua berhasil
-                            return redirect()->back()->with('success', 'Surat berhasil diterima.');
-                        } else {
-                            throw new \Exception("Gagal menghapus data dari surat_proses.");
-                        }
-
-                    }
-
-                } else {
-                    throw new \Exception("Gagal menyimpan data ke surat_terima.");
-                }
-            } else {
-                return redirect()->back()->with('error', 'Surat tidak ditemukan di surat_proses.');
-            }
-        } catch (\Exception $e) {
-            \DB::rollBack(); // Batalkan transaksi jika ada kesalahan
-            \Log::error('Error terima surat: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+        $suratProses = SuratProses::where('id_surat', $id)->first();
+        SuratTerima::create([
+            'id_surat' => $suratProses->id_surat,
+            'tanggal_terima' => now(),
+            'catatan_terima' => 'Surat telah diterima.',
+        ]);
+        MasterSurat::where('id_surat', $id)->update(['status' => 'Terima']);
+        $suratProses->delete();
+        return redirect()->back()->with('success', 'Surat berhasil diterima.');
     }
-
-
-
     public function tolakSurat($id)
     {
         // Ambil data surat dari `surat_proses`
         $suratProses = SuratProses::where('id_surat', $id)->first();
-
-        if (!$suratProses) {
-            return redirect()->back()->with('error', 'Surat tidak ditemukan dalam proses.');
-        }
-
         // Pindahkan ke `surat_tolak`
-        SuratTolak::updateOrCreate(
-            ['id_surat' => $suratProses->id_surat],
+        SuratTolak::create(
             [
-                'id_proses' => $suratProses->id_proses,
+                'id_surat' => $suratProses->id_surat,
                 'tanggal_tolak' => Carbon::now(),
                 'alasan_tolak' => 'Surat ditolak karena alasan tertentu.',
             ]
         );
-
         // Hapus dari `surat_proses`
         $suratProses->delete();
-
         // Perbarui status di `master_surat`
         MasterSurat::where('id_surat', $id)->update(['status' => 'Tolak']);
-
         return redirect()->back()->with('success', 'Surat berhasil ditolak.');
     }
-
     public function MasterUpdate(Request $request, $id)
     {
         // Temukan surat berdasarkan ID
@@ -216,7 +159,6 @@ class SuratController extends Controller
                     [
                         'tanggal_terima' => now(),
                         'catatan_terima' => $request->keterangan ?? null,
-                        'id_proses' => $idProses,
                     ]
                 );
             } elseif ($request->status == 'Tolak') {
@@ -225,7 +167,6 @@ class SuratController extends Controller
                     [
                         'tanggal_tolak' => now(),
                         'alasan_tolak' => $request->keterangan ?? null,
-                        'id_proses' => $idProses,
                     ]
                 );
             } elseif ($request->status == 'Proses') {
@@ -243,63 +184,140 @@ class SuratController extends Controller
         return redirect()->route('admin.master.surat')->with('success', 'Data surat berhasil diperbarui.');
     }
 
+    public function delete($id)
+    {
+        // Hapus data surat
+        $surat = MasterSurat::findOrFail($id);
+        $surat->delete();
+        // Hapus data terkait
+        SuratProses::where('id_surat', $id)->delete();
+        SuratTerima::where('id_surat', $id)->delete();
+        SuratTolak::where('id_surat', $id)->delete();
+        // Redirect dengan pesan sukses
+        return redirect()->route('admin.master.surat')->with('success', 'Data surat berhasil dihapus.');
+    }
+    public function filterSurat(Request $request)
+    {
+        $query = MasterSurat::query();
+
+        if ($request->has('filter')) {
+            $filter = $request->filter;
+            $tanggal = $request->tanggal ? Carbon::parse($request->tanggal) : now();
+
+            switch ($filter) {
+                case 'harian':
+                    $query->whereDate('tanggal_surat', $tanggal);
+                    break;
+                case 'mingguan':
+                    $query->whereBetween('tanggal_surat', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                    break;
+                case 'bulanan':
+                    $query->whereMonth('tanggal_surat', $tanggal->month)->whereYear('tanggal_surat', $tanggal->year);
+                    break;
+                case 'tahunan':
+                    $query->whereYear('tanggal_surat', $tanggal->year);
+                    break;
+            }
+        }
+
+        $masterSurat = $query->get();
+        session(['filter' => $filter, 'tanggal' => $tanggal]);
+
+        return view('admin.surat.index', compact('masterSurat'));
+    }
 
 
 
-    public function Masukindex(
-    ) {
+    public function ProsesIndex()
+    {
+        $data = SuratProses::with('masterSurat')->get();
+        return view('admin.surat.proses.reportproses', compact('data')); // Pass the required data to the view
+    }
+    public function filterproses(Request $request)
+    {
+        $filter = $request->filter;
+        $tanggal = $request->tanggal;
+
+        $query = SuratProses::query()->with('masterSurat');
+
+        if ($filter && $tanggal) {
+            $tanggal = Carbon::parse($tanggal);
+            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
+                switch ($filter) {
+                    case 'harian':
+                        $q->whereDate('tanggal_proses', $tanggal);
+                        break;
+                    case 'mingguan':
+                        $q->whereBetween('tanggal_proses', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        break;
+                    case 'bulanan':
+                        $q->whereMonth('tanggal_proses', $tanggal->month)
+                            ->whereYear('tanggal_proses', $tanggal->year);
+                        break;
+                    case 'tahunan':
+                        $q->whereYear('tanggal_proses', $tanggal->year);
+                        break;
+                }
+            });
+        }
+
+        $data = $query->get();
+        session(['filter' => $filter, 'tanggal' => $tanggal]);
+
+        // Menyiapkan pesan notifikasi jika data kosong
+        $message = '';
+        if ($data->isEmpty()) {
+            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
+        }
+
+        return view('admin.surat.proses.reportproses', compact('data', 'message'));
+    }
+    public function resetfilterproses(Request $request)
+    {
+        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
+        return redirect()->route('admin.proses.surat'); // Redirect ke halaman utama laporan
+    }
+    public function cetakproses(Request $request)
+    {
+        $filter = session('filter');
+        $tanggal = session('tanggal');
+
+        $query = SuratProses::query()->with('masterSurat');
+
+        if ($filter && $tanggal) {
+            $tanggal = Carbon::parse($tanggal);
+            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
+                switch ($filter) {
+                    case 'harian':
+                        $q->whereDate('tanggal_proses', $tanggal);
+                        break;
+                    case 'mingguan':
+                        $q->whereBetween('tanggal_proses', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        break;
+                    case 'bulanan':
+                        $q->whereMonth('tanggal_proses', $tanggal->month)
+                            ->whereYear('tanggal_proses', $tanggal->year);
+                        break;
+                    case 'tahunan':
+                        $q->whereYear('tanggal_proses', $tanggal->year);
+                        break;
+                }
+            });
+        }
+
+        $data = $query->get();
+
+        $pdf = PDF::loadView('admin.surat.proses.formCetakProses', compact('data'));
+        return $pdf->stream('laporan-surat-masuk.pdf');
+    }
+
+
+    public function terimaindex()
+    {
         $data = SuratTerima::with('masterSurat')->get();
-        // dd($data);
-        return view('admin.surat.masuk.index', compact('data'));
+        return view('admin.surat.terima.reportterima', compact('data')); // Pass the required data to the new view
     }
-
-    // Update data surat masuk
-    public function updateData(Request $request)
-    {
-        dd($request->all());
-        $request->validate([
-            'id' => 'required|exists:surat_masuk,id_masuk',
-            'nomor_surat' => 'required',
-            'tanggal_surat' => 'required|date',
-            'pengirim' => 'required',
-            'perihal' => 'required',
-            'tanggal_terima' => 'required|date',
-            'disposisi' => 'nullable',
-        ]);
-
-        $suratMasuk = SuratTerima::findOrFail($request->id);
-        $masterSurat = MasterSurat::findOrFail($suratMasuk->id_surat);
-        // dd($masterSurat, $suratMasuk);
-        $masterSurat->update([
-            'nomor_surat' => $request->nomor_surat,
-            'tanggal_surat' => $request->tanggal_surat,
-            'pengirim' => $request->pengirim,
-            'perihal' => $request->perihal,
-        ]);
-
-        $suratMasuk->update([
-            'tanggal_terima' => $request->tanggal_terima,
-            'disposisi' => $request->disposisi,
-        ]);
-
-        // dd($suratMasuk, $masterSurat);
-
-        return redirect()->route('admin.surat-masuk')->with('status', 'Surat masuk berhasil diperbarui!');
-    }
-
-    // Hapus data surat masuk
-    public function hapusData(Request $request)
-    {
-        $suratMasuk = SuratTerima::findOrFail($request->id);
-        $masterSurat = MasterSurat::findOrFail($suratMasuk->master_surat_id);
-
-        $suratMasuk->delete();
-        $masterSurat->delete();
-
-        return redirect()->route('admin.surat-masuk')->with('status', 'Surat masuk berhasil dihapus!');
-    }
-
-    public function filterData(Request $request)
+    public function filterterima(Request $request)
     {
         $filter = $request->filter;
         $tanggal = $request->tanggal;
@@ -311,17 +329,17 @@ class SuratController extends Controller
             $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
                 switch ($filter) {
                     case 'harian':
-                        $q->whereDate('tanggal_surat', $tanggal);
+                        $q->whereDate('tanggal_terima', $tanggal);
                         break;
                     case 'mingguan':
-                        $q->whereBetween('tanggal_surat', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        $q->whereBetween('tanggal_terima', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
                         break;
                     case 'bulanan':
-                        $q->whereMonth('tanggal_surat', $tanggal->month)
-                            ->whereYear('tanggal_surat', $tanggal->year);
+                        $q->whereMonth('tanggal_terima', $tanggal->month)
+                            ->whereYear('tanggal_terima', $tanggal->year);
                         break;
                     case 'tahunan':
-                        $q->whereYear('tanggal_surat', $tanggal->year);
+                        $q->whereYear('tanggal_terima', $tanggal->year);
                         break;
                 }
             });
@@ -329,10 +347,21 @@ class SuratController extends Controller
 
         $data = $query->get();
         session(['filter' => $filter, 'tanggal' => $tanggal]);
-        // dd($request->all());
-        return view('admin.surat.masuk.index', compact('data'));
+
+        // Menyiapkan pesan notifikasi jika data kosong
+        $message = '';
+        if ($data->isEmpty()) {
+            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
+        }
+
+        return view('admin.surat.terima.reportterima', compact('data', 'message'));
     }
-    public function cetakPDF(Request $request)
+    public function resetfilterterima(Request $request)
+    {
+        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
+        return redirect()->route('admin.terima.surat'); // Redirect ke halaman utama laporan
+    }
+    public function cetakterima(Request $request)
     {
         $filter = session('filter');
         $tanggal = session('tanggal');
@@ -344,17 +373,17 @@ class SuratController extends Controller
             $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
                 switch ($filter) {
                     case 'harian':
-                        $q->whereDate('tanggal_surat', $tanggal);
+                        $q->whereDate('tanggal_terima', $tanggal);
                         break;
                     case 'mingguan':
-                        $q->whereBetween('tanggal_surat', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        $q->whereBetween('tanggal_terima', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
                         break;
                     case 'bulanan':
-                        $q->whereMonth('tanggal_surat', $tanggal->month)
-                            ->whereYear('tanggal_surat', $tanggal->year);
+                        $q->whereMonth('tanggal_terima', $tanggal->month)
+                            ->whereYear('tanggal_terima', $tanggal->year);
                         break;
                     case 'tahunan':
-                        $q->whereYear('tanggal_surat', $tanggal->year);
+                        $q->whereYear('tanggal_terima', $tanggal->year);
                         break;
                 }
             });
@@ -362,7 +391,8 @@ class SuratController extends Controller
 
         $data = $query->get();
 
-        $pdf = PDF::loadView('admin.surat.masuk.formCetakPDF', compact('data'));
-        return $pdf->stream('laporan-surat-masuk.pdf');
+        $pdf = PDF::loadView('admin.surat.terima.formCetakTerima', compact('data'));
+        return $pdf->stream('laporan-surat-diterima.pdf');
     }
+
 }

@@ -7,16 +7,12 @@
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahModal">
                     <i class="fas fa-plus"></i> Tambah Data
                 </button>
-                <a href="{{ route('admin.surat-masuk.cetak-pdf', ['filter' => session('filter'), 'tanggal' => session('tanggal')]) }}"
-                    class="btn btn-primary">
-                    <i class="fas fa-file-pdf"></i> Cetak PDF
-                </a>
             </div>
         </div>
         <div class="card-body">
             <!-- Filter Data -->
             <div class="mb-4">
-                <form action="{{ route('admin.surat-masuk.filter') }}" method="GET" class="form-inline">
+                <form action="{{ route('admin.surat.filter') }}" method="GET" class="form-inline">
                     <div class="form-group mb-2">
                         <label for="filter" class="mr-2">Pilih Periode</label>
                         <select name="filter" id="filter" class="form-control">
@@ -34,7 +30,7 @@
                     <button type="submit" class="btn btn-primary mb-2">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="{{ url('/surat-masuk') }}" class="btn btn-outline-secondary mb-2">
+                    <a href="{{ url('/admin/surat') }}" class="btn btn-outline-secondary mb-2">
                         <i class="fas fa-sync"></i> Reset
                     </a>
                 </form>
@@ -195,12 +191,43 @@
                                         data-target="#editModal{{ $item->id_surat }}">
                                         <i class="fas fa-edit"></i> Edit
                                     </button>
-
                                     <!-- Tombol Hapus -->
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         data-target="#deleteModal{{ $item->id_surat }}">
                                         <i class="fas fa-trash"></i> Hapus
                                     </button>
+
+                                    <!-- Modal Konfirmasi Hapus -->
+                                    <div class="modal fade" id="deleteModal{{ $item->id_surat }}" tabindex="-1"
+                                        role="dialog" aria-labelledby="deleteModalLabel{{ $item->id_surat }}"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel{{ $item->id_surat }}">
+                                                        Konfirmasi Hapus</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Apakah Anda yakin ingin menghapus surat dengan nomor
+                                                    <strong>{{ $item->nomor_surat }}</strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Batal</button>
+                                                    <form action="{{ route('admin.surat.hapus', $item->id_surat) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger">Hapus</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
 
                                     <!-- Modal Edit -->
                                     <div class="modal fade" id="editModal{{ $item->id_surat }}" tabindex="-1"
@@ -321,10 +348,10 @@
                                     <label>Keterangan</label>
                                     <textarea name="keterangan" class="form-control" required></textarea>
                                 </div>
-                                {{-- <div class="form-group">
+                                <div class="form-group">
                                     <label for="file">File</label>
                                     <input type="file" class="form-control" id="file" name="file" required>
-                                </div> --}}
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>

@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('surat_tolak', function (Blueprint $table) {
             $table->id('id_tolak');
             $table->unsignedBigInteger('id_surat');
-            $table->unsignedBigInteger('id_proses');
             $table->date('tanggal_tolak');
             $table->text('alasan_tolak')->nullable();
             $table->timestamps();
@@ -23,10 +22,6 @@ return new class extends Migration {
                 ->on('master_surat')
                 ->onDelete('cascade');
 
-            $table->foreign('id_proses')
-                ->references('id_proses')
-                ->on('surat_proses')
-                ->onDelete('cascade');
         });
     }
 

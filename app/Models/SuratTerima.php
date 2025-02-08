@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\MasterSurat;
 use App\Models\SuratProses;
-use Carbon\Carbon;
 
 class SuratTerima extends Model
 {
@@ -17,7 +16,7 @@ class SuratTerima extends Model
     protected $keyType = 'int';
     protected $fillable = [
         'id_surat',
-        'id_proses',
+        // 'id_proses',
         'tanggal_terima',
         'catatan_terima',
     ];
@@ -26,8 +25,8 @@ class SuratTerima extends Model
     {
         return $this->belongsTo(MasterSurat::class, 'id_surat');
     }
-    public function suratProses()
-    {
-        return $this->belongsTo(SuratProses::class, 'id_proses');
-    }
+    // public function suratProses()
+    // {
+    //     return $this->belongsTo(SuratProses::class, 'id_proses');
+    // }
 }
