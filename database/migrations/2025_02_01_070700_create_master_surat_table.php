@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('pengirim');
             $table->enum('status', ['Proses', 'Terima', 'Tolak']);
             $table->text('keterangan')->nullable();
-            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_user')->nullable();
             $table->string('file_path')->nullable();
             $table->timestamps();
         });

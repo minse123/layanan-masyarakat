@@ -2,11 +2,10 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <span>Laporan Surat Proses</span>
+            <span>Laporan Surat Ditolak</span>
             <div class="d-flex">
                 <!-- Tombol Cetak PDF -->
-                <a href="{{ route('admin.proses.surat.cetak-pdf', ['filter' => session('filter'), 'tanggal' => session('tanggal')]) }}"
-                    class="btn btn-primary btn-icon-split">
+                <a href="{{ route('report.surat.tolak.cetak-pdf') }}" class="btn btn-primary btn-icon-split">
                     <span class="icon text-white-50">
                         <i class="fas fa-file-pdf"></i>
                     </span>
@@ -17,7 +16,7 @@
         <div class="card-body">
             <!-- Filter Data -->
             <div class="mb-4">
-                <form action="{{ route('admin.proses.surat.filter') }}" method="GET" class="form-inline">
+                <form action="{{ route('admin.tolak.surat.filter') }}" method="GET" class="form-inline">
                     <div class="form-group mb-2">
                         <label for="filter" class="mr-2">Pilih Periode</label>
                         <select name="filter" id="filter" class="form-control">
@@ -35,7 +34,7 @@
                     <button type="submit" class="btn btn-primary mb-2">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="{{ url('/admin/laporan/surat/proses') }}" class="btn btn-outline-secondary mb-2">
+                    <a href="{{ route('admin.tolak.surat.resetfilter') }}" class="btn btn-outline-secondary mb-2">
                         <i class="fas fa-sync"></i> Reset
                     </a>
                 </form>
@@ -51,8 +50,8 @@
                             <th>Perihal</th>
                             <th>Pengirim</th>
                             <th>Keterangan</th>
-                            <th>Tanggal Proses</th>
-                            <th>Catatan Proses</th>
+                            <th>Tanggal Tolak</th>
+                            <th>Alasan Tolak</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,8 +63,8 @@
                                 <td>{{ $item->masterSurat->perihal ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->pengirim ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->keterangan ?? '-' }}</td>
-                                <td>{{ $item->tanggal_proses ?? '-' }}</td>
-                                <td>{{ $item->catatan_proses ?? '-' }}</td>
+                                <td>{{ $item->tanggal_tolak ?? '-' }}</td>
+                                <td>{{ $item->alasan_tolak ?? '-' }}</td>
                             </tr>
                         @endforeach
                     </tbody>

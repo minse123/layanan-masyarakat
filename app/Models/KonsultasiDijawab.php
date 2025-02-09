@@ -17,7 +17,7 @@ class KonsultasiDijawab extends Model
         'tanggal_dijawab',
     ];
 
-    public function konsultasi()
+    public function masterKonsultasi()
     {
         return $this->belongsTo(MasterKonsultasi::class, 'id_konsultasi');
     }

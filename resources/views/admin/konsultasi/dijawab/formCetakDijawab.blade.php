@@ -4,10 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Surat Ditolak</title>
+    <title>Laporan Konsultasi Sudah di Jawab</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+        }
+
+        /* Pengaturan margin halaman PDF */
+        @page {
+            size: A4 landscape;
+            margin: 2cm;
         }
 
         .kop-surat {
@@ -35,6 +41,10 @@
             border: 1px solid #000;
             padding: 8px;
             text-align: left;
+            word-wrap: break-word;
+            /* Mencegah teks panjang keluar tabel */
+            max-width: 150px;
+            /* Batasi lebar kolom */
         }
 
         .table th {
@@ -45,6 +55,16 @@
 
         .text-center {
             text-align: center;
+        }
+
+        /* Mencegah tabel terpotong saat cetak PDF */
+        tr {
+            page-break-inside: avoid;
+        }
+
+        /* Jika tabel terlalu panjang, pindahkan ke halaman baru */
+        table {
+            page-break-after: auto;
         }
     </style>
 </head>
@@ -64,34 +84,40 @@
     </div>
 
     <!-- Judul Laporan -->
-    <h2 class="text-center">Laporan Surat Ditolak</h2>
+    <h2 class="text-center">Laporan Konsultasi Sudah di Jawab</h2>
     <p class="text-center">Periode: {{ session('filter') }} - {{ session('tanggal') }}</p>
 
     <!-- Tabel Data -->
-    <table class="table">
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>Nomor Surat</th>
-                <th>Tanggal Surat</th>
-                <th>Pengirim</th>
-                <th>Perihal</th>
-                <th>Tanggal Di Tolak</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($data as $key => $item)
+    <div style="overflow-x: auto;">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td class="text-center">{{ $key + 1 }}</td>
-                    <td>{{ $item->masterSurat->nomor_surat ?? '-' }}</td>
-                    <td class="text-center">{{ $item->masterSurat->tanggal_surat ?? '-' }}</td>
-                    <td>{{ $item->masterSurat->pengirim ?? '-' }}</td>
-                    <td>{{ $item->masterSurat->perihal ?? '-' }}</td>
-                    <td>{{ $item->masterSurat->surat_tolak->first()->tanggal_tolak ?? '-' }}</td>
+                    <th>No.</th>
+                    <th>Nama</th>
+                    <th>Telepon</th>
+                    <th>Email</th>
+                    <th>Judul Konsultasi</th>
+                    <th>Deskripsi</th>
+                    <th>Jawaban</th>
+                    <th>Tanggal Dijawab</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($data as $key => $item)
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $item->masterKonsultasi->nama ?? '-' }}</td>
+                        <td>{{ $item->masterKonsultasi->telepon ?? '-' }}</td>
+                        <td>{{ $item->masterKonsultasi->email ?? '-' }}</td>
+                        <td>{{ $item->masterKonsultasi->judul_konsultasi ?? '-' }}</td>
+                        <td>{{ $item->masterKonsultasi->deskripsi ?? '-' }}</td>
+                        <td>{{ $item->jawaban ?? '-' }}</td>
+                        <td>{{ $item->tanggal_dijawab ?? '-' }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>

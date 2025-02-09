@@ -25,7 +25,7 @@ class MasterSurat extends Model
         'keterangan',
         'file_path',
         'status',
-        'id_user',
+        // 'id_user',
     ];
 
     public function suratTerima()

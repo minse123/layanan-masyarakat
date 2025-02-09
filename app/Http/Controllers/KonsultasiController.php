@@ -7,6 +7,7 @@ use App\Models\MasterKonsultasi; // Model for consultations
 use App\Models\KonsultasiPending; // Model for pending consultations
 use App\Models\KonsultasiDijawab; // Model for answered consultations
 use Barryvdh\DomPDF\Facade\Pdf; // Import the PDF facade
+use Carbon\Carbon; // Import Carbon
 
 class KonsultasiController extends Controller
 {
@@ -60,8 +61,9 @@ class KonsultasiController extends Controller
             'judul_konsultasi' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'status' => 'required|string|in:Pending,Dijawab',
-            'jawaban' => 'required_if:status,Dijawab|string',
+            'jawaban' => $request->status === 'Dijawab' ? 'required|string' : 'nullable',
         ]);
+
         // Update consultation data
         $konsultasi->update([
             'nama' => $request->nama,
@@ -141,4 +143,165 @@ class KonsultasiController extends Controller
     }
 
 
+
+    public function pendingindex()
+    {
+        $data = KonsultasiPending::with('masterKonsultasi')->get();
+        return view('admin.konsultasi.pending.reportpending', compact('data')); // Pass the required data to the new view
+    }
+    public function filterpending(Request $request)
+    {
+        $filter = $request->filter;
+        $tanggal = $request->tanggal;
+
+        $query = KonsultasiPending::query()->with('masterKonsultasi');
+
+        if ($filter && $tanggal) {
+            $tanggal = Carbon::parse($tanggal);
+            $query->whereHas('masterKonsultasi', function ($q) use ($filter, $tanggal) {
+                switch ($filter) {
+                    case 'harian':
+                        $q->whereDate('tanggal_pengajuan', $tanggal);
+                        break;
+                    case 'mingguan':
+                        $q->whereBetween('tanggal_pengajuan', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        break;
+                    case 'bulanan':
+                        $q->whereMonth('tanggal_pengajuan', $tanggal->month)
+                            ->whereYear('tanggal_pengajuan', $tanggal->year);
+                        break;
+                    case 'tahunan':
+                        $q->whereYear('tanggal_pengajuan', $tanggal->year);
+                        break;
+                }
+            });
+        }
+
+        $data = $query->get();
+        // Simpan filter ke session
+        session(['filter' => $filter, 'tanggal' => $tanggal ? $tanggal->toDateString() : null]);
+        session()->save();
+        // Menyiapkan pesan notifikasi jika data kosong
+        $message = '';
+        if ($data->isEmpty()) {
+            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
+        }
+
+        return view('admin.konsultasi.pending.reportpending', compact('data', 'message'));
+    }
+    public function resetfilterpending(Request $request)
+    {
+        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
+        return redirect()->route('admin.konsultasi.pending'); // Redirect ke halaman utama laporan
+    }
+    public function cetakpending(Request $request)
+    {
+        $filter = session('filter');
+        $tanggal = session('tanggal');
+        $query = KonsultasiPending::query()->with('masterKonsultasi');
+        if ($filter && $tanggal) {
+            $tanggal = Carbon::parse($tanggal);
+            $query->whereHas('masterKonsultasi', function ($q) use ($filter, $tanggal) {
+                switch ($filter) {
+                    case 'harian':
+                        $q->whereDate('tanggal_pengajuan', $tanggal);
+                        break;
+                    case 'mingguan':
+                        $q->whereBetween('tanggal_pengajuan', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        break;
+                    case 'bulanan':
+                        $q->whereMonth('tanggal_pengajuan', $tanggal->month)
+                            ->whereYear('tanggal_pengajuan', $tanggal->year);
+                        break;
+                    case 'tahunan':
+                        $q->whereYear('tanggal_pengajuan', $tanggal->year);
+                        break;
+                }
+            });
+        }
+        $data = $query->get();
+        $pdf = PDF::loadView('admin.konsultasi.pending.formCetakPending', compact('data'));
+        return $pdf->stream('laporan-konsultasi-pending.pdf');
+    }
+
+
+    public function dijawabindex()
+    {
+        $data = KonsultasiDijawab::with('masterKonsultasi')->get(); // Adjusted to get data from KonsultasiDijawab
+        return view('admin.konsultasi.dijawab.reportdijawab', compact('data')); // Updated view to reflect the change
+    }
+    public function filterdijawab(Request $request)
+    {
+        $filter = $request->filter;
+        $tanggal = $request->tanggal;
+
+        $query = KonsultasiDijawab::query()->with('masterKonsultasi');
+
+        if ($filter && $tanggal) {
+            $tanggal = Carbon::parse($tanggal);
+            $query->whereHas('masterKonsultasi', function ($q) use ($filter, $tanggal) {
+                switch ($filter) {
+                    case 'harian':
+                        $q->whereDate('tanggal_dijawab', $tanggal);
+                        break;
+                    case 'mingguan':
+                        $q->whereBetween('tanggal_dijawab', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        break;
+                    case 'bulanan':
+                        $q->whereMonth('tanggal_dijawab', $tanggal->month)
+                            ->whereYear('tanggal_dijawab', $tanggal->year);
+                        break;
+                    case 'tahunan':
+                        $q->whereYear('tanggal_dijawab', $tanggal->year);
+                        break;
+                }
+            });
+        }
+
+        $data = $query->get();
+        // Simpan filter ke session
+        session(['filter' => $filter, 'tanggal' => $tanggal ? $tanggal->toDateString() : null]);
+        session()->save();
+        // Menyiapkan pesan notifikasi jika data kosong
+        $message = '';
+        if ($data->isEmpty()) {
+            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
+        }
+
+        return view('admin.konsultasi.dijawab.reportdijawab', compact('data', 'message'));
+    }
+    public function resetfilterdijawab(Request $request)
+    {
+        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
+        return redirect()->route('admin.konsultasi.dijawab'); // Redirect ke halaman utama laporan
+    }
+    public function cetakdijawab(Request $request)
+    {
+        $filter = session('filter');
+        $tanggal = session('tanggal');
+        $query = KonsultasiDijawab::query()->with('masterKonsultasi');
+        if ($filter && $tanggal) {
+            $tanggal = Carbon::parse($tanggal);
+            $query->whereHas('masterKonsultasi', function ($q) use ($filter, $tanggal) {
+                switch ($filter) {
+                    case 'harian':
+                        $q->whereDate('tanggal_dijawab', $tanggal);
+                        break;
+                    case 'mingguan':
+                        $q->whereBetween('tanggal_dijawab', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        break;
+                    case 'bulanan':
+                        $q->whereMonth('tanggal_dijawab', $tanggal->month)
+                            ->whereYear('tanggal_dijawab', $tanggal->year);
+                        break;
+                    case 'tahunan':
+                        $q->whereYear('tanggal_dijawab', $tanggal->year);
+                        break;
+                }
+            });
+        }
+        $data = $query->get();
+        $pdf = PDF::loadView('admin.konsultasi.dijawab.formCetakDijawab', compact('data'));
+        return $pdf->stream('laporan-konsultasi-dijawab.pdf');
+    }
 }

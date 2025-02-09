@@ -7,9 +7,6 @@
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahModal">
                     <i class="fas fa-plus"></i> Tambah Data
                 </button>
-                <a href="{{ route('admin.konsultasi.cetak-pdf') }}" class="btn btn-primary">
-                    <i class="fas fa-file-pdf"></i> Cetak PDF
-                </a>
             </div>
         </div>
         <div class="card-body">
@@ -247,7 +244,14 @@
                                                         function toggleJawabanField() {
                                                             const status = document.getElementById('status').value;
                                                             const jawabanField = document.getElementById('jawabanField');
-                                                            jawabanField.style.display = (status === 'Dijawab') ? 'block' : 'none';
+                                                            const jawabanInput = document.getElementById('jawaban');
+
+                                                            if (status === 'Dijawab') {
+                                                                jawabanField.style.display = 'block';
+                                                            } else {
+                                                                jawabanField.style.display = 'none';
+                                                                jawabanInput.value = ''; // Hapus nilai jawaban jika tidak diperlukan
+                                                            }
                                                         }
                                                         toggleJawabanField();
                                                     </script>

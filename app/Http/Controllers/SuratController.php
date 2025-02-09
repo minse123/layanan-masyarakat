@@ -395,4 +395,84 @@ class SuratController extends Controller
         return $pdf->stream('laporan-surat-diterima.pdf');
     }
 
+
+
+    public function tolakindex()
+    {
+        $data = SuratTolak::with('masterSurat')->get();
+        return view('admin.surat.tolak.reporttolak', compact('data')); // Pass the required data to the new view
+    }
+    public function filtertolak(Request $request)
+    {
+        $filter = $request->filter;
+        $tanggal = $request->tanggal;
+
+        $query = SuratTolak::query()->with('masterSurat');
+
+        if ($filter && $tanggal) {
+            $tanggal = Carbon::parse($tanggal);
+            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
+                switch ($filter) {
+                    case 'harian':
+                        $q->whereDate('tanggal_tolak', $tanggal);
+                        break;
+                    case 'mingguan':
+                        $q->whereBetween('tanggal_tolak', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        break;
+                    case 'bulanan':
+                        $q->whereMonth('tanggal_tolak', $tanggal->month)
+                            ->whereYear('tanggal_tolak', $tanggal->year);
+                        break;
+                    case 'tahunan':
+                        $q->whereYear('tanggal_tolak', $tanggal->year);
+                        break;
+                }
+            });
+        }
+
+        $data = $query->get();
+        session(['filter' => $filter, 'tanggal' => $tanggal]);
+
+        // Menyiapkan pesan notifikasi jika data kosong
+        $message = '';
+        if ($data->isEmpty()) {
+            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
+        }
+
+        return view('admin.surat.tolak.reporttolak', compact('data', 'message'));
+    }
+    public function resetfiltertolak(Request $request)
+    {
+        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
+        return redirect()->route('admin.tolak.surat'); // Redirect ke halaman utama laporan
+    }
+    public function cetaktolak(Request $request)
+    {
+        $filter = session('filter');
+        $tanggal = session('tanggal');
+        $query = SuratTolak::query()->with('masterSurat');
+        if ($filter && $tanggal) {
+            $tanggal = Carbon::parse($tanggal);
+            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
+                switch ($filter) {
+                    case 'harian':
+                        $q->whereDate('tanggal_tolak', $tanggal);
+                        break;
+                    case 'mingguan':
+                        $q->whereBetween('tanggal_tolak', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        break;
+                    case 'bulanan':
+                        $q->whereMonth('tanggal_tolak', $tanggal->month)
+                            ->whereYear('tanggal_tolak', $tanggal->year);
+                        break;
+                    case 'tahunan':
+                        $q->whereYear('tanggal_tolak', $tanggal->year);
+                        break;
+                }
+            });
+        }
+        $data = $query->get();
+        $pdf = PDF::loadView('admin.surat.tolak.formCetakTolak', compact('data'));
+        return $pdf->stream('laporan-surat-ditolak.pdf');
+    }
 }

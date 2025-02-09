@@ -26,20 +26,20 @@
                                </li>
 
                                <li class="nav-item">
-                                   <a class="nav-link click-scroll" href="#section_2">The Book</a>
+                                   <a class="nav-link click-scroll" href="#section_2">Layanan</a>
                                </li>
 
                                <li class="nav-item">
-                                   <a class="nav-link click-scroll" href="#section_3">Author</a>
+                                   <a class="nav-link click-scroll" href="#section_3">Tentang Kami</a>
+                               </li>
+
+                               {{-- <li class="nav-item">
+                                   <a class="nav-link click-scroll" href="#section_4">Kontak</a>
                                </li>
 
                                <li class="nav-item">
-                                   <a class="nav-link click-scroll" href="#section_4">Reviews</a>
-                               </li>
-
-                               <li class="nav-item">
-                                   <a class="nav-link click-scroll" href="#section_5">Contact</a>
-                               </li>
+                                   <a class="nav-link click-scroll" href="#section_5">Tentang Kami</a>
+                               </li> --}}
                            </ul>
 
                            <div class="d-none d-lg-block">

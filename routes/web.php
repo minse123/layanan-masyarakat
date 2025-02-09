@@ -16,8 +16,11 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::get('/', [LandingController::class, 'landing']);
 
-Route::get('/buku-tamu', [GuestController::class, 'index'])->name('buku-tamu');
+// guest akses
+// Route::get('/buku-tamu', [GuestController::class, 'index'])->name('buku-tamu');
 Route::post('/buku-tamu', [GuestController::class, 'simpanData'])->name('simpan-tamu');
+Route::post('/surat', [GuestController::class, 'storeSurat'])->name('simpan-surat');
+Route::post('/konsultasi', [GuestController::class, 'storeKonsultasi'])->name('simpan-konsultasi');
 
 // Route untuk sesi (login dan logout)
 Route::get('/login', [SesiController::class, 'index'])->name('login');
@@ -62,8 +65,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/laporan/surat/terima/filter', [SuratController::class, 'filterterima'])->name('admin.terima.surat.filter');
     Route::get('/admin/laporan/surat/terima/resetfilter', [SuratController::class, 'resetfilterterima'])->name('admin.terima.surat.resetfilter');
 
+    Route::get('/admin/laporan/surat/tolak', [SuratController::class, 'tolakindex'])->name('admin.tolak.surat');
+    Route::get('/admin/laporan/surat/tolak/filter', [SuratController::class, 'filtertolak'])->name('admin.tolak.surat.filter');
+    Route::get('/admin/laporan/surat/tolak/resetfilter', [SuratController::class, 'resetfiltertolak'])->name('admin.tolak.surat.resetfilter');
 
-    // Route::get('/view-pdf', [AdminController::class, 'cetak'])->name('admin.view-pdf');
+    Route::get('/admin/laporan/konsultasi/pending', [KonsultasiController::class, 'pendingindex'])->name('admin.konsultasi.pending');
+    Route::get('/admin/laporan/konsultasi/pending/filter', [KonsultasiController::class, 'filterpending'])->name('admin.pending.konsultasi.filter');
+    Route::get('/admin/laporan/konsultasi/pending/resetfilter', [KonsultasiController::class, 'resetfilterpending'])->name('admin.pending.konsultasi.resetfilter');
+
+    Route::get('/admin/laporan/konsultasi/dijawab', [KonsultasiController::class, 'dijawabindex'])->name('admin.konsultasi.dijawab');
+    Route::get('/admin/laporan/konsultasi/dijawab/filter', [KonsultasiController::class, 'filterdijawab'])->name('admin.dijawab.konsultasi.filter');
+    Route::get('/admin/laporan/konsultasi/dijawab/resetfilter', [KonsultasiController::class, 'resetfilterdijawab'])->name('admin.dijawab.konsultasi.resetfilter');
+
     Route::get('/admin/konsultasi', [KonsultasiController::class, 'index'])->name('admin.konsultasi.index');
     Route::post('/admin/konsultasi/store', [KonsultasiController::class, 'store'])->name('admin.konsultasi.store');
     Route::get('/admin/konsultasi/{id}', [KonsultasiController::class, 'show'])->name('admin.konsultasi.show');
@@ -86,5 +99,9 @@ Route::middleware(['auth', 'role:admin,kasubag'])->group(function () {
 
     Route::get('/report/surat/proses/cetak-pdf', [SuratController::class, 'cetakproses'])->name('report.surat.proses.cetak-pdf');
     Route::get('/report/surat/terima/cetak-pdf', [SuratController::class, 'cetakterima'])->name('report.surat.terima.cetak-pdf');
+    Route::get('/report/surat/tolak/cetak-pdf', [SuratController::class, 'cetaktolak'])->name('report.surat.tolak.cetak-pdf');
+    Route::get('/report/konsultasi/pending/cetak-pdf', [KonsultasiController::class, 'cetakpending'])->name('report.konsultasi.pending.cetak-pdf');
+    Route::get('/report/konsultasi/dijawab/cetak-pdf', [KonsultasiController::class, 'cetakdijawab'])->name('report.konsultasi.dijawab.cetak-pdf');
+
 
 });

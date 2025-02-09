@@ -16,7 +16,7 @@ class KonsultasiPending extends Model
         'tanggal_pengajuan',
     ];
 
-    public function konsultasi()
+    public function masterKonsultasi()
     {
         return $this->belongsTo(MasterKonsultasi::class, 'id_konsultasi');
     }

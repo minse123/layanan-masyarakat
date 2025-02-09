@@ -20,38 +20,12 @@
         </a>
     </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">Master Data</div>
-
-    <!-- Nav Item - Master Data -->
-    <li class="nav-item {{ request()->is('tamu') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ url('tamu') }}" title="Master Buku Tamu">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Master Buku Tamu</span>
-        </a>
-    </li>
-    <li class="nav-item {{ request()->is('admin/surat') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ url('admin/surat') }}" title="Master Administrasi Surat">
-            <i class="fas fa-fw fa-file-alt"></i>
-            <span>Master Administrasi Surat</span>
-        </a>
-    </li>
-    <li class="nav-item {{ request()->is('admin/konsultasi') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ url('admin/konsultasi') }}" title="Master Konsultasi Pelatihan">
-            <i class="fas fa-fw fa-comments"></i>
-            <span>Master Konsultasi Pelatihan</span>
-        </a>
-    </li>
-
     <hr class="sidebar-divider">
 
     <!-- Heading -->
     <div class="sidebar-heading">Report</div>
-    <li class="nav-item {{ request()->is('admin/report/tamu') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.report.tamu') }}" title="Report Tamu">
+    <li class="nav-item {{ request()->is('/report/tamu') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('report.tamu') }}" title="Report Tamu">
             <i class="fas fa-fw fa-file"></i>
             <span>Report Tamu</span>
         </a>
@@ -90,13 +64,6 @@
 
     <hr class="sidebar-divider">
 
-    <!-- Nav Item - User Accounts -->
-    <li class="nav-item {{ request()->is('admin/akun') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.akun') }}" title="Akun Pengguna">
-            <i class="fas fa-fw fa-user"></i>
-            <span>Akun Pengguna</span>
-        </a>
-    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
