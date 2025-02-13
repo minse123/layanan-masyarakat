@@ -30,6 +30,7 @@ class SuratController extends Controller
             'tanggal_surat' => 'required|date',
             'perihal' => 'nullable|string|max:255',
             'pengirim' => 'required|string|max:255',
+            'telepon' => 'required|string|max:255',
             'keterangan' => 'nullable|string',
             'catatan_proses' => 'nullable|string',
             'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -47,6 +48,7 @@ class SuratController extends Controller
                 'tanggal_surat' => $request->tanggal_surat,
                 'perihal' => $request->perihal,
                 'pengirim' => $request->pengirim,
+                'telepon' => $request->telepon,
                 'status' => 'Proses',
                 'keterangan' => $request->keterangan,
                 'id_user' => auth()->id(),
@@ -113,6 +115,7 @@ class SuratController extends Controller
             'nomor_surat' => 'required|string|max:255',
             'tanggal_surat' => 'required|date',
             'pengirim' => 'required|string|max:255',
+            'telepon' => 'required|string|max:255',
             'perihal' => 'required|string',
             'status' => 'required|string|in:Proses,Terima,Tolak',
             'keterangan' => 'nullable|string',
@@ -124,6 +127,7 @@ class SuratController extends Controller
             'nomor_surat' => $request->nomor_surat,
             'tanggal_surat' => $request->tanggal_surat,
             'pengirim' => $request->pengirim,
+            'telepon' => $request->telepon,
             'perihal' => $request->perihal,
             'status' => $request->status,
             'keterangan' => $request->keterangan,
@@ -183,7 +187,6 @@ class SuratController extends Controller
         // Redirect dengan pesan sukses
         return redirect()->route('admin.master.surat')->with('success', 'Data surat berhasil diperbarui.');
     }
-
     public function delete($id)
     {
         // Hapus data surat
@@ -394,8 +397,6 @@ class SuratController extends Controller
         $pdf = PDF::loadView('admin.surat.terima.formCetakTerima', compact('data'));
         return $pdf->stream('laporan-surat-diterima.pdf');
     }
-
-
 
     public function tolakindex()
     {

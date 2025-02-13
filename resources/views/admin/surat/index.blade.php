@@ -44,6 +44,7 @@
                             <th>Nomor Surat</th>
                             <th>Tanggal Surat</th>
                             <th>Pengirim</th>
+                            <th>Telepon</th>
                             <th>Perihal</th>
                             <th>Status</th>
                             <th>Detail</th>
@@ -57,6 +58,7 @@
                                 <td>{{ $item->nomor_surat }}</td>
                                 <td>{{ $item->tanggal_surat }}</td>
                                 <td>{{ $item->pengirim }}</td>
+                                <td>{{ $item->telepon }}</td>
                                 <td>{{ $item->perihal }}</td>
                                 <td>
                                     <span
@@ -106,89 +108,98 @@
                                                             <label>Pengirim:</label>
                                                             <p>{{ $item->pengirim }}</p>
                                                         </div>
-                                                    @endif
-
-                                                    @if ($item->perihal)
-                                                        <div class="form-group">
-                                                            <label>Perihal:</label>
-                                                            <p>{{ $item->perihal }}</p>
-                                                        </div>
-                                                    @endif
-
-                                                    @if ($item->status)
-                                                        <div class="form-group">
-                                                            <label>Status:</label>
-                                                            <p>{{ $item->status }}</p>
-                                                        </div>
-                                                    @endif
-
-                                                    @if ($item->keterangan)
-                                                        <div class="form-group">
-                                                            <label>Keterangan:</label>
-                                                            <p>{{ $item->keterangan }}</p>
-                                                        </div>
-                                                    @endif
-
-                                                    @if ($item->file_path)
-                                                        <div class="form-group">
-                                                            <label>File:</label>
-                                                            <p><a href="{{ asset('storage/' . $item->file_path) }}"
-                                                                    target="_blank">Lihat File</a></p>
-                                                        </div>
-                                                    @endif
-
-                                                    <hr> <!-- Garis pemisah -->
-
-                                                    @if ($item->status === 'Terima' && $item->suratTerima)
-                                                        <h6>Informasi Penerimaan</h6>
-                                                        @if ($item->suratTerima->first()->tanggal_terima)
+                                                        @endif @if ($item->telepon)
                                                             <div class="form-group">
-                                                                <label>Tanggal Terima:</label>
-                                                                <p>{{ $item->suratTerima->first()->tanggal_terima }}</p>
+                                                                <label>Telepon:</label>
+                                                                <p>{{ $item->telepon }}</p>
                                                             </div>
                                                         @endif
 
-                                                        @if ($item->suratTerima->first()->catatan_terima)
+                                                        @if ($item->perihal)
                                                             <div class="form-group">
-                                                                <label>Catatan Terima:</label>
-                                                                <p>{{ $item->suratTerima->first()->catatan_terima }}</p>
-                                                            </div>
-                                                        @endif
-                                                    @endif
-
-                                                    @if ($item->status !== 'Terima')
-                                                        <h6>Informasi Proses</h6>
-                                                        @if (optional($item->suratProses->first())->tanggal_proses)
-                                                            <div class="form-group">
-                                                                <label>Tanggal Proses:</label>
-                                                                <p>{{ $item->suratProses->first()->tanggal_proses }}</p>
+                                                                <label>Perihal:</label>
+                                                                <p>{{ $item->perihal }}</p>
                                                             </div>
                                                         @endif
 
-                                                        @if (optional($item->suratProses->first())->catatan_proses)
+                                                        @if ($item->status)
                                                             <div class="form-group">
-                                                                <label>Catatan Proses:</label>
-                                                                <p>{{ $item->suratProses->first()->catatan_proses }}</p>
+                                                                <label>Status:</label>
+                                                                <p>{{ $item->status }}</p>
+                                                            </div>
+                                                        @endif
+
+                                                        @if ($item->keterangan)
+                                                            <div class="form-group">
+                                                                <label>Keterangan:</label>
+                                                                <p>{{ $item->keterangan }}</p>
+                                                            </div>
+                                                        @endif
+
+                                                        @if ($item->file_path)
+                                                            <div class="form-group">
+                                                                <label>File:</label>
+                                                                <p><a href="{{ asset('storage/' . $item->file_path) }}"
+                                                                        target="_blank">Lihat File</a></p>
                                                             </div>
                                                         @endif
 
                                                         <hr> <!-- Garis pemisah -->
 
-                                                        <h6>Informasi Penolakan</h6>
-                                                        @if (optional($item->suratTolak->first())->tanggal_tolak)
-                                                            <div class="form-group">
-                                                                <label>Tanggal Tolak:</label>
-                                                                <p>{{ $item->suratTolak->first()->tanggal_tolak }}</p>
-                                                            </div>
+                                                        @if ($item->status === 'Terima' && $item->suratTerima)
+                                                            <h6>Informasi Penerimaan</h6>
+                                                            @if ($item->suratTerima->first()->tanggal_terima)
+                                                                <div class="form-group">
+                                                                    <label>Tanggal Terima:</label>
+                                                                    <p>{{ $item->suratTerima->first()->tanggal_terima }}
+                                                                    </p>
+                                                                </div>
+                                                            @endif
+
+                                                            @if ($item->suratTerima->first()->catatan_terima)
+                                                                <div class="form-group">
+                                                                    <label>Catatan Terima:</label>
+                                                                    <p>{{ $item->suratTerima->first()->catatan_terima }}
+                                                                    </p>
+                                                                </div>
+                                                            @endif
                                                         @endif
 
-                                                        @if (optional($item->suratTolak->first())->alasan_tolak)
-                                                            <div class="form-group">
-                                                                <label>Catatan Tolak:</label>
-                                                                <p>{{ $item->suratTolak->first()->alasan_tolak }}</p>
-                                                            </div>
+                                                        @if ($item->status !== 'Terima')
+                                                            <h6>Informasi Proses</h6>
+                                                            @if (optional($item->suratProses->first())->tanggal_proses)
+                                                                <div class="form-group">
+                                                                    <label>Tanggal Proses:</label>
+                                                                    <p>{{ $item->suratProses->first()->tanggal_proses }}
+                                                                    </p>
+                                                                </div>
+                                                            @endif
+
+                                                            @if (optional($item->suratProses->first())->catatan_proses)
+                                                                <div class="form-group">
+                                                                    <label>Catatan Proses:</label>
+                                                                    <p>{{ $item->suratProses->first()->catatan_proses }}
+                                                                    </p>
+                                                                </div>
+                                                            @endif
+
+                                                            <hr> <!-- Garis pemisah -->
+
+                                                            <h6>Informasi Penolakan</h6>
+                                                            @if (optional($item->suratTolak->first())->tanggal_tolak)
+                                                                <div class="form-group">
+                                                                    <label>Tanggal Tolak:</label>
+                                                                    <p>{{ $item->suratTolak->first()->tanggal_tolak }}</p>
+                                                                </div>
+                                                            @endif
+
+                                                            @if (optional($item->suratTolak->first())->alasan_tolak)
+                                                                <div class="form-group">
+                                                                    <label>Catatan Tolak:</label>
+                                                                    <p>{{ $item->suratTolak->first()->alasan_tolak }}</p>
+                                                                </div>
+                                                            @endif
                                                         @endif
-                                                    @endif
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -294,6 +305,11 @@
                                                                 value="{{ $item->pengirim }}" required>
                                                         </div>
                                                         <div class="form-group">
+                                                            <label>Telepon</label>
+                                                            <input type="text" name="telepon" class="form-control"
+                                                                value="{{ $item->telepon }}" required>
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label>Perihal</label>
                                                             <textarea name="perihal" class="form-control" required>{{ $item->perihal }}</textarea>
                                                         </div>
@@ -362,6 +378,10 @@
                                 <div class="form-group">
                                     <label>Pengirim</label>
                                     <input type="text" name="pengirim" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Telepon</label>
+                                    <input type="text" name="telepon" class="form-control" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Perihal</label>

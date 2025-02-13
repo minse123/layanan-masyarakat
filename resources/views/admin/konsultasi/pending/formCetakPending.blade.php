@@ -12,22 +12,44 @@
 
         /* Pengaturan margin halaman PDF */
         @page {
-            size: A4;
+            size: A4 landscape;
             margin: 2cm;
         }
 
         .kop-surat {
+            width: 100%;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        .kop-surat h4 {
-            margin: 0;
-            font-weight: bold;
+        .kop-surat td {
+            vertical-align: middle;
         }
 
-        .kop-surat p {
-            margin: 0;
+        .kop-surat img {
+            width: 100px;
+            height: auto;
+        }
+
+        .kop-text {
+            text-align: center;
+            width: 100%;
+        }
+
+        .kop-text h4 {
+            font-weight: normal;
+            margin: 4px 0;
+            font-size: 12px;
+        }
+
+        .kop-text h5 {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .kop-text p {
+            margin: 5px 0;
+            font-size: 10px;
         }
 
         .table {
@@ -66,29 +88,67 @@
         table {
             page-break-after: auto;
         }
+
+        /* Tanda Tangan */
+        .signature-section {
+            margin-top: 60px;
+            /* Increased space above the signature section */
+            page-break-inside: avoid;
+            /* Prevents the signature section from being split */
+            text-align: right;
+        }
+
+        .table {
+            page-break-after: auto;
+            /* Allows the table to break after if it's too long */
+        }
+
+        .signature {
+            display: inline-block;
+            text-align: center;
+            margin-left: 50px;
+            /* Adjust spacing between signatures if needed */
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 200px;
+            /* Adjust width of the signature line */
+            margin: 0 auto;
+            /* Center the line */
+            margin-top: 80px;
+            /* Space above the line */
+        }
     </style>
 </head>
 
 <body>
     <!-- Kop Surat -->
-    <div class="kop-surat">
-        <img src="{{ public_path('frontend/images/logo-kementerian-1.png') }}" alt="Logo Kementerian" width="50">
-        <h4>KEMENTERIAN DESA, PEMBANGUNAN DAERAH TERTINGGAL DAN TRANSMIGRASI RI</h4>
-        <h4>BADAN PENGEMBANGAN SUMBER DAYA MANUSIA DAN PEMBERDAYAAN MASYARAKAT</h4>
-        <h4>DESA, DAERAH TERTINGGAL DAN TRANSMIGRASI</h4>
-        <h4>BALAI PELATIHAN DAN PEMBERDAYAAN MASYARAKAT</h4>
-        <h4>DESA, DAERAH TERTINGGAL, DAN TRANSMIGRASI BANJARMASIN</h4>
-        <p>Jalan Handil Bhakti KM.9,5 No. 95 Banjarmasin Kalimantan Selatan, 70582</p>
-        <p>Telepon: 08115000344 | <a href="https://www.kemendesa.go.id" target="_blank">www.kemendesa.go.id</a></p>
-        <hr>
-    </div>
+    <table class="kop-surat">
+        <tr>
+            <td width="10%">
+                <img src="{{ public_path('frontend/images/logo-kementerian-1.png') }}" alt="Logo Kementerian">
+            </td>
+            <td class="kop-text">
+                <h4>KEMENTERIAN DESA, PEMBANGUNAN DAERAH TERTINGGAL DAN TRANSMIGRASI RI</h4>
+                <h4>BADAN PENGEMBANGAN SUMBER DAYA MANUSIA DAN PEMBERDAYAAN MASYARAKAT</h4>
+                <h4>DESA, DAERAH TERTINGGAL DAN TRANSMIGRASI</h4>
+                <h5>BALAI PELATIHAN DAN PEMBERDAYAAN MASYARAKAT</h5>
+                <h5>DESA, DAERAH TERTINGGAL, DAN TRANSMIGRASI BANJARMASIN</h5>
+                <p>Jalan Handil Bhakti KM.9,5 No. 95 Banjarmasin Kalimantan Selatan, 70582 Telepon: 08115000344</p>
+                <p><a href="https://www.kemendesa.go.id" target="_blank">www.kemendesa.go.id</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <hr>
 
     <!-- Judul Laporan -->
     <h2 class="text-center">Laporan Konsultasi Sedang Pending</h2>
     <p class="text-center">Periode: {{ session('filter') }} - {{ session('tanggal') }}</p>
 
     <!-- Tabel Data -->
-    <div style="overflow-x: auto;">
+    <div>
         <table class="table">
             <thead>
                 <tr>
@@ -115,6 +175,16 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+
+    <!-- Tanda Tangan -->
+    <div class="signature-section">
+        <div class="signature">
+            <p>Kepala Balai PPMDDTT Banjarmasin,</p>
+            <div class="signature-line"></div>
+            <p>Ahmad Syahir, S.H.I., M.H.</p>
+            <p>NIP. 19780602 201101 1 012</p>
+        </div>
     </div>
 </body>
 

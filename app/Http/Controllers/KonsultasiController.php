@@ -17,7 +17,6 @@ class KonsultasiController extends Controller
         $konsultasi = MasterKonsultasi::with(['konsultasiPending', 'konsultasiDijawab'])->get();
         return view('admin.konsultasi.index', compact('konsultasi'));
     }
-
     public function store(Request $request)
     {
         // Validate input
@@ -27,6 +26,7 @@ class KonsultasiController extends Controller
             'email' => 'required|email|max:255',
             'judul_konsultasi' => 'required|string|max:255',
             'deskripsi' => 'required|string',
+            'tanggal_pengajuan' => 'required|date',
         ]);
 
         // Save consultation data
@@ -34,19 +34,18 @@ class KonsultasiController extends Controller
 
         // Save pending consultation data
         KonsultasiPending::create([
-            'id_konsultasi' => $konsultasi->id,
-            'tanggal_pengajuan' => now(),
+            'id_konsultasi' => $konsultasi->id_konsultasi,
+            'tanggal_pengajuan' => Carbon::now(),
         ]);
 
         return redirect()->route('admin.konsultasi.index')->with('success', 'Konsultasi berhasil ditambahkan.');
     }
-
-    public function show(MasterKonsultasi $konsultasi)
+    public function show(Request $request, MasterKonsultasi $konsultasi)
     {
         // Display consultation details
-        return view('admin.konsultasi.show', compact('konsultasi'));
+        $konsultasi = MasterKonsultasi::with(['konsultasiPending', 'konsultasiDijawab'])->get();
+        return view('admin.konsultasi.index', compact('konsultasi'));
     }
-
     public function update(Request $request, $id)
     {
         $konsultasi = MasterKonsultasi::findOrFail($id);
@@ -105,7 +104,6 @@ class KonsultasiController extends Controller
         }
         return redirect()->route('admin.konsultasi.index')->with('success', 'Konsultasi berhasil dijawab.');
     }
-
     public function destroy(MasterKonsultasi $konsultasi)
     {
         // Delete consultation
@@ -140,6 +138,57 @@ class KonsultasiController extends Controller
 
 
         return redirect()->route('admin.konsultasi.index')->with('success', 'Konsultasi berhasil dijawab.');
+    }
+    public function filter(Request $request)
+    {
+        $filter = $request->filter;
+        $tanggal = $request->tanggal;
+
+        $query = KonsultasiPending::query()->with('masterKonsultasi');
+        $query = KonsultasiDijawab::query()->with('masterKonsultasi');
+
+
+        if ($filter && $tanggal) {
+            $tanggal = Carbon::parse($tanggal);
+            $query->whereHas('masterKonsultasi', function ($q) use ($filter, $tanggal) {
+                switch ($filter) {
+                    case 'harian':
+                        $q->whereDate('tanggal_pengajuan', $tanggal)
+                            ->orWhereDate('tanggal_dijawab', $tanggal);
+                        break;
+                    case 'mingguan':
+                        $q->whereBetween('tanggal_pengajuan', [$tanggal->startOfWeek(), $tanggal->endOfWeek()])
+                            ->orWhereBetween('tanggal_dijawab', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                        break;
+                    case 'bulanan':
+                        $q->whereMonth('tanggal_pengajuan', $tanggal->month)
+                            ->whereYear('tanggal_pengajuan', $tanggal->year)
+                            ->orWhereMonth('tanggal_dijawab', $tanggal->month)
+                            ->whereYear('tanggal_dijawab', $tanggal->year);
+                        break;
+                    case 'tahunan':
+                        $q->whereYear('tanggal_pengajuan', $tanggal->year)
+                            ->orWhereYear('tanggal_dijawab', $tanggal->year);
+                        break;
+                }
+            });
+        }
+        $data = $query->get();
+        // Simpan filter ke session
+        session(['filter' => $filter, 'tanggal' => $tanggal ? $tanggal->toDateString() : null]);
+        session()->save();
+        // Menyiapkan pesan notifikasi jika data kosong
+        $message = '';
+        if ($data->isEmpty()) {
+            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
+        }
+
+        return view('admin.konsultasi.index', compact('data', 'message'));
+    }
+    public function resetfilter(Request $request)
+    {
+        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
+        return redirect()->route('admin.konsultasi.index'); // Redirect ke halaman utama laporan
     }
 
 

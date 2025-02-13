@@ -54,6 +54,7 @@
                             <th>Tanggal Surat</th>
                             <th>Perihal</th>
                             <th>Pengirim</th>
+                            <th>Telepon</th>
                             <th>Keterangan</th>
                             <th>Tanggal Proses</th>
                             <th>Catatan Proses</th>
@@ -67,6 +68,7 @@
                                 <td>{{ $item->masterSurat->tanggal_surat ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->perihal ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->pengirim ?? '-' }}</td>
+                                <td>{{ $item->masterSurat->telepon ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->keterangan ?? '-' }}</td>
                                 <td>{{ $item->tanggal_proses ?? '-' }}</td>
                                 <td>{{ $item->catatan_proses ?? '-' }}</td>

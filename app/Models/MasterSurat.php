@@ -22,6 +22,7 @@ class MasterSurat extends Model
         'tanggal_surat',
         'perihal',
         'pengirim',
+        'telepon',
         'keterangan',
         'file_path',
         'status',

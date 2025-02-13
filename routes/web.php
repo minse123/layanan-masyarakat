@@ -4,20 +4,18 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CetakPDFController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\SesiController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\KasubagController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\KonsultasiController;
+use App\Http\Controllers\PsmController;
+use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('user/landing');
-// });
+
 Route::get('/', [LandingController::class, 'landing']);
 
 // guest akses
-// Route::get('/buku-tamu', [GuestController::class, 'index'])->name('buku-tamu');
 Route::post('/buku-tamu', [GuestController::class, 'simpanData'])->name('simpan-tamu');
 Route::post('/surat', [GuestController::class, 'storeSurat'])->name('simpan-surat');
 Route::post('/konsultasi', [GuestController::class, 'storeKonsultasi'])->name('simpan-konsultasi');
@@ -36,6 +34,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/auth-formEdit/{id}', [AdminController::class, 'authEdit'])->name('admin.auth.edit');
     Route::post('/admin/auth/update/{id}', [AdminController::class, 'authUpdate'])->name('admin.auth.update');
     Route::post('/admin/auth/hapus', [AdminController::class, 'authHapus'])->name('admin.auth.hapus');
+
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
     Route::get('/tamu', [AdminController::class, 'dataTamu'])->name('admin.tamu');
@@ -43,6 +42,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/update-data', [AdminController::class, 'updateTamu'])->name('admin-update-data');
     Route::post('/hapus-data', [AdminController::class, 'hapusTamu'])->name('admin-hapus-data');
     Route::get('/filter-data', [AdminController::class, 'filterData'])->name('admin.filter-data');
+    Route::get('/resetfilter-data', [AdminController::class, 'resetfilterdata'])->name('admin.resetfilter-data');
 
     Route::get('/admin/report/tamu', [AdminController::class, 'reportdataTamu'])->name('admin.report.tamu');
     Route::get('/admin/report/tamu/filter-data', [AdminController::class, 'reportfilterData'])->name('admin.report.tamu.filter-data');
@@ -83,13 +83,42 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/konsultasi/update/{id}', [KonsultasiController::class, 'update'])->name('admin.konsultasi.update'); // Changed to PUT
     Route::delete('/admin/konsultasi/destroy/{id}', [KonsultasiController::class, 'destroy'])->name('admin.konsultasi.destroy'); // Changed to DELETE
     Route::post('/admin/konsultasi/{id}/answer', [KonsultasiController::class, 'answer'])->name('admin.konsultasi.answer');
+    Route::get('/admin/konsultasi/filter', [KonsultasiController::class, 'filter'])->name('admin.konsultasi.filter');
+    Route::get('/admin/konsultasi/resetfilter', [KonsultasiController::class, 'resetfilter'])->name('admin.konsultasi.resetfilter');
     Route::get('/admin/konsultasi/cetak-pdf', [KonsultasiController::class, 'cetakPDF'])->name('admin.konsultasi.cetak-pdf');
 });
-Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/user/dashboard', [UserController::class, 'index']);
+Route::middleware(['auth', 'role:psm'])->group(function () {
+    Route::get('/psm/dashboard', [PsmController::class, 'index']);
+
+    Route::get('/psm/konsultasi', [PsmController::class, 'indexkonsultasi'])->name('psm.konsultasi.index'); // Changed to DELETE
+    Route::post('/psm/konsultasi/{id}/answer', [PsmController::class, 'konsultasidijawab'])->name('psm.konsultasi.jawab');
+    Route::get('/psm/konsultasi/filter', [PsmController::class, 'filterkonsultasi'])->name('psm.konsultasi.filter');
+    Route::get('/psm/konsultasi/resetfilter', [PsmController::class, 'resetfilterkonsultasi'])->name('psm.konsultasi.resetfilter');
 });
 Route::middleware(['auth', 'role:kasubag'])->group(function () {
-    Route::get('/kasubag/dashboard', [KasubagController::class, 'index']);
+    Route::get('/kasubag/dashboard', [KasubagController::class, 'index'])->name('kasubag.dashboard');
+    Route::get('/kasubag/tamu', [KasubagController::class, 'datatamu'])->name('kasubag.tamu');
+    Route::get('/kasubag/filtertamu', [KasubagController::class, 'filterdatatamu'])->name('kasubag.filterdatatamu');
+    Route::get('/kusubag/filterresettamu', [KasubagController::class, 'filterresetdatatamu'])->name('kasubag.filterresetdatatamu');
+
+    Route::get('/kasubag/surat', [KasubagController::class, 'Suratindex'])->name('kasubag.surat');
+    Route::post('/kasubag/surat/terima/{id}', [KasubagController::class, 'terimaSurat'])->name('kasubag.surat.terima');
+    Route::post('/kasubag/surat/tolak/{id}', [KasubagController::class, 'tolakSurat'])->name('kasubag.surat.tolak');
+    Route::get('/kasubag/surat/filter', [KasubagController::class, 'filtersurat'])->name('kasubag.surat.filter');
+    Route::get('/kasubag/surat/resetfilter', [KasubagController::class, 'resetfiltersurat'])->name('kasubag.surat.resetfilter');
+
+    Route::get('/kasubag/laporan/tamu', [KasubagController::class, 'tamuindex'])->name('kasubag.report.tamu');
+    Route::get('/kasubag/laporan/tamu/filter', [KasubagController::class, 'filtertamu'])->name('kasubag.tamu.filter');
+    Route::get('/kasubag/laporan/tamu/resetfilter', [KasubagController::class, 'resetfiltertamu'])->name('kasubag.tamu.resetfilter');
+    Route::get('/kasubag/laporan/surat/proses', [KasubagController::class, 'ProsesIndex'])->name('kasubag.proses.surat');
+    Route::get('/kasubag/laporan/surat/proses/filter', [KasubagController::class, 'filterproses'])->name('kasubag.proses.surat.filter');
+    Route::get('/kasubag/laporan/surat/proses/resetfilter', [KasubagController::class, 'resetfilterproses'])->name('kasubag.proses.surat.resetfilter');
+    Route::get('/kasubag/laporan/surat/terima', [KasubagController::class, 'terimaindex'])->name('kasubag.terima.surat');
+    Route::get('/kasubag/laporan/surat/terima/filter', [KasubagController::class, 'filterterima'])->name('kasubag.terima.surat.filter');
+    Route::get('/kasubag/laporan/surat/terima/resetfilter', [KasubagController::class, 'resetfilterterima'])->name('kasubag.terima.surat.resetfilter');
+    Route::get('/kasubag/laporan/surat/tolak', [KasubagController::class, 'tolakindex'])->name('kasubag.tolak.surat');
+    Route::get('/kasubag/laporan/surat/tolak/filter', [KasubagController::class, 'filtertolak'])->name('kasubag.tolak.surat.filter');
+    Route::get('/kasubag/laporan/surat/tolak/resetfilter', [KasubagController::class, 'resetfiltertolak'])->name('kasubag.tolak.surat.resetfilter');
 });
 
 Route::middleware(['auth', 'role:admin,kasubag'])->group(function () {

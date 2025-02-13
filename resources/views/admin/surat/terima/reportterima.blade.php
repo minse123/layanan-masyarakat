@@ -49,6 +49,7 @@
                             <th>Tanggal Surat</th>
                             <th>Perihal</th>
                             <th>Pengirim</th>
+                            <th>Telepon</th>
                             <th>Keterangan</th>
                             <th>Tanggal Terima</th>
                             <th>Catatan Terima</th>
@@ -62,6 +63,7 @@
                                 <td>{{ $item->masterSurat->tanggal_surat ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->perihal ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->pengirim ?? '-' }}</td>
+                                <td>{{ $item->masterSurat->telepon ?? '-' }}</td>
                                 <td>{{ $item->masterSurat->keterangan ?? '-' }}</td>
                                 <td>{{ $item->tanggal_terima ?? '-' }}</td>
                                 <td>{{ $item->catatan_terima ?? '-' }}</td>

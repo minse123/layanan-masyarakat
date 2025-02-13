@@ -17,17 +17,39 @@
         }
 
         .kop-surat {
+            width: 100%;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        .kop-surat h4 {
-            margin: 0;
-            font-weight: bold;
+        .kop-surat td {
+            vertical-align: middle;
         }
 
-        .kop-surat p {
-            margin: 0;
+        .kop-surat img {
+            width: 100px;
+            height: auto;
+        }
+
+        .kop-text {
+            text-align: center;
+            width: 100%;
+        }
+
+        .kop-text h4 {
+            font-weight: normal;
+            margin: 4px 0;
+            font-size: 12px;
+        }
+
+        .kop-text h5 {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .kop-text p {
+            margin: 5px 0;
+            font-size: 10px;
         }
 
         .table {
@@ -66,26 +88,52 @@
         table {
             page-break-after: auto;
         }
+
+        /* Tanda Tangan */
+        .signature-section {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 50px;
+        }
+
+        .signature {
+            text-align: center;
+            width: 30%;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 50px;
+        }
     </style>
 </head>
 
 <body>
     <!-- Kop Surat -->
-    <div class="kop-surat">
-        <img src="{{ public_path('frontend/images/logo-kementerian-1.png') }}" alt="Logo Kementerian" width="50">
-        <h4>KEMENTERIAN DESA, PEMBANGUNAN DAERAH TERTINGGAL DAN TRANSMIGRASI RI</h4>
-        <h4>BADAN PENGEMBANGAN SUMBER DAYA MANUSIA DAN PEMBERDAYAAN MASYARAKAT</h4>
-        <h4>DESA, DAERAH TERTINGGAL DAN TRANSMIGRASI</h4>
-        <h4>BALAI PELATIHAN DAN PEMBERDAYAAN MASYARAKAT</h4>
-        <h4>DESA, DAERAH TERTINGGAL, DAN TRANSMIGRASI BANJARMASIN</h4>
-        <p>Jalan Handil Bhakti KM.9,5 No. 95 Banjarmasin Kalimantan Selatan, 70582</p>
-        <p>Telepon: 08115000344 | <a href="https://www.kemendesa.go.id" target="_blank">www.kemendesa.go.id</a></p>
-        <hr>
-    </div>
+    <table class="kop-surat">
+        <tr>
+            <td width="10%">
+                <img src="{{ public_path('frontend/images/logo-kementerian-1.png') }}" alt="Logo Kementerian">
+            </td>
+            <td class="kop-text">
+                <h4>KEMENTERIAN DESA, PEMBANGUNAN DAERAH TERTINGGAL DAN TRANSMIGRASI RI</h4>
+                <h4>BADAN PENGEMBANGAN SUMBER DAYA MANUSIA DAN PEMBERDAYAAN MASYARAKAT</h4>
+                <h4>DESA, DAERAH TERTINGGAL DAN TRANSMIGRASI</h4>
+                <h5>BALAI PELATIHAN DAN PEMBERDAYAAN MASYARAKAT</h5>
+                <h5>DESA, DAERAH TERTINGGAL, DAN TRANSMIGRASI BANJARMASIN</h5>
+                <p>Jalan Handil Bhakti KM.9,5 No. 95 Banjarmasin Kalimantan Selatan, 70582 Telepon: 08115000344</p>
+                <p><a href="https://www.kemendesa.go.id" target="_blank">www.kemendesa.go.id</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <hr>
 
     <!-- Judul Laporan -->
     <h2 class="text-center">Laporan Konsultasi Sudah di Jawab</h2>
-    <p class="text-center">Periode: {{ session('filter') }} - {{ session('tanggal') }}</p>
+    <p class="text-center">Periode: {{ session('filter') }} -
+        {{ session('tanggal') }}-{{ session('bulan') }}-{{ session('tahun') }}</p>
 
     <!-- Tabel Data -->
     <div style="overflow-x: auto;">
@@ -117,6 +165,16 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+
+    <!-- Tanda Tangan -->
+    <div class="signature-section" style="margin-top: 60px;">
+        <div class="signature" style="margin-left: auto;">
+            <p>Kepala Balai PPMDDTT Banjarmasin,</p>
+            <div class="signature-line"></div>
+            <p>Ahmad Syahir, S.H.I., M.H.</p>
+            <p>NIP. 19780602 201101 1 012</p>
+        </div>
     </div>
 </body>
 

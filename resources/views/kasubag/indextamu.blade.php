@@ -1,22 +1,13 @@
-@extends('admin.app')
+@extends('kasubag.app')
 @section('content')
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <span>Laporan Surat Ditolak</span>
-            <div class="d-flex">
-                <!-- Tombol Cetak PDF -->
-                <a href="{{ route('report.surat.tolak.cetak-pdf') }}" class="btn btn-primary btn-icon-split">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-file-pdf"></i>
-                    </span>
-                    <span class="text">Cetak PDF</span>
-                </a>
-            </div>
+            <span>Data Buku Tamu</span>
         </div>
         <div class="card-body">
             <!-- Filter Data -->
             <div class="mb-4">
-                <form action="{{ route('admin.tolak.surat.filter') }}" method="GET" class="form-inline">
+                <form action="{{ route('kasubag.filterdatatamu') }}" method="GET" class="form-inline">
                     <div class="form-group mb-2">
                         <label for="filter" class="mr-2">Pilih Periode</label>
                         <select name="filter" id="filter" class="form-control">
@@ -34,39 +25,41 @@
                     <button type="submit" class="btn btn-primary mb-2">
                         <i class="fas fa-filter"></i> Filter
                     </button>
-                    <a href="{{ route('admin.tolak.surat.resetfilter') }}" class="btn btn-outline-secondary mb-2">
+                    <a href="{{ route('kasubag.filterresetdatatamu') }}" class="btn btn-outline-secondary mb-2">
                         <i class="fas fa-sync"></i> Reset
                     </a>
                 </form>
             </div>
+
             <!-- Tabel Data -->
             <div class="table-responsive">
                 <table class="table" id="myTable">
                     <thead class="thead-dark">
                         <tr>
-                            <th>No.</th>
-                            <th>Nomor Surat</th>
-                            <th>Tanggal Surat</th>
-                            <th>Perihal</th>
-                            <th>Pengirim</th>
-                            <th>Telepon</th>
-                            <th>Keterangan</th>
-                            <th>Tanggal Tolak</th>
-                            <th>Alasan Tolak</th>
+                            <th scope="col">No.</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Telepon</th>
+                            <th scope="col">Alamat</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Keperluan</th>
+                            <th scope="col">Waktu</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-group-divider">
+                        @if (session('status'))
+                            <div class="alert alert-success">
+                                {{ session('status') }}
+                            </div>
+                        @endif
                         @foreach ($data as $key => $item)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
-                                <td>{{ $item->masterSurat->nomor_surat ?? '-' }}</td>
-                                <td>{{ $item->masterSurat->tanggal_surat ?? '-' }}</td>
-                                <td>{{ $item->masterSurat->perihal ?? '-' }}</td>
-                                <td>{{ $item->masterSurat->pengirim ?? '-' }}</td>
-                                <td>{{ $item->masterSurat->telepon ?? '-' }}</td>
-                                <td>{{ $item->masterSurat->keterangan ?? '-' }}</td>
-                                <td>{{ $item->tanggal_tolak ?? '-' }}</td>
-                                <td>{{ $item->alasan_tolak ?? '-' }}</td>
+                                <th scope="row">{{ $key + 1 }}</th>
+                                <td>{{ $item->nama }}</td>
+                                <td>{{ $item->telepon }}</td>
+                                <td>{{ $item->alamat }}</td>
+                                <td>{{ $item->email }}</td>
+                                <td>{{ $item->keperluan }}</td>
+                                <td class="text-center">{{ $item->date }}</td>
                             </tr>
                         @endforeach
                     </tbody>

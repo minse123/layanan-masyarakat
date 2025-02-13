@@ -5,14 +5,35 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Tamu;
+use App\Models\KonsultasiPending;
+use App\Models\KonsultasiDijawab;
+use App\Models\SuratProses;
+use App\Models\SuratTerima;
+use App\Models\SuratTolak;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
+
+
     public function index()
     {
-        return view('admin.dashboard');
+        $totalTamu = Tamu::count();
+        $totalKonsultasiPending = KonsultasiPending::count();
+        $totalKonsultasiDijawab = KonsultasiDijawab::count();
+        $totalSuratProses = SuratProses::count();
+        $totalSuratTerima = SuratTerima::count();
+        $totalSuratTolak = SuratTolak::count();
+
+        return view('admin.dashboard', compact(
+            'totalTamu',
+            'totalKonsultasiPending',
+            'totalKonsultasiDijawab',
+            'totalSuratProses',
+            'totalSuratTerima',
+            'totalSuratTolak'
+        ));
     }
 
     public function dashboard()
@@ -64,7 +85,6 @@ class AdminController extends Controller
 
         return redirect(route('admin.akun'))->with('status', 'Data Berhasil Diperbarui');
     }
-
     public function authHapus(Request $request)
     {
         $id = $request->id;

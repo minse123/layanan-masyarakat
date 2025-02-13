@@ -12,8 +12,11 @@ class Tamu extends Model
     // Jika nama tabel di database berbeda dengan nama model (misal tabel 'tamu')
     protected $table = 'tamu';
 
+    protected $primaryKey = 'id_tamu';
+
     // Kolom yang dapat diisi secara massal (mass assignment)
     protected $fillable = [
+        'id_tamu',
         'nama',
         'telepon',
         'instansi',

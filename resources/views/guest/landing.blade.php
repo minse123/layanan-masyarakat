@@ -223,6 +223,10 @@
                                 <input type="text" name="pengirim" class="form-control" required>
                             </div>
                             <div class="form-group mt-3">
+                                <label class="form-control-placeholder">Telepon</label>
+                                <input type="text" name="telepon" class="form-control" required>
+                            </div>
+                            <div class="form-group mt-3">
                                 <label class="form-control-placeholder">Perihal</label>
                                 <input type="text" name="perihal" class="form-control" required>
                             </div>
@@ -395,9 +399,8 @@
 
 
                     <div class="col-lg-6 col-12">
-                        <h6 class="mt-5">Say hi and talk to us</h6>
 
-                        <h2 class="mb-4">Contact</h2>
+                        <h2 class="mb-4">Kontak Kami</h2>
 
                         <p class="mb-3">
                             <i class="bi-geo-alt me-2"></i>
@@ -405,8 +408,8 @@
                         </p>
 
                         <p class="mb-2">
-                            <a href="tel: 010-020-0340" class="contact-link">
-                                010-020-0340
+                            <a href="tel:0811-5000344" class="contact-link">
+                                0811-5000344
                             </a>
                         </p>
 
@@ -416,30 +419,32 @@
                             </a>
                         </p>
 
-                        <h6 class="site-footer-title mt-5 mb-3">Social</h6>
+                        <h6 class="site-footer-title mt-5 mb-3">Social Media</h6>
 
                         <ul class="social-icon mb-4">
                             <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-instagram"></a>
+                                <a href="https://www.instagram.com/balatmas.bjm/"
+                                    class="social-icon-link bi-instagram"></a>
                             </li>
-
                             <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-twitter"></a>
+                                <a href="https://twitter.com/BanjarmasinBlm" class="social-icon-link bi-twitter"></a>
                             </li>
-
                             <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-facebook"></a>
+                                <a href="https://www.facebook.com/blm.banjarmasin.9"
+                                    class="social-icon-link bi-facebook"></a>
                             </li>
-
                             <li class="social-icon-item">
-                                <a href="#" class="social-icon-link bi-whatsapp"></a>
+                                <a href="https://wa.me/08115000344" class="social-icon-link bi-whatsapp"></a>
+                            </li>
+                            <li class="social-icon-item">
+                                <a href="https://www.tiktok.com/@bppmddttbanjarmasin"
+                                    class="social-icon-link bi-tiktok"></a>
+                            </li>
+                            <li class="social-icon-item">
+                                <a href="http://www.youtube.com/@bppmddttbanjarmasin6034"
+                                    class="social-icon-link bi-youtube"></a>
                             </li>
                         </ul>
-
-                        <p class="copyright-text">Copyright © 2048 ebook company
-                            <br><br><a rel="nofollow" href="https://templatemo.com" target="_blank">designed by
-                                templatemo</a>
-                        </p>
                     </div>
 
                 </div>

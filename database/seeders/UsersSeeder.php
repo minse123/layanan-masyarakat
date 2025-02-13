@@ -25,7 +25,7 @@ class UsersSeeder extends Seeder
                 'name' => 'user',
                 'email' => 'user@gmail.com',
                 'telepon' => '089999999999',
-                'role' => 'user',
+                'role' => 'psm',
                 'password' => bcrypt('user123')
             ],
             [

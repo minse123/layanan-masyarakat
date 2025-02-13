@@ -8,42 +8,71 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            /* padding: 20px; */
+            margin: 10px;
             line-height: 1;
         }
 
+        /* Kop Surat */
         .kop-surat {
-            text-align: center;
-            /* margin-bottom: 20px; */
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        .kop-surat td {
+            vertical-align: middle;
         }
 
         .kop-surat img {
             width: 100px;
-            margin-bottom: 10px;
+            height: auto;
         }
 
-        .kop-surat h4 {
-            margin: 0;
-            font-size: 16px;
+        .kop-text {
+            text-align: center;
+            width: 100%;
         }
 
-        .kop-surat h5 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: bold;
-
+        .kop-text h4 {
+            font-weight: normal;
+            margin: 4px 0;
+            font-size: 12px;
         }
 
-        .kop-surat p {
+        .kop-text h5 {
             margin: 5px 0;
-            font-size: 14px;
+            font-size: 16px;
         }
 
+        .kop-text p {
+            margin: 5px 0;
+            font-size: 10px;
+        }
+
+        /* Garis pembatas */
+        hr {
+            border: 2px solid black;
+            margin: 20px 0;
+        }
+
+        /* Judul */
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 24px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Tabel */
         .table {
             width: 100%;
+            table-layout: auto;
             border-collapse: collapse;
             margin-top: 20px;
+            /* page-break-inside: auto; */
         }
 
         .table th,
@@ -51,44 +80,72 @@
             border: 1px solid #000;
             padding: 8px;
             text-align: left;
+            white-space: nowrap;
         }
 
         .table th {
             background-color: #f2f2f2;
             font-weight: bold;
-        }
-
-        .text-center {
             text-align: center;
         }
 
-        h2 {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 24px;
+        /* Tanda Tangan */
+        .signature-section {
+            margin-top: 60px;
+            text-align: right;
+            page-break-inside: avoid;
         }
 
-        hr {
-            border: 2px solid black;
-            margin: 20px 0;
+        .signature {
+            display: inline-block;
+            text-align: center;
+            margin-left: 50px;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 200px;
+            margin: 80px auto 0;
+        }
+
+        /* Pengaturan Cetak */
+        @media print {
+            body {
+                margin: 10mm;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+
+            .table {
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Kop Surat -->
-    <div class="kop-surat">
-        <img src="{{ public_path('frontend/images/logo-kementerian-1.png') }}" alt="Logo Kementerian" width="30">
-        <h4>KEMENTERIAN DESA, PEMBANGUNAN DAERAH TERTINGGAL DAN TRANSMIGRASI RI</h4>
-        <h4>BADAN PENGEMBANGAN SUMBER DAYA MANUSIA DAN PEMBERDAYAAN MASYARAKAT</h4>
-        <h4>DESA, DAERAH TERTINGGAL DAN TRANSMIGRASI</h4>
-        <h5>BALAI PELATIHAN DAN PEMBERDAYAAN MASYARAKAT</h5>
-        <h5>DESA, DAERAH TERTINGGAL, DAN TRANSMIGRASI BANJARMASIN</h5>
-        <p>Jalan Handil Bhakti KM.9,5 No. 95 Banjarmasin Kalimantan Selatan, 70582</p>
-        <p>Telepon: 08115000344 | <a href="https://www.kemendesa.go.id" target="_blank"
-                style="color: blue; text-decoration: underline;">www.kemendesa.go.id</a></p>
-        <hr>
-    </div>
+    <!-- Kop Surat Menggunakan Tabel -->
+    <table class="kop-surat">
+        <tr>
+            <td width="10%">
+                <img src="{{ public_path('frontend/images/logo-kementerian-1.png') }}" alt="Logo Kementerian">
+            </td>
+            <td class="kop-text">
+                <h4>KEMENTERIAN DESA, PEMBANGUNAN DAERAH TERTINGGAL DAN TRANSMIGRASI RI</h4>
+                <h4>BADAN PENGEMBANGAN SUMBER DAYA MANUSIA DAN PEMBERDAYAAN MASYARAKAT</h4>
+                <h4>DESA, DAERAH TERTINGGAL DAN TRANSMIGRASI</h4>
+                <h5>BALAI PELATIHAN DAN PEMBERDAYAAN MASYARAKAT</h5>
+                <h5>DESA, DAERAH TERTINGGAL, DAN TRANSMIGRASI BANJARMASIN</h5>
+                <p>Jalan Handil Bhakti KM.9,5 No. 95 Banjarmasin Kalimantan Selatan, 70582 Telepon: 08115000344</p>
+                <p><a href="https://www.kemendesa.go.id" target="_blank">www.kemendesa.go.id</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <hr>
 
     <!-- Judul Laporan -->
     <h2>Laporan Buku Tamu</h2>
@@ -98,13 +155,13 @@
     <table class="table">
         <thead>
             <tr>
-                <th class="text-center">No.</th>
-                <th class="text-center">Nama</th>
-                <th class="text-center">Telepon</th>
-                <th class="text-center">Alamat</th>
-                <th class="text-center">Email</th>
-                <th class="text-center">Keperluan</th>
-                <th class="text-center">Waktu</th>
+                <th>No.</th>
+                <th>Nama</th>
+                <th>Telepon</th>
+                <th>Alamat</th>
+                <th>Email</th>
+                <th>Keperluan</th>
+                <th>Waktu</th>
             </tr>
         </thead>
         <tbody>
@@ -121,6 +178,16 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- Tanda Tangan -->
+    <div class="signature-section">
+        <div class="signature">
+            <p>Kepala Balai PPMDDTT Banjarmasin,</p>
+            <div class="signature-line"></div>
+            <p>Ahmad Syahir, S.H.I., M.H.</p>
+            <p>NIP. 19780602 201101 1 012</p>
+        </div>
+    </div>
 </body>
 
 </html>

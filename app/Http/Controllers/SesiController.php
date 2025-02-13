@@ -37,8 +37,8 @@ class SesiController extends Controller
             switch ($user->role) {
                 case 'admin':
                     return redirect('/admin/dashboard')->with('message', 'Selamat datang, Operator!');
-                case 'user':
-                    return redirect('/user/dashboard')->with('message', 'Selamat datang, Staff!');
+                case 'psm':
+                    return redirect('/psm/dashboard')->with('message', 'Selamat datang, PSM');
                 case 'kasubag':
                     return redirect('/kasubag/dashboard')->with('message', 'Selamat datang, Kasubag!');
                 default:

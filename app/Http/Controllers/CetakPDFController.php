@@ -37,7 +37,8 @@ class CetakPDFController extends Controller
 
         $data = $query->get();
 
-        $pdf = Pdf::loadView('admin.tamu.formCetakPDF', compact('data', 'tanggal'));
+        $pdf = Pdf::loadView('admin.tamu.formCetakPDF', compact('data', 'tanggal'))
+            ->setPaper('a4', 'portrait');
         // $pdf->setOption('isRemoteEnabled', true);
         return $pdf->stream('data-tamu.pdf');
     }

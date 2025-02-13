@@ -30,7 +30,7 @@
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
                 <select class="form-control" id="role" name="role" required>
-                    <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
+                    <option value="user" {{ $user->role == 'psm' ? 'selected' : '' }}>PSM</option>
                     <option value="kasubag" {{ $user->role == 'kasubag' ? 'selected' : '' }}>Kasubag</option>
                 </select>
             </div>

@@ -4,73 +4,85 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class KonsultasiSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create();
-
-        // Daftar nama khas Kalimantan
-        $nama_kalimantan = [
-            'Budi',
-            'Siti',
-            'Jamilah',
-            'Herman',
-            'Alamsyah',
-            'Wahyuni',
-            'Taufik',
-            'Nurul',
-            'Marlina',
-            'Asep',
-            'Yusuf',
-            'Kirana',
-            'Teguh',
-            'Khadijah',
-            'Rizki',
-            'Anwar',
-            'Reni',
-            'Hasanah',
-            'Siti Zulaikha',
-            'Maya',
-            'Gustav',
-            'Indri',
-            'Andi',
-            'Mira'
+        $names = [
+            'Bahrun',
+            'Jatmiko',
+            'Suryadi',
+            'Iskandar',
+            'Syahrani',
+            'Muslimin',
+            'Halimah',
+            'Rizky',
+            'Junaidi',
+            'Siti Aisyah',
+            'Rahmad',
+            'Herlina',
+            'Abdullah',
+            'Mulyadi',
+            'Rafidah',
+            'Zulkifli',
+            'Hasanuddin',
+            'Darmadi',
+            'Fatimah',
+            'Nasrullah'
         ];
 
-        // Seed untuk tabel master_konsultasi
-        for ($i = 0; $i < 10; $i++) {
+        $emails = array_map(fn($name) => strtolower(Str::slug($name)) . '@example.com', $names);
+        $phones = array_map(fn() => '08' . rand(1111111111, 9999999999), range(1, 20));
+        $topics = [
+            'Pendirian BUMDes',
+            'Perizinan Usaha Desa',
+            'Keuangan BUMDes',
+            'Kerjasama BUMDes',
+            'Pelatihan SDM',
+            'Pengelolaan Aset Desa',
+            'Strategi Pemasaran',
+            'Digitalisasi BUMDes',
+            'Modal dan Investasi',
+            'Manajemen Risiko',
+            'Pengembangan Produk Lokal',
+            'Hukum dan Regulasi',
+            'Kemitraan dengan Swasta',
+            'Pengelolaan Pariwisata Desa',
+            'E-commerce Desa',
+            'Subsidi Pemerintah',
+            'Pajak dan Retribusi',
+            'Evaluasi Kinerja BUMDes',
+            'Program CSR',
+            'Peningkatan Daya Saing'
+        ];
+
+        $data = [];
+        $pendingData = [];
+        $date = Carbon::now();
+
+        foreach (range(0, 19) as $i) {
             $id_konsultasi = DB::table('master_konsultasi')->insertGetId([
-                'nama' => $nama_kalimantan[array_rand($nama_kalimantan)],  // Pilih nama acak dari array
-                'telepon' => $faker->phoneNumber,
-                'email' => $faker->email,
-                'judul_konsultasi' => $faker->sentence,
-                'deskripsi' => $faker->paragraph,
-                'status' => 'Pending', // Default status
-                'created_at' => now(),
-                'updated_at' => now(),
+                'nama' => $names[$i],
+                'telepon' => $phones[$i],
+                'email' => $emails[$i],
+                'judul_konsultasi' => $topics[$i],
+                'deskripsi' => 'Saya ingin mendapatkan informasi lebih lanjut tentang ' . strtolower($topics[$i]) . '.',
+                'status' => 'Pending',
+                'created_at' => $date,
+                'updated_at' => $date,
             ]);
 
-            // Seed untuk tabel konsultasi_pending
-            DB::table('konsultasi_pending')->insert([
+            $pendingData[] = [
                 'id_konsultasi' => $id_konsultasi,
-                'tanggal_pengajuan' => $faker->date(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            // Seed untuk tabel konsultasi_dijawab (untuk beberapa konsultasi)
-            if (rand(0, 1)) {  // Beberapa konsultasi akan dijawab
-                DB::table('konsultasi_dijawab')->insert([
-                    'id_konsultasi' => $id_konsultasi,
-                    'jawaban' => $faker->paragraph,
-                    'tanggal_dijawab' => $faker->date(),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
+                'tanggal_pengajuan' => $date->subDays(rand(1, 30))->format('Y-m-d'),
+                'created_at' => $date,
+                'updated_at' => $date,
+            ];
         }
+
+        DB::table('konsultasi_pending')->insert($pendingData);
     }
 }

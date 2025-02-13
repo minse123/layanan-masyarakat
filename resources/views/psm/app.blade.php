@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-@include('admin.layouts.css')
+@include('psm.layouts.css')
 
 <body id="page-top">
 
@@ -9,7 +9,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        @include('admin.layouts.sidebar')
+        @include('psm.layouts.sidebar')
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -19,7 +19,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                @include('admin.layouts.navbar')
+                @include('psm.layouts.navbar')
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -34,7 +34,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            @include('admin.layouts.footer')
+            @include('psm.layouts.footer')
             <!-- End of Footer -->
 
         </div>
@@ -69,7 +69,7 @@
     </div>
 
 
-    @include('admin.layouts.js')
+    @include('psm.layouts.js')
 
     @yield('script')
 
