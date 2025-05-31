@@ -46,6 +46,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/admin/report/tamu', [AdminController::class, 'reportdataTamu'])->name('admin.report.tamu');
     Route::get('/admin/report/tamu/filter-data', [AdminController::class, 'reportfilterData'])->name('admin.report.tamu.filter-data');
+    Route::get('/admin/report/tamu/resetfilter-data', [AdminController::class, 'reportresetfilterData'])->name('admin.report.tamu.resetfilter-data');
     Route::get('/admin/report/tamu/cetak-pdf', [AdminController::class, 'cetakPDF'])->name('admin.report.tamu.cetak-pdf');
 
     Route::get('/admin/surat', [SuratController::class, 'Suratindex'])->name('admin.master.surat');
@@ -55,6 +56,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/surat/tolak/{id}', [SuratController::class, 'tolakSurat'])->name('admin.surat.tolak');
     route::post('/admin/surat/hapus/{id}', [SuratController::class, 'delete'])->name('admin.surat.hapus');
     Route::get('/admin/surat/filter', [SuratController::class, 'filterSurat'])->name('admin.surat.filter');
+    Route::get('/admin/surat/resetfilter', [SuratController::class, 'resetfilterSurat'])->name('admin.surat.resetfilter');
 
 
     Route::get('/admin/laporan/surat/proses', [SuratController::class, 'ProsesIndex'])->name('admin.proses.surat');

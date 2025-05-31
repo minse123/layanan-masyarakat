@@ -9,7 +9,7 @@
 
 
     <title>Aplikasi Buku Tamu Digital</title>
-
+    <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo-kementerian.png') }}">
     <!-- Custom fonts for this template-->
     <link href="{{ asset('/backend/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link

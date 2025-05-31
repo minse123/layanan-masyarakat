@@ -12,6 +12,11 @@
             line-height: 1;
         }
 
+        @page {
+            size: A4 landscape;
+            margin: 2cm;
+        }
+
         /* Kop Surat */
         .kop-surat {
             width: 100%;
@@ -107,22 +112,6 @@
             width: 200px;
             margin: 80px auto 0;
         }
-
-        /* Pengaturan Cetak */
-        @media print {
-            body {
-                margin: 10mm;
-            }
-
-            @page {
-                size: A4 portrait;
-                margin: 10mm;
-            }
-
-            .table {
-                page-break-inside: avoid;
-            }
-        }
     </style>
 </head>
 
@@ -152,7 +141,7 @@
     <p class="text-center">Tanggal: {{ $tanggal }}</p>
 
     <!-- Tabel Data -->
-    <table class="table">
+    <table class="table" style="auto">
         <thead>
             <tr>
                 <th>No.</th>

@@ -35,12 +35,6 @@ class AdminController extends Controller
             'totalSuratTolak'
         ));
     }
-
-    public function dashboard()
-    {
-        return view('admin.dashboard');
-    }
-
     public function authIndex()
     { {
             $users = User::all(); // Mengambil semua data pengguna
@@ -145,27 +139,59 @@ class AdminController extends Controller
     public function filterData(Request $request)
     {
         $filter = $request->filter;
-        $tanggal = $request->tanggal;
-
         $query = Tamu::query();
 
-        if ($filter == 'harian') {
-            $query->whereDate('date', $tanggal);
-        } elseif ($filter == 'mingguan') {
-            $query->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()]);
-        } elseif ($filter == 'bulanan') {
-            $query->whereMonth('date', date('m', strtotime($tanggal)))
-                ->whereYear('date', date('Y', strtotime($tanggal)));
-        } elseif ($filter == 'tahunan') {
-            $query->whereYear('date', date('Y', strtotime($tanggal)));
+        // Hapus semua session filter sebelumnya
+        session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun']);
+
+        if ($filter) {
+            switch ($filter) {
+                case 'harian':
+                    if ($request->tanggal) {
+                        $query->whereDate('date', $request->tanggal);
+                        session(['tanggal' => $request->tanggal]);
+                    }
+                    break;
+
+                case 'mingguan':
+                    if ($request->minggu) {
+                        $start = Carbon::parse($request->minggu)->startOfWeek();
+                        $end = Carbon::parse($request->minggu)->endOfWeek();
+                        $query->whereBetween('date', [$start, $end]);
+                        session(['minggu' => $request->minggu]);
+                    }
+                    break;
+
+                case 'bulanan':
+                    if ($request->bulan) {
+                        $query->whereMonth('date', date('m', strtotime($request->bulan)))
+                            ->whereYear('date', date('Y', strtotime($request->bulan)));
+                        session(['bulan' => $request->bulan]);
+                    }
+                    break;
+
+                case 'tahunan':
+                    if ($request->tahun) {
+                        $query->whereYear('date', $request->tahun);
+                        session(['tahun' => $request->tahun]);
+                    }
+                    break;
+            }
+
+            session(['filter' => $filter]); // Simpan filter yang dipilih
         }
 
         $data = $query->get();
 
-        session(['filter' => $filter, 'tanggal' => $tanggal]);
-
         return view('admin.tamu.index', compact('data'));
     }
+
+    public function resetfilterData(Request $request)
+    {
+        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
+        return redirect()->route('admin.tamu'); // Redirect ke halaman utama laporan
+    }
+
 
 
     //form report
@@ -178,26 +204,63 @@ class AdminController extends Controller
     {
         $filter = $request->filter;
         $tanggal = $request->tanggal;
+        $minggu = $request->minggu;
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
 
-        $query = Tamu::query();
+        $query = Tamu::query(); // Query dasar
 
-        if ($filter == 'harian') {
-            $query->whereDate('date', $tanggal);
-        } elseif ($filter == 'mingguan') {
-            $query->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()]);
-        } elseif ($filter == 'bulanan') {
-            $query->whereMonth('date', date('m', strtotime($tanggal)))
-                ->whereYear('date', date('Y', strtotime($tanggal)));
-        } elseif ($filter == 'tahunan') {
-            $query->whereYear('date', date('Y', strtotime($tanggal)));
+        if ($filter) {
+            switch ($filter) {
+                case 'harian':
+                    if ($tanggal) {
+                        $tanggal = Carbon::parse($tanggal);
+                        $query->whereDate('date', $tanggal);
+                    }
+                    break;
+                case 'mingguan':
+                    if ($minggu) {
+                        [$year, $week] = explode('-W', $minggu);
+                        $startOfWeek = Carbon::now()->setISODate($year, $week)->startOfWeek();
+                        $endOfWeek = Carbon::now()->setISODate($year, $week)->endOfWeek();
+                        $query->whereBetween('date', [$startOfWeek, $endOfWeek]);
+                    }
+                    break;
+                case 'bulanan':
+                    if ($bulan) {
+                        $tanggal = Carbon::parse($bulan);
+                        $query->whereMonth('date', $tanggal->month)
+                            ->whereYear('date', $tanggal->year);
+                    }
+                    break;
+                case 'tahunan':
+                    if ($tahun) {
+                        $query->whereYear('date', $tahun);
+                    }
+                    break;
+            }
         }
-
         $data = $query->get();
+        session([
+            'filter' => $filter,
+            'tanggal' => $tanggal instanceof Carbon ? $tanggal->toDateString() : $tanggal,
+            'minggu' => $minggu,
+            'bulan' => $bulan,
+            'tahun' => $tahun
+        ]);
 
-        session(['filter' => $filter, 'tanggal' => $tanggal]);
-
-        return view('admin.tamu.reporttamu', compact('data'));
+        $message = '';
+        if ($data->isEmpty()) {
+            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
+        }
+        return view('admin.tamu.reporttamu', compact('data', 'message'));
     }
+    public function reportresetfilterData(Request $request)
+    {
+        $request->session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun']); // Hapus session filter
+        return redirect()->route('admin.report.tamu'); // Redirect ke halaman utama laporan
+    }
+
 
     public function cetakPDF(Request $request)
     {

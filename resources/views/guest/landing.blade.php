@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo-kementerian.png') }}">
     <title>Layanan Masyarakat</title>
 
     <!-- Include CSS -->

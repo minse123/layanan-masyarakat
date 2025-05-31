@@ -7,7 +7,7 @@
                 <div class="text-center mb-4">
                     <a href="/"><img src="/frontend/images/logo-kementerian.png" alt="Logo" style="width: 100px;"></a>
                 </div>
-                <p class="auth-subtitle mb-3">Masuk dengan data Anda yang telah didaftarkan.</p>
+                <p class="auth-subtitle mb-3">Masuakn Akun Anda</p>
 
                 {{-- Alert --}}
                 @if (session()->has('message'))
@@ -52,11 +52,11 @@
                     <button type="submit" class="btn btn-primary btn-block shadow-lg mt-3">Masuk</button>
                     <hr>
                 </form>
-
+                {{-- 
                 <div class="text-center mt-3">
                     <p class="text-gray-600">Belum memiliki akun? <a href="/register" class="font-bold">Daftar</a>.</p>
                     <p><a class="font-bold" href="/lupa-password">Lupa password?</a></p>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

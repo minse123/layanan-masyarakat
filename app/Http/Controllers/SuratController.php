@@ -201,33 +201,61 @@ class SuratController extends Controller
     }
     public function filterSurat(Request $request)
     {
+        $filter = $request->filter;
         $query = MasterSurat::query();
+        $masterSurat = MasterSurat::query();
 
-        if ($request->has('filter')) {
-            $filter = $request->filter;
-            $tanggal = $request->tanggal ? Carbon::parse($request->tanggal) : now();
+        // Hapus semua session filter sebelumnya
+        session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun']);
 
+        if ($filter) {
             switch ($filter) {
                 case 'harian':
-                    $query->whereDate('tanggal_surat', $tanggal);
+                    if ($request->tanggal) {
+                        $query->whereDate('tanggal_surat', $request->tanggal);
+                        session(['tanggal' => $request->tanggal]);
+                    }
                     break;
+
                 case 'mingguan':
-                    $query->whereBetween('tanggal_surat', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
+                    if ($request->minggu) {
+                        $start = Carbon::parse($request->minggu)->startOfWeek();
+                        $end = Carbon::parse($request->minggu)->endOfWeek();
+                        $query->whereBetween('tanggal_surat', [$start, $end]);
+                        session(['minggu' => $request->minggu]);
+                    }
                     break;
+
                 case 'bulanan':
-                    $query->whereMonth('tanggal_surat', $tanggal->month)->whereYear('tanggal_surat', $tanggal->year);
+                    if ($request->bulan) {
+                        $query->whereMonth('tanggal_surat', date('m', strtotime($request->bulan)))
+                            ->whereYear('tanggal_surat', date('Y', strtotime($request->bulan)));
+                        session(['bulan' => $request->bulan]);
+                    }
                     break;
+
                 case 'tahunan':
-                    $query->whereYear('tanggal_surat', $tanggal->year);
+                    if ($request->tahun) {
+                        $query->whereYear('tanggal_surat', $request->tahun);
+                        session(['tahun' => $request->tahun]);
+                    }
                     break;
             }
+
+            session(['filter' => $filter]); // Simpan filter yang dipilih
         }
 
+        $data = $query->get();
         $masterSurat = $query->get();
-        session(['filter' => $filter, 'tanggal' => $tanggal]);
 
-        return view('admin.surat.index', compact('masterSurat'));
+        return view('admin.surat.index', compact('data', 'masterSurat'));
     }
+    public function resetfiltersurat(Request $request)
+    {
+        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
+        return redirect()->route('admin.master.surat'); // Redirect ke halaman utama laporan
+    }
+
 
 
 

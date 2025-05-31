@@ -143,48 +143,61 @@ class KonsultasiController extends Controller
     {
         $filter = $request->filter;
         $tanggal = $request->tanggal;
+        $minggu = $request->minggu;
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
 
-        $query = KonsultasiPending::query()->with('masterKonsultasi');
-        $query = KonsultasiDijawab::query()->with('masterKonsultasi');
+        $query = MasterKonsultasi::query(); // Query dasar
 
+        $query->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END");
 
-        if ($filter && $tanggal) {
-            $tanggal = Carbon::parse($tanggal);
-            $query->whereHas('masterKonsultasi', function ($q) use ($filter, $tanggal) {
-                switch ($filter) {
-                    case 'harian':
-                        $q->whereDate('tanggal_pengajuan', $tanggal)
-                            ->orWhereDate('tanggal_dijawab', $tanggal);
-                        break;
-                    case 'mingguan':
-                        $q->whereBetween('tanggal_pengajuan', [$tanggal->startOfWeek(), $tanggal->endOfWeek()])
-                            ->orWhereBetween('tanggal_dijawab', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
-                        break;
-                    case 'bulanan':
-                        $q->whereMonth('tanggal_pengajuan', $tanggal->month)
-                            ->whereYear('tanggal_pengajuan', $tanggal->year)
-                            ->orWhereMonth('tanggal_dijawab', $tanggal->month)
-                            ->whereYear('tanggal_dijawab', $tanggal->year);
-                        break;
-                    case 'tahunan':
-                        $q->whereYear('tanggal_pengajuan', $tanggal->year)
-                            ->orWhereYear('tanggal_dijawab', $tanggal->year);
-                        break;
-                }
-            });
+        if ($filter) {
+            switch ($filter) {
+                case 'harian':
+                    if ($tanggal) {
+                        $tanggal = Carbon::parse($tanggal);
+                        $query->whereDate('created_at', $tanggal);
+                    }
+                    break;
+                case 'mingguan':
+                    if ($minggu) {
+                        [$year, $week] = explode('-W', $minggu);
+                        $startOfWeek = Carbon::now()->setISODate($year, $week)->startOfWeek();
+                        $endOfWeek = Carbon::now()->setISODate($year, $week)->endOfWeek();
+                        $query->whereBetween('created_at', [$startOfWeek, $endOfWeek]);
+                    }
+                    break;
+                case 'bulanan':
+                    if ($bulan) {
+                        $tanggal = Carbon::parse($bulan);
+                        $query->whereMonth('created_at', $tanggal->month)
+                            ->whereYear('created_at', $tanggal->year);
+                    }
+                    break;
+                case 'tahunan':
+                    if ($tahun) {
+                        $query->whereYear('created_at', $tahun);
+                    }
+                    break;
+            }
         }
-        $data = $query->get();
-        // Simpan filter ke session
-        session(['filter' => $filter, 'tanggal' => $tanggal ? $tanggal->toDateString() : null]);
-        session()->save();
-        // Menyiapkan pesan notifikasi jika data kosong
+        $konsultasi = $query->get(); // Data hasil filter
+        session([
+            'filter' => $filter,
+            'tanggal' => $tanggal,
+            'minggu' => $minggu,
+            'bulan' => $bulan,
+            'tahun' => $tahun
+        ]);
+
         $message = '';
-        if ($data->isEmpty()) {
+        if ($konsultasi->isEmpty()) {
             $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
         }
-
-        return view('admin.konsultasi.index', compact('data', 'message'));
+        return view('admin.konsultasi.index', compact('data'));
     }
+
+
     public function resetfilter(Request $request)
     {
         $request->session()->forget(['filter', 'tanggal']); // Hapus session filter

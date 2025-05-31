@@ -56,19 +56,29 @@
             <span>Report Tamu</span>
         </a>
     </li>
-    <li class="nav-item {{ request()->is('admin/laporan') ? 'active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#reportTamuCollapse" role="button" aria-expanded="false"
-            aria-controls="reportTamuCollapse" title="Administrasi Surat">
+    @php
+        $isSuratReport =
+            request()->routeIs('admin.proses.surat') ||
+            request()->routeIs('admin.terima.surat') ||
+            request()->routeIs('admin.tolak.surat');
+    @endphp
+    <li class="nav-item {{ $isSuratReport ? 'active' : '' }}">
+        <a class="nav-link" data-toggle="collapse" href="#reportTamuCollapse" role="button"
+            aria-expanded="{{ $isSuratReport ? 'true' : 'false' }}" aria-controls="reportTamuCollapse"
+            title="Administrasi Surat">
             <i class="fas fa-fw fa-file-invoice"></i>
             <span>Administrasi Surat</span>
         </a>
-        <div id="reportTamuCollapse" class="collapse" aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar">
+        <div id="reportTamuCollapse" class="collapse {{ $isSuratReport ? 'show' : '' }}"
+            aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Reports:</h6>
-                <a class="collapse-item" href="{{ route('admin.proses.surat') }}">Report Surat Proses</a>
-                <a class="collapse-item" href="{{ route('admin.terima.surat') }}">Report Surat Terima</a>
-                <a class="collapse-item" href="{{ route('admin.tolak.surat') }}">Report Surat Tolak</a>
+                <a class="collapse-item {{ request()->routeIs('admin.proses.surat') ? 'active' : '' }}"
+                    href="{{ route('admin.proses.surat') }}">Report Surat Proses</a>
+                <a class="collapse-item {{ request()->routeIs('admin.terima.surat') ? 'active' : '' }}"
+                    href="{{ route('admin.terima.surat') }}">Report Surat Terima</a>
+                <a class="collapse-item {{ request()->routeIs('admin.tolak.surat') ? 'active' : '' }}"
+                    href="{{ route('admin.tolak.surat') }}">Report Surat Tolak</a>
             </div>
         </div>
     </li>
