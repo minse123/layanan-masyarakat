@@ -1,7 +1,7 @@
                <!-- Topbar -->
                <nav class="navbar navbar-expand-lg">
                    <div class="container">
-                       <a class="navbar-brand" href="index.html">
+                       <a class="navbar-brand" href="{{ url('/') }}">
                            <img src="{{ asset('frontend/images/logo-kementerian.png') }}" alt="Logo"
                                class="navbar-brand-icon"> <span>BPPMDDTT</span>
                            <span>Banjarmasin</span>
@@ -33,11 +33,11 @@
                                    <a class="nav-link click-scroll" href="#section_3">Tentang Kami</a>
                                </li>
 
-                               {{-- <li class="nav-item">
+                               <li class="nav-item">
                                    <a class="nav-link click-scroll" href="#section_4">Kontak</a>
                                </li>
 
-                               <li class="nav-item">
+                               {{-- <li class="nav-item">
                                    <a class="nav-link click-scroll" href="#section_5">Tentang Kami</a>
                                </li> --}}
                            </ul>

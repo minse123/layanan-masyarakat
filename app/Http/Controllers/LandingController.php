@@ -8,6 +8,6 @@ class LandingController extends Controller
 {
     public function landing()
     {
-        return view('guest/landing');
+        return view('landing');
     }
 }
