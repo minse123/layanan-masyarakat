@@ -10,15 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('tamu', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->string('telepon');
-            $table->string('instansi');
-            $table->string('alamat');
-            $table->string('email')->unique();
-            $table->text('keperluan');
-            $table->date('date');
+        Schema::create('kategori_pelatihan', function (Blueprint $table) {
+            $table->id('id_kategori');
+            $table->unsignedBigInteger('id_konsultasi')->nullable();
+            $table->enum('status', ['inti', 'pendukung']);
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('tamu');
+        Schema::dropIfExists('kategori_pelatihan');
     }
 };

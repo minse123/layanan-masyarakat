@@ -1,6 +1,5 @@
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('admin/dashboard') }}">
         <div class="img"
@@ -8,10 +7,8 @@
         </div>
         <div class="sidebar-brand-text mx-3">Pelayanan Digital</div>
     </a>
-
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
-
     <!-- Nav Item - Dashboard -->
     <li class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
         <a class="nav-link" href="{{ url('admin/dashboard') }}" title="Dashboard">
@@ -19,20 +16,11 @@
             <span>Dashboard</span>
         </a>
     </li>
-
     <!-- Divider -->
     <hr class="sidebar-divider">
-
     <!-- Heading -->
     <div class="sidebar-heading">Master Data</div>
-
     <!-- Nav Item - Master Data -->
-    <li class="nav-item {{ request()->is('tamu') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ url('tamu') }}" title="Master Buku Tamu">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Master Buku Tamu</span>
-        </a>
-    </li>
     <li class="nav-item {{ request()->is('admin/surat') ? 'active' : '' }}">
         <a class="nav-link" href="{{ url('admin/surat') }}" title="Master Administrasi Surat">
             <i class="fas fa-fw fa-file-alt"></i>
@@ -45,17 +33,9 @@
             <span>Master Konsultasi Pelatihan</span>
         </a>
     </li>
-
     <hr class="sidebar-divider">
-
     <!-- Heading -->
     <div class="sidebar-heading">Report</div>
-    <li class="nav-item {{ request()->is('admin/report/tamu') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.report.tamu') }}" title="Report Tamu">
-            <i class="fas fa-fw fa-file"></i>
-            <span>Report Tamu</span>
-        </a>
-    </li>
     @php
         $isSuratReport =
             request()->routeIs('admin.proses.surat') ||
@@ -63,13 +43,13 @@
             request()->routeIs('admin.tolak.surat');
     @endphp
     <li class="nav-item {{ $isSuratReport ? 'active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#reportTamuCollapse" role="button"
-            aria-expanded="{{ $isSuratReport ? 'true' : 'false' }}" aria-controls="reportTamuCollapse"
+        <a class="nav-link" data-toggle="collapse" href="#reportSuratCollapse" role="button"
+            aria-expanded="{{ $isSuratReport ? 'true' : 'false' }}" aria-controls="reportSuratCollapse"
             title="Administrasi Surat">
             <i class="fas fa-fw fa-file-invoice"></i>
             <span>Administrasi Surat</span>
         </a>
-        <div id="reportTamuCollapse" class="collapse {{ $isSuratReport ? 'show' : '' }}"
+        <div id="reportSuratCollapse" class="collapse {{ $isSuratReport ? 'show' : '' }}"
             aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Reports:</h6>
@@ -82,7 +62,7 @@
             </div>
         </div>
     </li>
-    <li class="nav-item {{ request()->is('#') ? 'active' : '' }}">
+    <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#reportKonsultasiCollapse" role="button" aria-expanded="false"
             aria-controls="reportKonsultasiCollapse" title="Report Konsultasi Pelatihan">
             <i class="fas fa-fw fa-file-alt"></i>
@@ -97,9 +77,7 @@
             </div>
         </div>
     </li>
-
     <hr class="sidebar-divider">
-
     <!-- Nav Item - User Accounts -->
     <li class="nav-item {{ request()->is('admin/akun') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.akun') }}" title="Akun Pengguna">
@@ -107,10 +85,8 @@
             <span>Akun Pengguna</span>
         </a>
     </li>
-
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
-
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle" title="Toggle Sidebar"></button>

@@ -10,6 +10,7 @@ use App\Models\MasterSurat;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SuratController extends Controller
 {
@@ -63,10 +64,9 @@ class SuratController extends Controller
                     'tanggal_proses' => now(),
                     'catatan_proses' => $request->catatan_proses,
                 ]);
-            } else {
-                return redirect()->back()->withErrors(['error' => 'Gagal menyimpan surat.']);
             }
-            return redirect()->back()->with('success', 'Surat masuk dalam proses');
+            Alert::success('Selamat', 'Surat Berhasil Ditambahkan');
+            return redirect()->back();
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
@@ -82,7 +82,8 @@ class SuratController extends Controller
         ]);
         MasterSurat::where('id_surat', $id)->update(['status' => 'Terima']);
         $suratProses->delete();
-        return redirect()->back()->with('success', 'Surat berhasil diterima.');
+        Alert::success('Berhasil', 'Surat berhasil diterima.');
+        return redirect()->back();
     }
     public function tolakSurat($id)
     {
@@ -100,7 +101,8 @@ class SuratController extends Controller
         $suratProses->delete();
         // Perbarui status di `master_surat`
         MasterSurat::where('id_surat', $id)->update(['status' => 'Tolak']);
-        return redirect()->back()->with('success', 'Surat berhasil ditolak.');
+        Alert::success('Ditolak', 'Surat berhasil ditolak.');
+        return redirect()->back();
     }
     public function MasterUpdate(Request $request, $id)
     {
@@ -185,6 +187,7 @@ class SuratController extends Controller
         }
 
         // Redirect dengan pesan sukses
+        alert()->success('Berhasil', 'Data surat berhasil diperbarui.');
         return redirect()->route('admin.master.surat')->with('success', 'Data surat berhasil diperbarui.');
     }
     public function delete($id)
@@ -197,6 +200,7 @@ class SuratController extends Controller
         SuratTerima::where('id_surat', $id)->delete();
         SuratTolak::where('id_surat', $id)->delete();
         // Redirect dengan pesan sukses
+        alert()->success('Berhasil', 'Data surat berhasil dihapus.');
         return redirect()->route('admin.master.surat')->with('success', 'Data surat berhasil dihapus.');
     }
     public function filterSurat(Request $request)

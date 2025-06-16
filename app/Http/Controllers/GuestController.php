@@ -14,36 +14,6 @@ use App\Models\KonsultasiPending;
 
 class GuestController extends Controller
 {
-    public function index()
-    {
-        $data = Tamu::all();
-        return view('guest.buku-tamu', compact('data'));
-    }
-
-    public function simpanData(Request $request)
-    {
-        $nama = $request->nama;
-        $telepon = $request->telepon;
-        $instansi = $request->instansi;
-        $alamat = $request->alamat;
-        $telepon = $request->telepon;
-        $email = $request->email;
-        $keperluan = $request->keperluan;
-
-        // dd($nama, $telepon, $alamat, $email);
-
-        $data = new Tamu();
-        $data->nama = $nama;
-        $data->telepon = $telepon;
-        $data->instansi = $instansi;
-        $data->alamat = $alamat;
-        $data->email = $email;
-        $data->keperluan = $keperluan;
-
-        $data->save();
-        Alert::success('Selamat', 'Data Berhasil Disimpan');
-        return back()->with('status', 'Data Berhasil Disimpan');
-    }
 
     public function storeSurat(Request $request)
     {

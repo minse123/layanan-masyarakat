@@ -21,20 +21,27 @@ class UsersSeeder extends Seeder
                 'role' => 'admin',
                 'password' => bcrypt('admin123')
             ],
-            [
-                'name' => 'user',
-                'email' => 'user@gmail.com',
-                'telepon' => '089999999999',
-                'role' => 'psm',
-                'password' => bcrypt('user123')
-            ],
-            [
-                'name' => 'kasubag',
-                'email' => 'kasubag@gmail.com',
-                'telepon' => '089999999999',
-                'role' => 'kasubag',
-                'password' => bcrypt('kasubag123')
-            ],
+            // [
+            //     'name' => 'operator',
+            //     'email' => 'operator@gmail.com',
+            //     'telepon' => '087777777777',
+            //     'role' => 'operator',
+            //     'password' => bcrypt('operator123')
+            // ],
+            // [
+            //     'name' => 'psm',
+            //     'email' => 'psm@gmail.com',
+            //     'telepon' => '089999999999',
+            //     'role' => 'psm',
+            //     'password' => bcrypt('psm123')
+            // ],
+            // [
+            //     'name' => 'masyarakat',
+            //     'email' => 'masyarakat@gmail.com',
+            //     'telepon' => '089999999999',
+            //     'role' => 'masyarakat',
+            //     'password' => bcrypt('masyarakat123')
+            // ],
 
         ];
 

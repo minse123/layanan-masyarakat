@@ -9,14 +9,12 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\PsmController;
-use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [LandingController::class, 'landing']);
 
 // guest akses
-Route::post('/buku-tamu', [GuestController::class, 'simpanData'])->name('simpan-tamu');
 Route::post('/surat', [GuestController::class, 'storeSurat'])->name('simpan-surat');
 Route::post('/konsultasi', [GuestController::class, 'storeKonsultasi'])->name('simpan-konsultasi');
 
@@ -99,19 +97,11 @@ Route::middleware(['auth', 'role:psm'])->group(function () {
 });
 Route::middleware(['auth', 'role:kasubag'])->group(function () {
     Route::get('/kasubag/dashboard', [KasubagController::class, 'index'])->name('kasubag.dashboard');
-    Route::get('/kasubag/tamu', [KasubagController::class, 'datatamu'])->name('kasubag.tamu');
-    Route::get('/kasubag/filtertamu', [KasubagController::class, 'filterdatatamu'])->name('kasubag.filterdatatamu');
-    Route::get('/kusubag/filterresettamu', [KasubagController::class, 'filterresetdatatamu'])->name('kasubag.filterresetdatatamu');
-
     Route::get('/kasubag/surat', [KasubagController::class, 'Suratindex'])->name('kasubag.surat');
     Route::post('/kasubag/surat/terima/{id}', [KasubagController::class, 'terimaSurat'])->name('kasubag.surat.terima');
     Route::post('/kasubag/surat/tolak/{id}', [KasubagController::class, 'tolakSurat'])->name('kasubag.surat.tolak');
     Route::get('/kasubag/surat/filter', [KasubagController::class, 'filtersurat'])->name('kasubag.surat.filter');
     Route::get('/kasubag/surat/resetfilter', [KasubagController::class, 'resetfiltersurat'])->name('kasubag.surat.resetfilter');
-
-    Route::get('/kasubag/laporan/tamu', [KasubagController::class, 'tamuindex'])->name('kasubag.report.tamu');
-    Route::get('/kasubag/laporan/tamu/filter', [KasubagController::class, 'filtertamu'])->name('kasubag.tamu.filter');
-    Route::get('/kasubag/laporan/tamu/resetfilter', [KasubagController::class, 'resetfiltertamu'])->name('kasubag.tamu.resetfilter');
     Route::get('/kasubag/laporan/surat/proses', [KasubagController::class, 'ProsesIndex'])->name('kasubag.proses.surat');
     Route::get('/kasubag/laporan/surat/proses/filter', [KasubagController::class, 'filterproses'])->name('kasubag.proses.surat.filter');
     Route::get('/kasubag/laporan/surat/proses/resetfilter', [KasubagController::class, 'resetfilterproses'])->name('kasubag.proses.surat.resetfilter');

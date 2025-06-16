@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SesiController extends Controller
 {
@@ -32,10 +33,10 @@ class SesiController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
             // Redirect berdasarkan role
             switch ($user->role) {
                 case 'admin':
+                    Alert::success('Login Berhasil', 'Selamat datang di dashboard!');
                     return redirect('/admin/dashboard')->with('message', 'Selamat datang, Operator!');
                 case 'psm':
                     return redirect('/psm/dashboard')->with('message', 'Selamat datang, PSM');

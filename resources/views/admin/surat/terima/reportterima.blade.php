@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <span>Laporan Surat Yang Diterima</span>
+            <h6 class="m-0 font-weight-bold text-primary">Laporan Surat Yang Diterima</h6>
             <div class="d-flex">
                 <!-- Tombol Cetak PDF -->
                 <a href="{{ route('report.surat.terima.cetak-pdf') }}" class="btn btn-primary btn-icon-split">

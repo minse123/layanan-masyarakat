@@ -28,8 +28,6 @@
 
                         <h1 class="text-white mb-4">Sistem Informasi Layanan Masyarakat</h1>
 
-                        <a href="#item-1" class="link link--kale smoothscroll me-3">Buku Tamu </a>
-
                         <a href="#item-2" class="btn custom-btn smoothscroll me-3">Layanan Konsultasi BumDes</a>
 
                         <a href="#item-3" class="link link--kale smoothscroll">Pengajuan Surat</a>
@@ -66,17 +64,6 @@
                 </div>
 
                 <div class="row text-center">
-                    <div class="col-lg-4 col-12 mb-4" id="item-1">
-                        <div class="card border p-3">
-                            <img src="/frontend/images/guests-book.png" class="card-img-top" alt="Buku Tamu">
-                            <div class="card-body">
-                                <button class="btn btn-primary w-100" data-bs-toggle="modal"
-                                    data-bs-target="#modalBukuTamu">
-                                    Buku Tamu
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-lg-4 col-12 mb-4" id="item-2">
                         <div class="card border p-3">
                             <img src="/frontend/images/interview.png" class="card-img-top"
@@ -105,91 +92,44 @@
         </section>
 
 
-        <!-- Modal Buku Tamu -->
-        <div class="modal fade" id="modalBukuTamu" tabindex="-1" aria-labelledby="modalBukuTamuLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalBukuTamuLabel">Buku Tamu</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('simpan-tamu') }}" method="post" class="signin-form">
-                            @csrf
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Nama</label>
-                                <input type="text" name="nama" class="form-control" required>
-                            </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Telepon</label>
-                                <input type="text" name="telepon" class="form-control" required>
-                            </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Alamat</label>
-                                <input type="text" name="alamat" class="form-control" required>
-                            </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Instansi</label>
-                                <input type="text" name="instansi" class="form-control" required>
-                            </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Email</label>
-                                <input type="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Keperluan</label>
-                                <textarea name="keperluan" class="form-control" required placeholder=""></textarea>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit"
-                                    class="form-control btn btn-primary rounded submit px-3">Simpan</button>
-                            </div>
-                            @include('sweetalert::alert')
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <!-- Modal Konsultasi BumDes -->
         <!-- Modal Konsultasi BumDes -->
         <div class="modal fade" id="modalKonsultasi" tabindex="-1" aria-labelledby="modalKonsultasiLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-4">
+                    <div class="modal-header bg-success text-white rounded-top-4">
                         <h5 class="modal-title" id="modalKonsultasiLabel">Layanan Konsultasi BumDes</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body px-4 py-3">
                         <form action="{{ route('simpan-konsultasi') }}" method="POST">
                             @csrf
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Nama</label>
-                                    <input type="text" name="nama" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Telepon</label>
-                                    <input type="text" name="telepon" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="email" name="email" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Judul Konsultasi</label>
-                                    <input type="text" name="judul_konsultasi" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Deskripsi</label>
-                                    <textarea name="deskripsi" class="form-control" required></textarea>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nama</label>
+                                <input type="text" name="nama" class="form-control rounded-pill" required>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3">
+                                <label class="form-label">Telepon</label>
+                                <input type="text" name="telepon" class="form-control rounded-pill" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control rounded-pill" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Judul Konsultasi</label>
+                                <input type="text" name="judul_konsultasi" class="form-control rounded-pill"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Deskripsi</label>
+                                <textarea name="deskripsi" class="form-control rounded-3" rows="3" required></textarea>
+                            </div>
+                            <div class="d-grid">
                                 <button type="submit"
-                                    class="form-control btn btn-success rounded submit px-3">Ajukan</button>
+                                    class="btn btn-success rounded-pill px-4 py-2 fw-bold">Ajukan</button>
                             </div>
                             @include('sweetalert::alert')
                         </form>
@@ -199,45 +139,46 @@
         </div>
 
         <!-- Modal Pengajuan Surat -->
-        <div class="modal fade" id="modalSurat" tabindex="-1" aria-labelledby="modalSuratLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
+        <div class="modal fade" id="modalSurat" tabindex="-1" aria-labelledby="modalSuratLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-4">
+                    <div class="modal-header bg-warning rounded-top-4">
                         <h5 class="modal-title" id="modalSuratLabel">Pengajuan Surat</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body px-4 py-3">
                         <form action="{{ route('simpan-surat') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Nomor Surat</label>
-                                <input type="text" name="nomor_surat" class="form-control" required>
+                            <div class="mb-3">
+                                <label class="form-label">Nomor Surat</label>
+                                <input type="text" name="nomor_surat" class="form-control rounded-pill" required>
                             </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Tanggal Surat</label>
-                                <input type="date" name="tanggal_surat" class="form-control" required>
+                            <div class="mb-3">
+                                <label class="form-label">Tanggal Surat</label>
+                                <input type="date" name="tanggal_surat" class="form-control rounded-pill"
+                                    required>
                             </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Pengirim</label>
-                                <input type="text" name="pengirim" class="form-control" required>
+                            <div class="mb-3">
+                                <label class="form-label">Pengirim</label>
+                                <input type="text" name="pengirim" class="form-control rounded-pill" required>
                             </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Telepon</label>
-                                <input type="text" name="telepon" class="form-control" required>
+                            <div class="mb-3">
+                                <label class="form-label">Telepon</label>
+                                <input type="text" name="telepon" class="form-control rounded-pill" required>
                             </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Perihal</label>
-                                <input type="text" name="perihal" class="form-control" required>
+                            <div class="mb-3">
+                                <label class="form-label">Perihal</label>
+                                <input type="text" name="perihal" class="form-control rounded-pill" required>
                             </div>
-                            <div class="form-group mt-3">
-                                <label class="form-control-placeholder">Lampiran</label>
-                                <input type="file" name="file" id='file' class="form-control" required>
+                            <div class="mb-3">
+                                <label class="form-label">Lampiran</label>
+                                <input type="file" name="file" id="file"
+                                    class="form-control rounded-pill" required>
                             </div>
-                            <div class="form-group">
+                            <div class="d-grid">
                                 <button type="submit"
-                                    class="form-control btn btn-warning rounded submit px-3">Ajukan</button>
+                                    class="btn btn-warning rounded-pill px-4 py-2 fw-bold">Ajukan</button>
                             </div>
                             @include('sweetalert::alert')
                         </form>

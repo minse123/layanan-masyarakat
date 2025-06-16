@@ -12,13 +12,13 @@ return new class extends Migration {
     {
         Schema::create('master_surat', function (Blueprint $table) {
             $table->id('id_surat');
+            $table->unsignedBigInteger('id_user')->nullable();
             $table->string('nomor_surat')->unique();
             $table->date('tanggal_surat');
             $table->text('perihal');
             $table->string('pengirim');
             $table->enum('status', ['Proses', 'Terima', 'Tolak']);
             $table->text('keterangan')->nullable();
-            $table->unsignedBigInteger('id_user')->nullable();
             $table->string('file_path')->nullable();
             $table->timestamps();
         });

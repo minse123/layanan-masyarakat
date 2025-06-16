@@ -17,31 +17,6 @@ use Barryvdh\DomPDF\Facade\Pdf; // Import the PDF facade
 
 class CetakPDFController extends Controller
 {
-    public function tamuCetakPDF(Request $request)
-    {
-        $filter = $request->filter;
-        $tanggal = $request->tanggal;
-
-        $query = Tamu::query();
-
-        if ($filter == 'harian') {
-            $query->whereDate('date', $tanggal);
-        } elseif ($filter == 'mingguan') {
-            $query->whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()]);
-        } elseif ($filter == 'bulanan') {
-            $query->whereMonth('date', date('m', strtotime($tanggal)))
-                ->whereYear('date', date('Y', strtotime($tanggal)));
-        } elseif ($filter == 'tahunan') {
-            $query->whereYear('date', date('Y', strtotime($tanggal)));
-        }
-
-        $data = $query->get();
-
-        $pdf = Pdf::loadView('admin.tamu.formCetakPDF', compact('data', 'tanggal'))
-            ->setPaper('a4', 'portrait');
-        // $pdf->setOption('isRemoteEnabled', true);
-        return $pdf->stream('data-tamu.pdf');
-    }
 
     public function cetakPDF()
     {

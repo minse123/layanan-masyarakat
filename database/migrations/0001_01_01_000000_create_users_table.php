@@ -15,9 +15,11 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('telepon');
+            $table->string('telepon')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('nik')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'psm', 'kasubag']);
+            $table->enum('role', ['admin', 'operator', 'psm', 'masyarakat']);
             $table->rememberToken();
             $table->timestamps();
         });

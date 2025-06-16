@@ -52,6 +52,7 @@
                     <button type="submit" class="btn btn-primary btn-block shadow-lg mt-3">Masuk</button>
                     <hr>
                 </form>
+                @include('sweetalert::alert')
                 {{-- 
                 <div class="text-center mt-3">
                     <p class="text-gray-600">Belum memiliki akun? <a href="/register" class="font-bold">Daftar</a>.</p>

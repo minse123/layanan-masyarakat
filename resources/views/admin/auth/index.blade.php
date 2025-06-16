@@ -14,6 +14,8 @@
                             <th scope="col">Nama</th>
                             <th scope="col">Email</th>
                             <th scope="col">Telepon</th>
+                            <th scope="col">nik</th>
+                            <th scope="col">Alamat</th>
                             {{-- <th scope="col">Password</th> --}}
                             <th scope="col">Role</th>
                             <th scope="col" style="width: 20%">Aksi</th>
@@ -31,6 +33,8 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->telepon }}</td>
+                                <td>{{ $user->nik }}</td>
+                                <td>{{ $user->alamat }}</td>
                                 {{-- <td>{{ $user->password }}</td> --}}
                                 <td>{{ ucfirst($user->role) }}</td>
                                 <td>
@@ -59,3 +63,11 @@
         let table = new DataTable('#myTable');
     </script>
 @endsection
+
+@include('sweetalert::alert')
+
+{{-- @if (session('success'))
+    <script>
+        Swal.fire('Berhasil', '{{ session('success') }}', 'success');
+    </script>
+@endif --}}

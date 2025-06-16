@@ -9,12 +9,15 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo-kementerian.png') }}">
-   
+
     <link rel="stylesheet" href="{{ asset('/frontend/css/style.css') }}">
     <title>Aplikasi Buku Tamu</title>
 </head>
 
 <body class="bg-light">
+    <img src="/frontend/images/bppmddtt.jpg" alt="Background"
+        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: 0; opacity: 0.15;">
+
     <div class="container">
         <!-- Outer Row -->
         <div class="row justify-content-center align-items-center vh-100">
