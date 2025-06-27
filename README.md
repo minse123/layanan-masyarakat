@@ -1,6 +1,7 @@
 # layanan-masyarakat
 
-Sistem Informasi layanan-masyarakat BPPMDDTT Banjarmasin
+Sistem Informasi layanan-masyarakat BPPMDDTT Banjarmasin  
+**Website ini dibuat untuk keperluan penelitian dan penyusunan skripsi.**
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
@@ -10,6 +11,11 @@ Sistem Informasi layanan-masyarakat BPPMDDTT Banjarmasin
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+
+## Tentang
+
+Aplikasi ini merupakan sistem informasi layanan masyarakat berbasis web yang dikembangkan menggunakan Laravel.  
+**Seluruh fitur dan data pada website ini digunakan untuk tujuan penelitian dan penyusunan skripsi.**
 
 ## About Laravel
 
