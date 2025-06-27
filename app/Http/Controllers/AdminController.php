@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\SuratProses;
 use App\Models\SuratTerima;
 use App\Models\SuratTolak;
+use App\Models\Video;
 use RealRashid\SweetAlert\Facades\Alert;
+
 class AdminController extends Controller
 {
 
@@ -17,10 +19,15 @@ class AdminController extends Controller
         $totalSuratTerima = SuratTerima::count();
         $totalSuratTolak = SuratTolak::count();
 
+        $totalVideoPublish = Video::where('ditampilkan', 1)->count();
+        $totalVideoBelumPublish = Video::where('ditampilkan', 0)->count();
+
         return view('admin.dashboard', compact(
             'totalSuratProses',
             'totalSuratTerima',
-            'totalSuratTolak'
+            'totalSuratTolak',
+            'totalVideoPublish',
+            'totalVideoBelumPublish'
         ));
     }
     public function authIndex()
@@ -43,7 +50,7 @@ class AdminController extends Controller
         $user->nik = $request->nik;
         $user->alamat = $request->alamat;
         $user->role = $request->role;
-        $user->password = bcrypt($request->password);
+        $user->password = $request->password;
         $user->save();
 
         return redirect(route('admin.akun'))->with('status', 'Data Berhasil Disimpan');
@@ -64,7 +71,7 @@ class AdminController extends Controller
         $user->role = $request->role;
 
         if ($request->filled('password')) {
-            $user->password = bcrypt($request->password);
+            $user->password = $request->password; // tanpa bcrypt
         }
 
         $user->save();

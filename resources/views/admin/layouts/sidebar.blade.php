@@ -19,6 +19,32 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
+    @php
+        $isVideo = request()->routeIs('admin.video.*');
+    @endphp
+    <div class="sidebar-heading">Konfigurasi Dashboard</div>
+    <li class="nav-item {{ $isVideo ? 'active' : '' }}">
+        <a class="nav-link" data-toggle="collapse" href="#configVideoCollapse" role="button"
+            aria-expanded="{{ $isVideo ? 'true' : 'false' }}" aria-controls="configVideoCollapse"
+            title="Konfigurasi Video">
+            <i class="fas fa-fw fa-video"></i>
+            <span>Konfigurasi Video</span>
+        </a>
+        <div id="configVideoCollapse" class="collapse {{ $isVideo ? 'show' : '' }}" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Konfigurasi:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.video.index') ? 'active' : '' }}"
+                    href="{{ route('admin.video.index') }}">Daftar Video</a>
+                {{-- <a class="collapse-item {{ request()->routeIs('admin.video.create') ? 'active' : '' }}"
+                    href="{{ route('admin.video.create') }}">Tambah Video</a> --}}
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
     <div class="sidebar-heading">Master Data</div>
     <!-- Nav Item - Master Data -->
     <li class="nav-item {{ request()->is('admin/surat') ? 'active' : '' }}">
@@ -79,7 +105,7 @@
     </li>
     <hr class="sidebar-divider">
     <!-- Nav Item - User Accounts -->
-    <li class="nav-item {{ request()->is('admin/akun') ? 'active' : '' }}">
+    <li class="nav-item {{ request()->is('admin/auth') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.akun') }}" title="Akun Pengguna">
             <i class="fas fa-fw fa-user"></i>
             <span>Akun Pengguna</span>

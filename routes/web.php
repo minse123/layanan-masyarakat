@@ -3,12 +3,14 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CetakPDFController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\MasyarakatController;
 use App\Http\Controllers\SesiController;
 use App\Http\Controllers\KasubagController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\PsmController;
+use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -86,6 +88,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/konsultasi/filter', [KonsultasiController::class, 'filter'])->name('admin.konsultasi.filter');
     Route::get('/admin/konsultasi/resetfilter', [KonsultasiController::class, 'resetfilter'])->name('admin.konsultasi.resetfilter');
     Route::get('/admin/konsultasi/cetak-pdf', [KonsultasiController::class, 'cetakPDF'])->name('admin.konsultasi.cetak-pdf');
+
+    Route::get('/admin/video', [VideoController::class, 'index'])->name('admin.video.index');
+    Route::post('/admin/video', [VideoController::class, 'store'])->name('admin.video.store');
+    // Route::get('/admin/video/{id}/edit', [VideoController::class, 'edit'])->name('admin.video.edit');
+    Route::put('/admin/video/{id}', [VideoController::class, 'update'])->name('admin.video.update');
+    Route::delete('/admin/video/{id}', [VideoController::class, 'destroy'])->name('admin.video.destroy');
 });
 Route::middleware(['auth', 'role:psm'])->group(function () {
     Route::get('/psm/dashboard', [PsmController::class, 'index']);
@@ -123,6 +131,10 @@ Route::middleware(['auth', 'role:admin,kasubag'])->group(function () {
     Route::get('/report/surat/tolak/cetak-pdf', [SuratController::class, 'cetaktolak'])->name('report.surat.tolak.cetak-pdf');
     Route::get('/report/konsultasi/pending/cetak-pdf', [KonsultasiController::class, 'cetakpending'])->name('report.konsultasi.pending.cetak-pdf');
     Route::get('/report/konsultasi/dijawab/cetak-pdf', [KonsultasiController::class, 'cetakdijawab'])->name('report.konsultasi.dijawab.cetak-pdf');
+});
 
 
+Route::middleware(['auth', 'role:masyarakat'])->group(function () {
+    Route::get('/masyarakat/dashboard', [MasyarakatController::class, 'index'])->name('masyarakat.dashboard');
+    Route::get('/video-pelatihan', [MasyarakatController::class, 'semuaVideo'])->name('masyarakat.videopelatihan');
 });

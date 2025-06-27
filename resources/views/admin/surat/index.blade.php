@@ -99,7 +99,7 @@
                                     <!-- Tombol untuk membuka modal detail -->
                                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                         data-target="#detailModal{{ $item->id_surat }}">
-                                        <i class="fas fa-eye"></i> Detail
+                                        <i class="fas fa-eye"></i>
                                     </button>
 
                                     <!-- Modal Detail -->
@@ -297,7 +297,7 @@
                                         <!-- Tombol Terima dengan konfirmasi modal -->
                                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
                                             data-target="#terimaModal{{ $item->id_surat }}">
-                                            <i class="fas fa-check"></i> Terima
+                                            <i class="fas fa-check"></i> 
                                         </button>
                                         <!-- Modal Konfirmasi Terima -->
                                         <div class="modal fade" id="terimaModal{{ $item->id_surat }}" tabindex="-1"
@@ -336,7 +336,7 @@
                                         <!-- Tombol Tolak dengan konfirmasi modal -->
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                             data-target="#tolakModal{{ $item->id_surat }}">
-                                            <i class="fas fa-times"></i> Tolak
+                                            <i class="fas fa-times"></i>
                                         </button>
                                         <!-- Modal Konfirmasi Tolak -->
                                         <div class="modal fade" id="tolakModal{{ $item->id_surat }}" tabindex="-1"
@@ -375,12 +375,12 @@
                                     <!-- Tombol Edit -->
                                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
                                         data-target="#editModal{{ $item->id_surat }}">
-                                        <i class="fas fa-edit"></i> Edit
+                                        <i class="fas fa-edit"></i>
                                     </button>
                                     <!-- Tombol Hapus -->
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         data-target="#deleteModal{{ $item->id_surat }}">
-                                        <i class="fas fa-trash"></i> Hapus
+                                        <i class="fas fa-trash"></i>
                                     </button>
 
                                     <!-- Modal Konfirmasi Hapus -->

@@ -42,6 +42,8 @@ class SesiController extends Controller
                     return redirect('/psm/dashboard')->with('message', 'Selamat datang, PSM');
                 case 'kasubag':
                     return redirect('/kasubag/dashboard')->with('message', 'Selamat datang, Kasubag!');
+                case 'masyarakat':
+                    return redirect('/masyarakat/dashboard')->with('message', 'Selamat datang, Masyarakat!');
                 default:
                     return redirect('/')->with('message', 'Berhasil login.');
             }

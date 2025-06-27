@@ -83,9 +83,11 @@
                             <th>Nama</th>
                             <th>Telepon</th>
                             <th>Email</th>
-                            <th>Judul Konsultasi</th>
+                            <th>Deskripsi</th>
+                            <th>Jenis</th>
+                            <th>Nama Pelatihan</th>
                             <th>Status</th>
-                            <th>Tanggal Pengajuan/Dijawab</th>
+                            <th>Tanggal</th>
                             <th>Detail</th>
                             <th>Aksi</th>
                         </tr>
@@ -97,32 +99,17 @@
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ $item->telepon }}</td>
                                 <td>{{ $item->email }}</td>
-                                <td>{{ $item->judul_konsultasi }}</td>
-                                <td>
-                                    <span
-                                        class="badge 
-                            @if ($item->status == 'Pending') badge-warning 
-                            @elseif ($item->status == 'Dijawab') badge-success @endif">
-                                        {{ $item->status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    @if ($item->status == 'Dijawab' && optional($item->konsultasiDijawab)->tanggal_dijawab)
-                                        <p>{{ optional($item->konsultasiDijawab)->tanggal_dijawab }}</p>
-                                    @elseif ($item->konsultasiPending->isNotEmpty())
-                                        @foreach ($item->konsultasiPending as $pending)
-                                            <p class="mb-1">{{ $pending->tanggal_pengajuan }}</p>
-                                        @endforeach
-                                    @else
-                                        <p>Tidak ada pengajuan</p>
-                                    @endif
-                                </td>
-                                <td>
-                                    <!-- Tombol untuk membuka modal detail -->
-                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
-                                        data-target="#detailModal{{ $item->id_konsultasi }}" title="Lihat Detail">
-                                        <i class="fas fa-eye"></i> Detail
-                                    </button>
+                                <td>{{ $item->deskripsi }}</td>
+                                <td>{{ $item->jenis }}</td>
+                                <td>{{ $item->nama_pelatihan }}</td>
+                                <td>{{ $item->status }}</td>
+                                <td>{{ $item->tanggal }}</td>
+
+                                <!-- Tombol untuk membuka modal detail -->
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                    data-target="#detailModal{{ $item->id_konsultasi }}" title="Lihat Detail">
+                                    <i class="fas fa-eye"></i> Detail
+                                </button>
                                 </td>
                                 <td>
                                     <!-- Tombol Edit -->

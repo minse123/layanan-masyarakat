@@ -11,10 +11,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('kategori_pelatihan', function (Blueprint $table) {
-            $table->id('id_kategori');
+            $table->bigIncrements('id_kategori'); // PK
             $table->unsignedBigInteger('id_konsultasi')->nullable();
-            $table->enum('status', ['inti', 'pendukung']);
+            $table->enum('jenis_kategori', ['inti', 'pendukung']);
             $table->timestamps();
+
+            $table->foreign('id_konsultasi')->references('id_konsultasi')->on('master_konsultasi')->onDelete('cascade');
         });
     }
 

@@ -1,0 +1,77 @@
+<!-- Topbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url('/') }}">
+            <img src="{{ asset('frontend/images/logo-kementerian.png') }}" alt="Logo" class="navbar-brand-icon">
+            <span>BPPMDDTT</span>
+            <span>Banjarmasin</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-lg-auto me-lg-4">
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_1">Beranda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_2">Layanan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_3">Tentang Kami</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_4">Kontak</a>
+                </li>
+                
+                <div class="d-none d-lg-flex align-items-center ms-lg-3">
+                    @auth
+                        <div class="dropdown">
+                            <button class="btn px-4 py-2 rounded-pill dropdown-toggle d-flex align-items-center gap-2"
+                                type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                style="font-size: 1.1rem; font-weight: 600; min-height: 48px;">
+                                <span
+                                    class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                                    style="width:38px;height:38px;">
+                                    <i class="bi bi-person" style="font-size:1.5rem;"></i>
+                                </span>
+                                <span class="ms-2 text-white">{{ Auth::user()->name }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow animated--fade-in"
+                                aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                        href="{{ url('profile.edit') }}">
+                                        <i class="bi bi-pencil-square text-primary"></i>
+                                        <span>Edit Akun</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <form action="{{ url('logout') }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item d-flex align-items-center gap-2">
+                                            <i class="bi bi-box-arrow-right text-danger"></i>
+                                            <span>Logout</span>
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    @else
+                        <a href="{{ route('login') }}"
+                            class="btn btn-primary px-4 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2"
+                            style="font-size: 1.1rem; min-height: 48px;">
+                            <i class="bi bi-lock"></i>
+                            <span>Login</span>
+                        </a>
+                    @endauth
+                </div>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>

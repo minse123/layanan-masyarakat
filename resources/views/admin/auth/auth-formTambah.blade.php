@@ -43,6 +43,7 @@
                                     <option value="admin">Admin</option>
                                     <option value="psm">PSM</option>
                                     <option value="kasubag">Kasubag</option>
+                                    <option value="masyarakat">Masyarakat</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Tambah</button>

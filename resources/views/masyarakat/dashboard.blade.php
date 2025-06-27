@@ -8,13 +8,13 @@
     <title>Layanan Masyarakat</title>
 
     <!-- Include CSS -->
-    @include('guest/layouts.css')
+    @include('masyarakat/layouts.css')
 
 </head>
 
 <body>
 
-    @include('guest/layouts.navbar')
+    @include('masyarakat/layouts.navbar')
 
     <main>
 
@@ -387,9 +387,47 @@
                 </div>
             </div>
         </section>
+
+        <!-- Tonton Video Pelatihan -->
+        <section id="section_video" class="pt-5">
+            <div class="container">
+                <div class="row text-center mb-4">
+                    <div class="col-12">
+                        <h6>Pelatihan Online</h6>
+                        <h2 class="mb-4">Tonton Video Pelatihan</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    @forelse ($videos as $video)
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="card border shadow-sm h-100">
+                                <iframe class="card-img-top" height="180"
+                                    src="https://www.youtube.com/embed/{{ $video->youtube_id }}"
+                                    title="{{ $video->judul }}" allowfullscreen></iframe>
+                                <div class="card-body">
+                                    <h6 class="card-title mb-2">{{ $video->judul }}</h6>
+                                    <p class="card-text small">{{ $video->deskripsi }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12">
+                            <p>Belum ada video pelatihan yang tersedia.</p>
+                        </div>
+                    @endforelse
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center mt-3">
+                        <a href="{{ url('video-pelatihan') }}" class="btn btn-success rounded-pill px-4 py-2 fw-bold">
+                            Lihat Selengkapnya
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
-    @include('guest/layouts.js')
+    @include('masyarakat/layouts.js')
 </body>
-@include('guest/layouts.footer')
+@include('masyarakat/layouts.footer')
 
 </html>
