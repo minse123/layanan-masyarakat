@@ -13,8 +13,9 @@ class MasterKonsultasi extends Model
     protected $primaryKey = 'id_konsultasi';
     public $incrementing = true; // ID auto-increment
     protected $keyType = 'int';
+
     protected $fillable = [
-        'id_konsultasi',
+        'id_user',
         'nama',
         'telepon',
         'email',
@@ -23,13 +24,13 @@ class MasterKonsultasi extends Model
         'status',
     ];
 
-    public function konsultasiPending()
+    public function kategoriPelatihan()
     {
-        return $this->hasMany(KonsultasiPending::class, 'id_konsultasi');
+        return $this->hasOne(KategoriPelatihan::class, 'id_konsultasi', 'id_konsultasi');
     }
 
-    public function konsultasiDijawab()
+    public function jawabPelatihan()
     {
-        return $this->hasOne(KonsultasiDijawab::class, 'id_konsultasi')->withDefault();
+        return $this->hasOne(\App\Models\JawabPelatihan::class, 'id_konsultasi', 'id_konsultasi');
     }
 }

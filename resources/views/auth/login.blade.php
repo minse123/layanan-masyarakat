@@ -1,5 +1,5 @@
 @extends('auth.auth')
-
+@include('sweetalert::alert')
 @section('content')
     <div class="row justify-content-center h-100">
         <div class="col-lg-9 col-12">
@@ -53,11 +53,11 @@
                     <hr>
                 </form>
                 @include('sweetalert::alert')
-                {{-- 
+
                 <div class="text-center mt-3">
                     <p class="text-gray-600">Belum memiliki akun? <a href="/register" class="font-bold">Daftar</a>.</p>
-                    <p><a class="font-bold" href="/lupa-password">Lupa password?</a></p>
-                </div> --}}
+                    <p><a class="font-bold" href="/">Kembali Kehalaman Awal</a></p>
+                </div>
             </div>
         </div>
     </div>

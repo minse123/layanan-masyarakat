@@ -18,7 +18,6 @@
                             <th>No.</th>
                             <th>Judul</th>
                             <th>Jenis Pelatihan</th>
-                            <th>Deskripsi</th>
                             <th>Ditampilkan</th>
                             <th>Aksi</th>
                         </tr>
@@ -35,7 +34,6 @@
                                         <span class="badge badge-secondary">Pendukung</span>
                                     @endif
                                 </td>
-                                <td>{{ $video->deskripsi }}</td>
                                 <td>
                                     @if ($video->ditampilkan)
                                         <span class="badge badge-success">Ya</span>
@@ -54,15 +52,43 @@
                                         data-target="#editVideoModal{{ $video->id }}">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <!-- Tombol Hapus -->
-                                    <form action="{{ route('admin.video.destroy', $video->id) }}" method="POST"
-                                        class="d-inline" onsubmit="return confirm('Yakin hapus video ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <!-- Tombol Hapus --> 
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                        data-target="#deleteVideoModal{{ $video->id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
+                                    <!-- Modal Konfirmasi Hapus -->
+                                    <div class="modal fade" id="deleteVideoModal{{ $video->id }}" tabindex="-1"
+                                        role="dialog" aria-labelledby="deleteVideoModalLabel{{ $video->id }}"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <form action="{{ route('admin.video.destroy', $video->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-danger text-white">
+                                                        <h5 class="modal-title"
+                                                            id="deleteVideoModalLabel{{ $video->id }}">Konfirmasi
+                                                            Hapus</h5>
+                                                        <button type="button" class="close text-white" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Apakah Anda yakin ingin menghapus video
+                                                        <strong>{{ $video->judul }}</strong>?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-danger">Hapus</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
 
@@ -122,8 +148,9 @@
                             </div>
 
                             <!-- Modal Edit Video -->
-                            <div class="modal fade" id="editVideoModal{{ $video->id }}" tabindex="-1" role="dialog"
-                                aria-labelledby="editVideoModalLabel{{ $video->id }}" aria-hidden="true">
+                            <div class="modal fade" id="editVideoModal{{ $video->id }}" tabindex="-1"
+                                role="dialog" aria-labelledby="editVideoModalLabel{{ $video->id }}"
+                                aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <form action="{{ route('admin.video.update', $video->id) }}" method="POST">
                                         @csrf

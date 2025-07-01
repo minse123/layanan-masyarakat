@@ -24,7 +24,9 @@
 
                     <div class="col-lg-6 col-12 mb-5 pb-5 pb-lg-0 mb-lg-0">
 
-                        <h6>Selamat Datang di</h6>
+                        <h6>
+                            Selamat Datang, <span class="fw-bold text-white">{{ Auth::user()->name }}</span> di
+                        </h6>
 
                         <h1 class="text-white mb-4">Sistem Informasi Layanan Masyarakat</h1>
 
@@ -97,37 +99,82 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg rounded-4">
                     <div class="modal-header bg-success rounded-top-4">
-                        <h5 class="modal-title text-white" id="modalKonsultasiLabel">Layanan Konsultasi BumDes</h5>
+                        <h5 class="modal-title text-white" id="modalKonsultasiLabel">
+                            <i class="bi bi-chat-dots me-2"></i> Layanan Konsultasi BumDes
+                        </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                            aria-label="Tutup"></button>
                     </div>
                     <div class="modal-body px-4 py-3">
-                        <form action="{{ route('simpan-konsultasi') }}" method="POST">
+                        <form action="{{ route('simpan-konsultasi') }}" method="POST" autocomplete="off">
                             @csrf
-                            <div class="mb-3">
-                                <label class="form-label">Nama</label>
-                                <input type="text" name="nama" class="form-control rounded-pill" required>
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Nama</label>
+                                    <input type="text" name="nama" class="form-control rounded-pill" required
+                                        placeholder="Nama Lengkap">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Telepon</label>
+                                    <input type="text" name="telepon" class="form-control rounded-pill" required
+                                        placeholder="Nomor Telepon">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="email" class="form-control rounded-pill" required
+                                        placeholder="Alamat Email">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Tanggal Pengajuan</label>
+                                    <input type="date" name="tanggal_pengajuan" class="form-control rounded-pill"
+                                        required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Judul Konsultasi</label>
+                                    <input type="text" name="judul_konsultasi" class="form-control rounded-pill"
+                                        required placeholder="Judul Konsultasi">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Deskripsi</label>
+                                    <textarea name="deskripsi" class="form-control rounded-3" rows="3" required
+                                        placeholder="Tuliskan deskripsi konsultasi Anda..."></textarea>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Jenis Kategori</label>
+                                    <select name="jenis_kategori" id="jenis_kategori"
+                                        class="form-select rounded-pill" required onchange="togglePelatihan()">
+                                        <option value="">-- Pilih Kategori --</option>
+                                        <option value="inti">Inti</option>
+                                        <option value="pendukung">Pendukung</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6 d-none" id="pelatihan_inti_wrap">
+                                    <label class="form-label">Pelatihan Inti</label>
+                                    <select name="pelatihan_inti" class="form-select rounded-pill">
+                                        <option value="">-- Pilih Pelatihan Inti --</option>
+                                        <option value="bumdes">Bumdes</option>
+                                        <option value="kpmd">KPMD</option>
+                                        <option value="masyarakat_hukum_adat">Masyarakat Hukum Adat</option>
+                                        <option value="pembangunan_desa_wisata">Pembangunan Desa Wisata</option>
+                                        <option value="catrans">Catrans</option>
+                                        <option value="pelatihan_perencanaan_pembangunan_partisipatif">Pelatihan
+                                            Perencanaan Pembangunan Partisipatif</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6 d-none" id="pelatihan_pendukung_wrap">
+                                    <label class="form-label">Pelatihan Pendukung</label>
+                                    <select name="pelatihan_pendukung" class="form-select rounded-pill">
+                                        <option value="">-- Pilih Pelatihan Pendukung --</option>
+                                        <option value="prukades">Prukades</option>
+                                        <option value="prudes">Prudes</option>
+                                        <option value="ecomerce">E-Commerce</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Telepon</label>
-                                <input type="text" name="telepon" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Judul Konsultasi</label>
-                                <input type="text" name="judul_konsultasi" class="form-control rounded-pill"
-                                    required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Deskripsi</label>
-                                <textarea name="deskripsi" class="form-control rounded-3" rows="3" required></textarea>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit"
-                                    class="btn btn-success rounded-pill px-4 py-2 fw-bold">Ajukan</button>
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-success rounded-pill px-4 py-2 fw-bold">
+                                    <i class="bi bi-send me-1"></i> Ajukan Konsultasi
+                                </button>
                             </div>
                             @include('sweetalert::alert')
                         </form>
@@ -137,7 +184,8 @@
         </div>
 
         <!-- Modal Pengajuan Surat -->
-        <div class="modal fade" id="modalSurat" tabindex="-1" aria-labelledby="modalSuratLabel" aria-hidden="true">
+        <div class="modal fade" id="modalSurat" tabindex="-1" aria-labelledby="modalSuratLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow-lg rounded-4">
                     <div class="modal-header bg-warning rounded-top-4">
@@ -427,6 +475,19 @@
         </section>
     </main>
     @include('masyarakat/layouts.js')
+
+    <script>
+        function togglePelatihan() {
+            var kategori = document.getElementById('jenis_kategori').value;
+            document.getElementById('pelatihan_inti_wrap').classList.add('d-none');
+            document.getElementById('pelatihan_pendukung_wrap').classList.add('d-none');
+            if (kategori === 'inti') {
+                document.getElementById('pelatihan_inti_wrap').classList.remove('d-none');
+            } else if (kategori === 'pendukung') {
+                document.getElementById('pelatihan_pendukung_wrap').classList.remove('d-none');
+            }
+        }
+    </script>
 </body>
 @include('masyarakat/layouts.footer')
 

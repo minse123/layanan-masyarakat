@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\SuratProses;
 use App\Models\SuratTerima;
 use App\Models\SuratTolak;
+use App\Models\MasterKonsultasi;
 use App\Models\Video;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -18,7 +19,9 @@ class AdminController extends Controller
         $totalSuratProses = SuratProses::count();
         $totalSuratTerima = SuratTerima::count();
         $totalSuratTolak = SuratTolak::count();
-
+        $totalKonsultasi = MasterKonsultasi::count();
+        $totalKonsultasiDijawab = MasterKonsultasi::where('status', 'Dijawab')->count();
+        $totalKonsultasiPending = MasterKonsultasi::where('status', 'Belum Dijawab')->count();
         $totalVideoPublish = Video::where('ditampilkan', 1)->count();
         $totalVideoBelumPublish = Video::where('ditampilkan', 0)->count();
 
@@ -27,7 +30,10 @@ class AdminController extends Controller
             'totalSuratTerima',
             'totalSuratTolak',
             'totalVideoPublish',
-            'totalVideoBelumPublish'
+            'totalVideoBelumPublish',
+            'totalKonsultasi',
+            'totalKonsultasiDijawab',
+            'totalKonsultasiPending', // <-- ini yang benar
         ));
     }
     public function authIndex()

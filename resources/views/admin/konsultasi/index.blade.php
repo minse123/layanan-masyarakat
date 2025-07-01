@@ -1,4 +1,5 @@
 @extends('admin.app')
+@include('sweetalert::alert')
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -83,12 +84,9 @@
                             <th>Nama</th>
                             <th>Telepon</th>
                             <th>Email</th>
-                            <th>Deskripsi</th>
-                            <th>Jenis</th>
-                            <th>Nama Pelatihan</th>
+                            <th>Jenis Kategori</th>
                             <th>Status</th>
-                            <th>Tanggal</th>
-                            <th>Detail</th>
+                            <th>Tanggal Pengajuan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -99,32 +97,26 @@
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ $item->telepon }}</td>
                                 <td>{{ $item->email }}</td>
-                                <td>{{ $item->deskripsi }}</td>
-                                <td>{{ $item->jenis }}</td>
-                                <td>{{ $item->nama_pelatihan }}</td>
+                                <td>{{ optional($item->kategoriPelatihan)->jenis_kategori ?? '-' }}</td>
                                 <td>{{ $item->status }}</td>
-                                <td>{{ $item->tanggal }}</td>
-
-                                <!-- Tombol untuk membuka modal detail -->
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
-                                    data-target="#detailModal{{ $item->id_konsultasi }}" title="Lihat Detail">
-                                    <i class="fas fa-eye"></i> Detail
-                                </button>
+                                <td>{{ optional(optional($item->kategoriPelatihan)->jenisPelatihan)->tanggal_pengajuan ?? '-' }}
                                 </td>
                                 <td>
+                                    <!-- Button Detail dipindah ke Aksi -->
+                                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                                        data-target="#detailModal{{ $item->id_konsultasi }}" title="Lihat Detail">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                     <!-- Tombol Edit -->
                                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
                                         data-target="#editModal{{ $item->id_konsultasi }}" title="Edit Konsultasi">
-                                        <i class="fas fa-edit"></i> Edit
+                                        <i class="fas fa-edit"></i>
                                     </button>
-
                                     <!-- Tombol Hapus -->
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         data-target="#deleteModal{{ $item->id_konsultasi }}" title="Hapus Konsultasi">
-                                        <i class="fas fa-trash"></i> Hapus
+                                        <i class="fas fa-trash"></i>
                                     </button>
-
-                                    <!-- Button to Answer Consultation -->
                                     @if ($item->status == 'Pending')
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                             data-target="#answerModal{{ $item->id_konsultasi }}" title="Jawab Konsultasi">
@@ -138,81 +130,68 @@
                             <div class="modal fade" id="detailModal{{ $item->id_konsultasi }}" tabindex="-1"
                                 role="dialog" aria-labelledby="detailModalLabel{{ $item->id_konsultasi }}"
                                 aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
-                                        <div class="modal-header">
+                                        <div class="modal-header bg-primary text-white">
                                             <h5 class="modal-title" id="detailModalLabel{{ $item->id_konsultasi }}">
-                                                Detail
-                                                Konsultasi</h5>
-                                            <button type="button" class="close" data-dismiss="modal"
+                                                Detail Konsultasi
+                                            </h5>
+                                            <button type="button" class="close text-white" data-dismiss="modal"
                                                 aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            @if ($item->nama)
-                                                <div class="form-group">
-                                                    <label>Nama:</label>
-                                                    <p>{{ $item->nama }}</p>
-                                                </div>
-                                            @endif
-                                            @if ($item->telepon)
-                                                <div class="form-group">
-                                                    <label>Telepon:</label>
-                                                    <p>{{ $item->telepon }}</p>
-                                                </div>
-                                            @endif
-                                            @if ($item->email)
-                                                <div class="form-group">
-                                                    <label>Email:</label>
-                                                    <p>{{ $item->email }}</p>
-                                                </div>
-                                            @endif
-                                            @if ($item->judul_konsultasi)
-                                                <div class="form-group">
-                                                    <label>Judul Konsultasi:</label>
-                                                    <p>{{ $item->judul_konsultasi }}</p>
-                                                </div>
-                                            @endif
-                                            @if ($item->deskripsi)
-                                                <div class="form-group">
-                                                    <label>Deskripsi:</label>
-                                                    <p>{{ $item->deskripsi }}</p>
-                                                </div>
-                                            @endif
-                                            @if ($item->status)
-                                                <div class="form-group">
-                                                    <label>Status:</label>
-                                                    <p>{{ $item->status }}</p>
-                                                </div>
-                                            @endif
-                                            @if ($item->konsultasiPending->isNotEmpty())
-                                                <div class="form-group">
-                                                    <label>Tanggal Pengajuan:</label>
-                                                    @foreach ($item->konsultasiPending as $pending)
-                                                        <p>{{ $pending->tanggal_pengajuan }}</p>
-                                                    @endforeach
-                                                </div>
-                                            @else
-                                                <div class="form-group">
-                                                    <label>Tanggal Pengajuan:</label>
-                                                    <p>Tidak ada pengajuan</p>
-                                                </div>
-                                            @endif
-                                            @if ($item->status == 'Dijawab')
-                                                @if (optional($item->konsultasiDijawab)->jawaban)
-                                                    <div class="form-group">
-                                                        <label>Jawaban:</label>
-                                                        <p>{{ optional($item->konsultasiDijawab)->jawaban }}</p>
-                                                    </div>
+                                            <dl class="row mb-0">
+                                                <dt class="col-sm-4">Nama</dt>
+                                                <dd class="col-sm-8">{{ $item->nama }}</dd>
+
+                                                <dt class="col-sm-4">Telepon</dt>
+                                                <dd class="col-sm-8">{{ $item->telepon }}</dd>
+
+                                                <dt class="col-sm-4">Email</dt>
+                                                <dd class="col-sm-8">{{ $item->email }}</dd>
+
+                                                <dt class="col-sm-4">Judul Konsultasi</dt>
+                                                <dd class="col-sm-8">{{ $item->judul_konsultasi }}</dd>
+
+                                                <dt class="col-sm-4">Deskripsi</dt>
+                                                <dd class="col-sm-8">{{ $item->deskripsi }}</dd>
+
+                                                <dt class="col-sm-4">Status</dt>
+                                                <dd class="col-sm-8">{{ $item->status }}</dd>
+
+                                                <dt class="col-sm-4">Tanggal Pengajuan</dt>
+                                                <dd class="col-sm-8">
+                                                    {{ optional(optional($item->kategoriPelatihan)->jenisPelatihan)->tanggal_pengajuan ?? '-' }}
+                                                </dd>
+
+                                                <dt class="col-sm-4">Jenis Kategori</dt>
+                                                <dd class="col-sm-8">
+                                                    {{ optional($item->kategoriPelatihan)->jenis_kategori ?? '-' }}</dd>
+
+                                                <dt class="col-sm-4">Jenis Pelatihan</dt>
+                                                <dd class="col-sm-8">
+                                                    @if (optional($item->kategoriPelatihan)->jenis_kategori == 'inti')
+                                                        {{ optional($item->kategoriPelatihan->jenisPelatihan)->pelatihan_inti ?? '-' }}
+                                                    @elseif (optional($item->kategoriPelatihan)->jenis_kategori == 'pendukung')
+                                                        {{ optional($item->kategoriPelatihan->jenisPelatihan)->pelatihan_pendukung ?? '-' }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </dd>
+
+                                                @if ($item->status == 'Dijawab')
+                                                    @if (optional($item->jawabPelatihan)->jawaban)
+                                                        <dt class="col-sm-4">Jawaban</dt>
+                                                        <dd class="col-sm-8">{{ $item->jawabPelatihan->jawaban }}</dd>
+                                                    @endif
+                                                    @if (optional($item->jawabPelatihan)->tanggal_dijawab)
+                                                        <dt class="col-sm-4">Tanggal Dijawab</dt>
+                                                        <dd class="col-sm-8">{{ $item->jawabPelatihan->tanggal_dijawab }}</dd>
+                                                    @endif
                                                 @endif
-                                                @if (optional($item->konsultasiDijawab)->tanggal_dijawab)
-                                                    <div class="form-group">
-                                                        <label>Tanggal Dijawab:</label>
-                                                        <p>{{ optional($item->konsultasiDijawab)->tanggal_dijawab }}</p>
-                                                    </div>
-                                                @endif
-                                            @endif
+                                            </dl>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -410,6 +389,49 @@
                                     <label>Deskripsi</label>
                                     <textarea name="deskripsi" class="form-control" required></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label>Jenis Kategori</label>
+                                    <select name="jenis_kategori" id="jenis_kategori" class="form-control" required
+                                        onchange="toggleJenisPelatihan()">
+                                        <option value="">Pilih Kategori</option>
+                                        <option value="inti">Inti</option>
+                                        <option value="pendukung">Pendukung</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="pelatihan_inti_group" style="display:none;">
+                                    <label>Jenis Pelatihan Inti</label>
+                                    <select name="pelatihan_inti" class="form-control">
+                                        <option value="">Pilih Pelatihan Inti</option>
+                                        <option value="bumdes">Bumdes</option>
+                                        <option value="kpmd">KPMD</option>
+                                        <option value="masyarakat_hukum_adat">Masyarakat Hukum Adat</option>
+                                        <option value="pembangunan_desa_wisata">Pembangunan Desa Wisata</option>
+                                        <option value="catrans">Catrans</option>
+                                        <option value="pelatihan_perencanaan_pembangunan_partisipatif">Pelatihan
+                                            Perencanaan Pembangunan Partisipatif</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="pelatihan_pendukung_group" style="display:none;">
+                                    <label>Jenis Pelatihan Pendukung</label>
+                                    <select name="pelatihan_pendukung" class="form-control">
+                                        <option value="">Pilih Pelatihan Pendukung</option>
+                                        <option value="prukades">Prukades</option>
+                                        <option value="prudes">Prudes</option>
+                                        <option value="ecomerce">Ecomerce</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal Pengajuan</label>
+                                    <input type="date" name="tanggal_pengajuan" class="form-control" required>
+                                </div>
+                                <script>
+                                    function toggleJenisPelatihan() {
+                                        var kategori = document.getElementById('jenis_kategori').value;
+                                        document.getElementById('pelatihan_inti_group').style.display = kategori === 'inti' ? 'block' : 'none';
+                                        document.getElementById('pelatihan_pendukung_group').style.display = kategori === 'pendukung' ? 'block' :
+                                            'none';
+                                    }
+                                </script>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>

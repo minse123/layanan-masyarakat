@@ -89,8 +89,8 @@ class SesiController extends Controller
 
         // Regenerate CSRF token
         $request->session()->regenerateToken();
-
-        return redirect('/')->with('message', 'Anda berhasil logout.');
+        alert()->success('Berhasil', 'Anda berhasil logout.');
+        return redirect('/login')->with('message', 'Anda berhasil logout.');
     }
 
 }

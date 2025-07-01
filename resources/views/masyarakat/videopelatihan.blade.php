@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo-kementerian.png') }}">
     <title>Video Pelatihan</title>
     @include('masyarakat/layouts.css')
+    
 </head>
 
 <body>
