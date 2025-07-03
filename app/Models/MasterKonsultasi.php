@@ -24,13 +24,15 @@ class MasterKonsultasi extends Model
         'status',
     ];
 
+    // Jika satu konsultasi bisa punya banyak kategori pelatihan
     public function kategoriPelatihan()
     {
-        return $this->hasOne(KategoriPelatihan::class, 'id_konsultasi', 'id_konsultasi');
+        return $this->hasMany(KategoriPelatihan::class, 'id_konsultasi', 'id_konsultasi');
     }
 
+    // Jika satu konsultasi hanya punya satu jawaban
     public function jawabPelatihan()
     {
-        return $this->hasOne(\App\Models\JawabPelatihan::class, 'id_konsultasi', 'id_konsultasi');
+        return $this->hasOne(JawabPelatihan::class, 'id_konsultasi', 'id_konsultasi');
     }
 }

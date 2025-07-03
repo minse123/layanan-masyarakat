@@ -466,7 +466,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12 text-center mt-3">
-                        <a href="{{ url('video-pelatihan') }}" class="btn btn-success rounded-pill px-4 py-2 fw-bold">
+                        <a href="{{ route('masyarakat.videopelatihan') }}" class="btn btn-success rounded-pill px-4 py-2 fw-bold">
                             Lihat Selengkapnya
                         </a>
                     </div>

@@ -7,8 +7,7 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
-        <!-- Sidebar -->
+ 
         @include('admin.layouts.sidebar')
         <!-- End of Sidebar -->
 

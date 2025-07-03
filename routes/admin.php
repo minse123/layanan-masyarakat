@@ -5,6 +5,7 @@ use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\SuratController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\KategoriSoalPelatihanController;
 
 
 
@@ -29,14 +30,14 @@ Route::get('/admin/report/tamu/filter-data', [AdminController::class, 'reportfil
 Route::get('/admin/report/tamu/resetfilter-data', [AdminController::class, 'reportresetfilterData'])->name('admin.report.tamu.resetfilter-data');
 Route::get('/admin/report/tamu/cetak-pdf', [AdminController::class, 'cetakPDF'])->name('admin.report.tamu.cetak-pdf');
 
-Route::get('/admin/surat', [SuratController::class, 'Suratindex'])->name('admin.master.surat');
-Route::put('/admin/surat/update/{id}', [SuratController::class, 'MasterUpdate'])->name('admin.master.surat.update');
-Route::post('/admin/surat/store', [SuratController::class, 'store'])->name('admin.surat.store');
-Route::post('/admin/surat/terima/{id}', [SuratController::class, 'terimaSurat'])->name('admin.surat.terima');
-Route::post('/admin/surat/tolak/{id}', [SuratController::class, 'tolakSurat'])->name('admin.surat.tolak');
-route::post('/admin/surat/hapus/{id}', [SuratController::class, 'delete'])->name('admin.surat.hapus');
-Route::get('/admin/surat/filter', [SuratController::class, 'filterSurat'])->name('admin.surat.filter');
-Route::get('/admin/surat/resetfilter', [SuratController::class, 'resetfilterSurat'])->name('admin.surat.resetfilter');
+Route::get('/surat', [SuratController::class, 'Suratindex'])->name('admin.master.surat');
+Route::put('/surat/update/{id}', [SuratController::class, 'MasterUpdate'])->name('admin.master.surat.update');
+Route::post('/surat/store', [SuratController::class, 'store'])->name('admin.surat.store');
+Route::post('/surat/terima/{id}', [SuratController::class, 'terimaSurat'])->name('admin.surat.terima');
+Route::post('/surat/tolak/{id}', [SuratController::class, 'tolakSurat'])->name('admin.surat.tolak');
+route::post('/surat/hapus/{id}', [SuratController::class, 'delete'])->name('admin.surat.hapus');
+Route::get('/surat/filter', [SuratController::class, 'filterSurat'])->name('admin.surat.filter');
+Route::get('/surat/resetfilter', [SuratController::class, 'resetfilterSurat'])->name('admin.surat.resetfilter');
 
 Route::get('/laporan/surat/proses', [SuratController::class, 'ProsesIndex'])->name('admin.proses.surat');
 Route::get('/laporan/surat/proses/filter', [SuratController::class, 'filterproses'])->name('admin.proses.surat.filter');
@@ -73,3 +74,7 @@ Route::post('/admin/video', [VideoController::class, 'store'])->name('admin.vide
 // Route::get('/admin/video/{id}/edit', [VideoController::class, 'edit'])->name('admin.video.edit');
 Route::put('/admin/video/{id}', [VideoController::class, 'update'])->name('admin.video.update');
 Route::delete('/admin/video/{id}', [VideoController::class, 'destroy'])->name('admin.video.destroy');
+
+Route::resource('admin/kategori-soal-pelatihan', KategoriSoalPelatihanController::class)
+    ->names('admin.kategori-soal-pelatihan')
+    ->except(['create', 'show', 'edit']); // karena tambah/edit pakai modal, tidak perlu route create/edit/show

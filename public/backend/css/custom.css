@@ -188,4 +188,16 @@ h1 {
                      color: #28a745;
                      transition: color 0.3s ease;
                  }
-         
+
+#accordionSidebar {
+    height: 100vh;
+    overflow-y: auto;
+    position: fixed;
+    /* Agar sidebar tetap di kiri saat scroll halaman */
+    top: 0;
+    left: 0;
+    z-index: 1030;
+}
+.main-content {
+    margin-left: 250px; /* Sesuaikan dengan lebar sidebar Anda */
+}

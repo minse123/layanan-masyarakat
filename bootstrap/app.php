@@ -15,11 +15,25 @@ return Application::configure(basePath: dirname(__DIR__))
             ->prefix('admin')
             ->group(base_path('routes/admin.php'));
 
-        // Masyarakat routes
         Route::middleware(['web', 'auth', 'role:masyarakat'])
             ->prefix('masyarakat')
             ->group(base_path('routes/masyarakat.php'));
 
+        // Route::middleware(['web', 'auth', 'role:psm'])
+        //     ->prefix('psm')
+        //     ->group(base_path('routes/psm.php'));
+    
+        // Route::middleware(['web', 'auth', 'role:kasubag'])
+        //     ->prefix('kasubag')
+        //     ->group(base_path('routes/kasubag.php'));
+    
+        // Route::middleware(['web', 'auth', 'role:operator'])
+        //     ->prefix('operator')
+        //     ->group(base_path('routes/operator.php'));
+
+        route::middleware(['web', 'auth', 'role:admin,kasubag,psm'])
+            ->prefix('report')
+            ->group(base_path('routes/report.php'));
         // Tambahkan group lain sesuai kebutuhan
     })
     ->withMiddleware(function (Middleware $middleware) {

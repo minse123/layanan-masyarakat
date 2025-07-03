@@ -36,6 +36,7 @@ class SuratSeeder extends Seeder
 
         $users = range(1, 10);
         $dataProses = [];
+        $phones = array_map(fn() => '08' . rand(1111111111, 9999999999), range(1, 20));
         $date = Carbon::now();
 
         foreach (range(0, 19) as $i) {
@@ -43,6 +44,7 @@ class SuratSeeder extends Seeder
                 'nomor_surat' => 'MS-' . Str::random(5),
                 'tanggal_surat' => $date->subDays(rand(1, 30))->format('Y-m-d'),
                 'perihal' => 'Pengajuan proposal dari ' . $regions[$i],
+                'telepon' => $phones[$i],
                 'pengirim' => 'Dinas ' . $regions[$i],
                 'status' => 'Proses',
                 'keterangan' => 'Surat dalam proses verifikasi',

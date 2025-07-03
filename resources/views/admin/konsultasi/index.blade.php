@@ -97,10 +97,9 @@
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ $item->telepon }}</td>
                                 <td>{{ $item->email }}</td>
-                                <td>{{ optional($item->kategoriPelatihan)->jenis_kategori ?? '-' }}</td>
+                                <td>{{ optional($item->kategoriPelatihan->first())->jenis_kategori ?? '-' }}</td>
                                 <td>{{ $item->status }}</td>
-                                <td>{{ optional(optional($item->kategoriPelatihan)->jenisPelatihan)->tanggal_pengajuan ?? '-' }}
-                                </td>
+                                <td>{{ optional(optional($item->kategoriPelatihan->first())->jenisPelatihan)->tanggal_pengajuan ?? '-' }}</td>
                                 <td>
                                     <!-- Button Detail dipindah ke Aksi -->
                                     <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
@@ -163,19 +162,19 @@
 
                                                 <dt class="col-sm-4">Tanggal Pengajuan</dt>
                                                 <dd class="col-sm-8">
-                                                    {{ optional(optional($item->kategoriPelatihan)->jenisPelatihan)->tanggal_pengajuan ?? '-' }}
+                                                    {{ optional(optional($item->kategoriPelatihan->first())->jenisPelatihan)->tanggal_pengajuan ?? '-' }}
                                                 </dd>
 
                                                 <dt class="col-sm-4">Jenis Kategori</dt>
                                                 <dd class="col-sm-8">
-                                                    {{ optional($item->kategoriPelatihan)->jenis_kategori ?? '-' }}</dd>
+                                                    {{ optional($item->kategoriPelatihan->first())->jenis_kategori ?? '-' }}</dd>
 
                                                 <dt class="col-sm-4">Jenis Pelatihan</dt>
                                                 <dd class="col-sm-8">
-                                                    @if (optional($item->kategoriPelatihan)->jenis_kategori == 'inti')
-                                                        {{ optional($item->kategoriPelatihan->jenisPelatihan)->pelatihan_inti ?? '-' }}
-                                                    @elseif (optional($item->kategoriPelatihan)->jenis_kategori == 'pendukung')
-                                                        {{ optional($item->kategoriPelatihan->jenisPelatihan)->pelatihan_pendukung ?? '-' }}
+                                                    @if (optional($item->kategoriPelatihan->first())->jenis_kategori == 'inti')
+                                                        {{ optional($item->kategoriPelatihan->first()->jenisPelatihan)->pelatihan_inti ?? '-' }}
+                                                    @elseif (optional($item->kategoriPelatihan->first())->jenis_kategori == 'pendukung')
+                                                        {{ optional($item->kategoriPelatihan->first()->jenisPelatihan)->pelatihan_pendukung ?? '-' }}
                                                     @else
                                                         -
                                                     @endif
@@ -188,7 +187,8 @@
                                                     @endif
                                                     @if (optional($item->jawabPelatihan)->tanggal_dijawab)
                                                         <dt class="col-sm-4">Tanggal Dijawab</dt>
-                                                        <dd class="col-sm-8">{{ $item->jawabPelatihan->tanggal_dijawab }}</dd>
+                                                        <dd class="col-sm-8">{{ $item->jawabPelatihan->tanggal_dijawab }}
+                                                        </dd>
                                                     @endif
                                                 @endif
                                             </dl>
