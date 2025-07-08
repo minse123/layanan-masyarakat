@@ -10,44 +10,63 @@
             </div>
         </div>
         <div class="card-body">
-            <!-- Filter Data -->
-            <div class="mb-4">
-                <form action="{{ route('admin.surat.filter') }}" method="GET" class="form-inline">
-                    <div class="form-group mb-2">
-                        <label for="filter" class="mr-2">Pilih Periode</label>
-                        <select name="filter" id="filter" class="form-control" onchange="updateFilterInput()">
-                            <option value="harian" {{ request('filter') == 'harian' ? 'selected' : '' }}>Harian</option>
-                            <option value="mingguan" {{ request('filter') == 'mingguan' ? 'selected' : '' }}>Mingguan
-                            </option>
-                            <option value="bulanan" {{ request('filter') == 'bulanan' ? 'selected' : '' }}>Bulanan</option>
-                            <option value="tahunan" {{ request('filter') == 'tahunan' ? 'selected' : '' }}>Tahunan</option>
-                        </select>
-                    </div>
+            <!-- Filter Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Filter Data Surat</h6>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('admin.surat.filter') }}" method="GET">
+                        <div class="form-row align-items-end">
+                            <div class="form-group col-md-3">
+                                <label for="filter">Pilih Periode:</label>
+                                <select name="filter" id="filter" class="form-control" onchange="updateFilterInput()">
+                                    <option value="harian" {{ request('filter', 'harian') == 'harian' ? 'selected' : '' }}>
+                                        Harian</option>
+                                    <option value="mingguan" {{ request('filter') == 'mingguan' ? 'selected' : '' }}>
+                                        Mingguan</option>
+                                    <option value="bulanan" {{ request('filter') == 'bulanan' ? 'selected' : '' }}>Bulanan
+                                    </option>
+                                    <option value="tahunan" {{ request('filter') == 'tahunan' ? 'selected' : '' }}>Tahunan
+                                    </option>
+                                </select>
+                            </div>
 
-                    <div class="form-group mx-sm-3 mb-2" id="filter-harian">
-                        <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}">
-                    </div>
+                            <div class="form-group col-md-4" id="filter-harian">
+                                <label for="tanggal">Tanggal:</label>
+                                <input type="date" name="tanggal" id="tanggal" class="form-control"
+                                    value="{{ request('tanggal', date('Y-m-d')) }}">
+                            </div>
 
-                    <div class="form-group mx-sm-3 mb-2" id="filter-mingguan" style="display: none;">
-                        <input type="week" name="minggu" class="form-control" value="{{ request('minggu') }}">
-                    </div>
+                            <div class="form-group col-md-4" id="filter-mingguan" style="display: none;">
+                                <label for="minggu">Minggu:</label>
+                                <input type="week" name="minggu" id="minggu" class="form-control"
+                                    value="{{ request('minggu') }}">
+                            </div>
 
-                    <div class="form-group mx-sm-3 mb-2" id="filter-bulanan" style="display: none;">
-                        <input type="month" name="bulan" class="form-control" value="{{ request('bulan') }}">
-                    </div>
+                            <div class="form-group col-md-4" id="filter-bulanan" style="display: none;">
+                                <label for="bulan">Bulan:</label>
+                                <input type="month" name="bulan" id="bulan" class="form-control"
+                                    value="{{ request('bulan') }}">
+                            </div>
 
-                    <div class="form-group mx-sm-3 mb-2" id="filter-tahunan" style="display: none;">
-                        <input type="number" name="tahun" class="form-control" min="2000" max="2099"
-                            step="1" value="{{ request('tahun') ?? now()->year }}">
-                    </div>
+                            <div class="form-group col-md-4" id="filter-tahunan" style="display: none;">
+                                <label for="tahun">Tahun:</label>
+                                <input type="number" name="tahun" id="tahun" class="form-control" min="2000"
+                                    max="2099" step="1" value="{{ request('tahun', now()->year) }}">
+                            </div>
 
-                    <button type="submit" class="btn btn-primary mb-2">
-                        <i class="fas fa-filter"></i> Filter
-                    </button>
-                    <a href="{{ route('admin.surat.resetfilter') }}" class="btn btn-outline-secondary mb-2">
-                        <i class="fas fa-sync"></i> Reset
-                    </a>
-                </form>
+                            <div class="form-group col-md-5">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <a href="{{ route('admin.surat.resetfilter') }}" class="btn btn-outline-secondary ml-2">
+                                    <i class="fas fa-sync"></i> Reset
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <script>
@@ -58,13 +77,15 @@
                     document.getElementById("filter-bulanan").style.display = (selectedFilter === "bulanan") ? "block" : "none";
                     document.getElementById("filter-tahunan").style.display = (selectedFilter === "tahunan") ? "block" : "none";
                 }
-                updateFilterInput(); // Jalankan saat halaman dimuat untuk menyesuaikan input sesuai filter yang dipilih
+                document.addEventListener('DOMContentLoaded', function() {
+                    updateFilterInput();
+                });
             </script>
 
             <!-- Tabel Data -->
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead class="thead-dark">
+                    <thead class="bg-primary text-white">
                         <tr>
                             <th>No.</th>
                             <th>Nomor Surat</th>
@@ -297,7 +318,7 @@
                                         <!-- Tombol Terima dengan konfirmasi modal -->
                                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
                                             data-target="#terimaModal{{ $item->id_surat }}">
-                                            <i class="fas fa-check"></i> 
+                                            <i class="fas fa-check"></i>
                                         </button>
                                         <!-- Modal Konfirmasi Terima -->
                                         <div class="modal fade" id="terimaModal{{ $item->id_surat }}" tabindex="-1"

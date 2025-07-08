@@ -17,3 +17,6 @@
 
     <!-- Page level DataTable -->
     <script src="{{ asset('/backend/js/datatable.min.js') }}"></script>
+    <script src="{{ asset('/backend/js/custom.js') }}"></script>
+    <script src="{{ asset('/frontend/js/custom.js') }}"></script>
+

@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\KategoriSoalPelatihan;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class KategoriSoalPelatihanController extends Controller
 {
     public function index()
     {
         $kategori = KategoriSoalPelatihan::orderBy('id', 'desc')->get();
-        return view('admin.soal.kategori_soal_pelatihan', compact('kategori'));
+        return view('admin.soal.kategori-soal-pelatihan', compact('kategori'));
     }
 
     public function store(Request $request)
@@ -20,6 +21,7 @@ class KategoriSoalPelatihanController extends Controller
             'tipe' => 'required|in:inti,pendukung',
         ]);
         KategoriSoalPelatihan::create($request->only('nama_kategori', 'tipe'));
+        Alert::success('Berhasil', 'Kategori berhasil ditambahkan!');
         return redirect()->back()->with('success', 'Kategori berhasil ditambahkan.');
     }
 
@@ -31,6 +33,7 @@ class KategoriSoalPelatihanController extends Controller
         ]);
         $kategori = KategoriSoalPelatihan::findOrFail($id);
         $kategori->update($request->only('nama_kategori', 'tipe'));
+        Alert::success('Berhasil', 'Kategori berhasil diupdate!');
         return redirect()->back()->with('success', 'Kategori berhasil diupdate.');
     }
 
@@ -38,6 +41,7 @@ class KategoriSoalPelatihanController extends Controller
     {
         $kategori = KategoriSoalPelatihan::findOrFail($id);
         $kategori->delete();
+        Alert::success('Berhasil', 'Kategori berhasil dihapus!');
         return redirect()->back()->with('success', 'Kategori berhasil dihapus.');
     }
 }

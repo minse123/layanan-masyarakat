@@ -26,44 +26,55 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <!-- Filter Data -->
-            <div class="mb-4">
-                <form action="{{ route('admin.konsultasi.filter') }}" method="GET" class="form-inline">
-                    <div class="form-group mb-2">
-                        <label for="filter" class="mr-2">Pilih Periode</label>
-                        <select name="filter" id="filter" class="form-control" onchange="updateFilterInput()">
-                            <option value="harian" {{ request('filter') == 'harian' ? 'selected' : '' }}>Harian</option>
-                            <option value="mingguan" {{ request('filter') == 'mingguan' ? 'selected' : '' }}>Mingguan
-                            </option>
-                            <option value="bulanan" {{ request('filter') == 'bulanan' ? 'selected' : '' }}>Bulanan</option>
-                            <option value="tahunan" {{ request('filter') == 'tahunan' ? 'selected' : '' }}>Tahunan</option>
-                        </select>
-                    </div>
+            <!-- Filter Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Filter Data Konsultasi</h6>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('admin.konsultasi.filter') }}" method="GET">
+                        <div class="form-row align-items-end">
+                            <div class="form-group col-md-3">
+                                <label for="filter">Pilih Periode:</label>
+                                <select name="filter" id="filter" class="form-control" onchange="updateFilterInput()">
+                                    <option value="harian" {{ request('filter', 'harian') == 'harian' ? 'selected' : '' }}>Harian</option>
+                                    <option value="mingguan" {{ request('filter') == 'mingguan' ? 'selected' : '' }}>Mingguan</option>
+                                    <option value="bulanan" {{ request('filter') == 'bulanan' ? 'selected' : '' }}>Bulanan</option>
+                                    <option value="tahunan" {{ request('filter') == 'tahunan' ? 'selected' : '' }}>Tahunan</option>
+                                </select>
+                            </div>
 
-                    <div class="form-group mx-sm-3 mb-2" id="filter-harian">
-                        <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}">
-                    </div>
+                            <div class="form-group col-md-3" id="filter-harian">
+                                <label for="tanggal">Tanggal:</label>
+                                <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal', date('Y-m-d')) }}">
+                            </div>
 
-                    <div class="form-group mx-sm-3 mb-2" id="filter-mingguan" style="display: none;">
-                        <input type="week" name="minggu" class="form-control" value="{{ request('minggu') }}">
-                    </div>
+                            <div class="form-group col-md-3" id="filter-mingguan" style="display: none;">
+                                <label for="minggu">Minggu:</label>
+                                <input type="week" name="minggu" class="form-control" value="{{ request('minggu') }}">
+                            </div>
 
-                    <div class="form-group mx-sm-3 mb-2" id="filter-bulanan" style="display: none;">
-                        <input type="month" name="bulan" class="form-control" value="{{ request('bulan') }}">
-                    </div>
+                            <div class="form-group col-md-3" id="filter-bulanan" style="display: none;">
+                                <label for="bulan">Bulan:</label>
+                                <input type="month" name="bulan" class="form-control" value="{{ request('bulan') }}">
+                            </div>
 
-                    <div class="form-group mx-sm-3 mb-2" id="filter-tahunan" style="display: none;">
-                        <input type="number" name="tahun" class="form-control" min="2000" max="2099"
-                            step="1" value="{{ request('tahun') ?? now()->year }}">
-                    </div>
+                            <div class="form-group col-md-3" id="filter-tahunan" style="display: none;">
+                                <label for="tahun">Tahun:</label>
+                                <input type="number" name="tahun" class="form-control" min="2000" max="2099" step="1" value="{{ request('tahun', now()->year) }}">
+                            </div>
 
-                    <button type="submit" class="btn btn-primary mb-2">
-                        <i class="fas fa-filter"></i> Filter
-                    </button>
-                    <a href="{{ route('admin.konsultasi.resetfilter') }}" class="btn btn-outline-secondary mb-2">
-                        <i class="fas fa-sync"></i> Reset
-                    </a>
-                </form>
+                            <div class="form-group col-md-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <a href="{{ route('admin.konsultasi.resetfilter') }}" class="btn btn-outline-secondary ml-2">
+                                    <i class="fas fa-sync"></i> Reset
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <script>
                 function updateFilterInput() {
@@ -73,12 +84,14 @@
                     document.getElementById("filter-bulanan").style.display = (selectedFilter === "bulanan") ? "block" : "none";
                     document.getElementById("filter-tahunan").style.display = (selectedFilter === "tahunan") ? "block" : "none";
                 }
-                updateFilterInput(); // Jalankan saat halaman dimuat untuk menyesuaikan input sesuai filter yang dipilih
+                document.addEventListener('DOMContentLoaded', function() {
+                    updateFilterInput();
+                });
             </script>
             <!-- Tabel Data -->
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead class="thead-dark">
+                    <thead class="bg-primary text-white">
                         <tr>
                             <th>No.</th>
                             <th>Nama</th>
@@ -207,10 +220,10 @@
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                        <div class="modal-header">
+                                        <div class="modal-header bg-primary text-white">
                                             <h5 class="modal-title" id="editModalLabel{{ $item->id_konsultasi }}">Edit
                                                 Konsultasi</h5>
-                                            <button type="button" class="close" data-dismiss="modal"
+                                            <button type="button" class="close text-white" data-dismiss="modal"
                                                 aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -293,10 +306,10 @@
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                        <div class="modal-header">
+                                        <div class="modal-header bg-primary text-white">
                                             <h5 class="modal-title" id="deleteModalLabel{{ $item->id_konsultasi }}">
                                                 Konfirmasi Hapus</h5>
-                                            <button type="button" class="close" data-dismiss="modal"
+                                            <button type="button" class="close text-white" data-dismiss="modal"
                                                 aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -358,71 +371,77 @@
             <!-- Modal Tambah -->
             <div class="modal fade" id="tambahModal" tabindex="-1" role="dialog" aria-labelledby="tambahModalLabel"
                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header bg-primary text-white">
                             <h5 class="modal-title" id="tambahModalLabel">Tambah Data Konsultasi</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <form action="{{ route('admin.konsultasi.store') }}" method="POST">
                             @csrf
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Nama</label>
-                                    <input type="text" name="nama" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Telepon</label>
-                                    <input type="text" name="telepon" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="email" name="email" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Judul Konsultasi</label>
-                                    <input type="text" name="judul_konsultasi" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Deskripsi</label>
-                                    <textarea name="deskripsi" class="form-control" required></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label>Jenis Kategori</label>
-                                    <select name="jenis_kategori" id="jenis_kategori" class="form-control" required
-                                        onchange="toggleJenisPelatihan()">
-                                        <option value="">Pilih Kategori</option>
-                                        <option value="inti">Inti</option>
-                                        <option value="pendukung">Pendukung</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" id="pelatihan_inti_group" style="display:none;">
-                                    <label>Jenis Pelatihan Inti</label>
-                                    <select name="pelatihan_inti" class="form-control">
-                                        <option value="">Pilih Pelatihan Inti</option>
-                                        <option value="bumdes">Bumdes</option>
-                                        <option value="kpmd">KPMD</option>
-                                        <option value="masyarakat_hukum_adat">Masyarakat Hukum Adat</option>
-                                        <option value="pembangunan_desa_wisata">Pembangunan Desa Wisata</option>
-                                        <option value="catrans">Catrans</option>
-                                        <option value="pelatihan_perencanaan_pembangunan_partisipatif">Pelatihan
-                                            Perencanaan Pembangunan Partisipatif</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" id="pelatihan_pendukung_group" style="display:none;">
-                                    <label>Jenis Pelatihan Pendukung</label>
-                                    <select name="pelatihan_pendukung" class="form-control">
-                                        <option value="">Pilih Pelatihan Pendukung</option>
-                                        <option value="prukades">Prukades</option>
-                                        <option value="prudes">Prudes</option>
-                                        <option value="ecomerce">Ecomerce</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Tanggal Pengajuan</label>
-                                    <input type="date" name="tanggal_pengajuan" class="form-control" required>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Nama</label>
+                                            <input type="text" name="nama" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Telepon</label>
+                                            <input type="text" name="telepon" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" name="email" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Judul Konsultasi</label>
+                                            <input type="text" name="judul_konsultasi" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Deskripsi</label>
+                                            <textarea name="deskripsi" class="form-control" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Jenis Kategori</label>
+                                            <select name="jenis_kategori" id="jenis_kategori" class="form-control" required
+                                                onchange="toggleJenisPelatihan()">
+                                                <option value="">Pilih Kategori</option>
+                                                <option value="inti">Inti</option>
+                                                <option value="pendukung">Pendukung</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="pelatihan_inti_group" style="display:none;">
+                                            <label>Jenis Pelatihan Inti</label>
+                                            <select name="pelatihan_inti" class="form-control">
+                                                <option value="">Pilih Pelatihan Inti</option>
+                                                <option value="bumdes">Bumdes</option>
+                                                <option value="kpmd">KPMD</option>
+                                                <option value="masyarakat_hukum_adat">Masyarakat Hukum Adat</option>
+                                                <option value="pembangunan_desa_wisata">Pembangunan Desa Wisata</option>
+                                                <option value="catrans">Catrans</option>
+                                                <option value="pelatihan_perencanaan_pembangunan_partisipatif">Pelatihan
+                                                    Perencanaan Pembangunan Partisipatif</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="pelatihan_pendukung_group" style="display:none;">
+                                            <label>Jenis Pelatihan Pendukung</label>
+                                            <select name="pelatihan_pendukung" class="form-control">
+                                                <option value="">Pilih Pelatihan Pendukung</option>
+                                                <option value="prukades">Prukades</option>
+                                                <option value="prudes">Prudes</option>
+                                                <option value="ecomerce">Ecomerce</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tanggal Pengajuan</label>
+                                            <input type="date" name="tanggal_pengajuan" class="form-control" required>
+                                        </div>
+                                    </div>
                                 </div>
                                 <script>
                                     function toggleJenisPelatihan() {

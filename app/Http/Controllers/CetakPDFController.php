@@ -13,28 +13,28 @@ use App\Models\SuratTolak;
 use App\Models\MasterSurat;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf; // Import the PDF facade
+use App\Models\KategoriSoalPelatihan;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CetakPDFController extends Controller
 {
-
-    public function cetakPDF()
+    public function tamucetakPDF(Request $request)
     {
-        // Retrieve all consultation data
-        $konsultasi = MasterKonsultasi::with(['konsultasiPending', 'konsultasiDijawab'])->get();
+        // ... existing code ...
+    }
 
-        // Check if there is data to generate PDF
-        if ($konsultasi->isEmpty()) {
-            return redirect()->route('admin.konsultasi.index')->with('error', 'Tidak ada data untuk dicetak.');
-        }
+    public function cetakSoalPdf(Request $request)
+    {
+        $request->validate([
+            'kategori_ids' => 'required|array|min:1',
+            'kategori_ids.*' => 'exists:kategori_soal_pelatihan,id',
+        ]);
 
-        // Create PDF
-        $pdf = PDF::loadView('admin.konsultasi.pdf', compact('konsultasi'));
+        $kategoriWithSoal = KategoriSoalPelatihan::with('soalPelatihan')
+            ->whereIn('id', $request->kategori_ids)
+            ->get();
 
-        // Set paper size
-        $pdf->setPaper('A4', 'landscape');
-
-        // Download PDF
-        return $pdf->download('data_konsultasi.pdf');
+        $pdf = Pdf::loadView('admin.soal.cetak.report-soal-pdf', compact('kategoriWithSoal'));
+        return $pdf->stream('laporan-soal-pelatihan.pdf');
     }
 }

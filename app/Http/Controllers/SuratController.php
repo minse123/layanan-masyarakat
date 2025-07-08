@@ -16,11 +16,19 @@ class SuratController extends Controller
 {
     public function Suratindex()
     {
-        $suratTolak = SuratTolak::all();
-        $masterSurat = MasterSurat::all();
-        $suratProses = SuratProses::all();
-        $suratTerima = SuratTerima::all();
-        return view('admin.surat.index', compact('suratTerima', 'masterSurat', 'suratProses', 'suratTolak'));
+        $query = MasterSurat::query();
+
+        if (session('filter') && session('tanggal')) {
+            $query->whereDate('tanggal_surat', session('tanggal'));
+        }
+
+        if (session('status')) {
+            $query->where('status', session('status'));
+        }
+
+        $masterSurat = $query->get();
+
+        return view('admin.surat.index', compact('masterSurat'));
     }
     // MasterSurat View
     public function store(Request $request)
@@ -206,11 +214,12 @@ class SuratController extends Controller
     public function filterSurat(Request $request)
     {
         $filter = $request->filter;
+        $status = $request->status;
         $query = MasterSurat::query();
-        $masterSurat = MasterSurat::query();
+        
 
         // Hapus semua session filter sebelumnya
-        session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun']);
+        session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun', 'status']);
 
         if ($filter) {
             switch ($filter) {
@@ -249,14 +258,18 @@ class SuratController extends Controller
             session(['filter' => $filter]); // Simpan filter yang dipilih
         }
 
-        $data = $query->get();
+        if ($status) {
+            $query->where('status', $status);
+            session(['status' => $status]);
+        }
+
         $masterSurat = $query->get();
 
-        return view('admin.surat.index', compact('data', 'masterSurat'));
+        return view('admin.surat.index', compact('masterSurat'));
     }
     public function resetfiltersurat(Request $request)
     {
-        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
+        $request->session()->forget(['filter', 'tanggal', 'status']); // Hapus session filter
         return redirect()->route('admin.master.surat'); // Redirect ke halaman utama laporan
     }
 

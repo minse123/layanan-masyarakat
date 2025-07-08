@@ -60,18 +60,17 @@
             <div class="container">
                 <div class="row text-center">
                     <div class="col-lg-12 col-12">
-                        <h6>Apa Saja Layanannya?</h6>
-                        <h2 class="mb-5">Layanan yang Kami Tawarkan</h2>
+                        <h6 style="font-size: 1.5rem;">Apa Saja Layanannya?</h6>
+                        <h2 class="mb-5" style="font-size: 2.5rem;">Layanan yang Kami Tawarkan</h2>
                     </div>
                 </div>
-
                 <div class="row text-center">
                     <div class="col-lg-4 col-12 mb-4" id="item-2">
-                        <div class="card border p-3">
-                            <img src="/frontend/images/interview.png" class="card-img-top"
-                                alt="Layanan Konsultasi BumDes">
-                            <div class="card-body">
-                                <button class="btn btn-success w-100" data-bs-toggle="modal"
+                        <div class="card border p-3 h-100 d-flex flex-column justify-content-between">
+                            <img src="/frontend/images/interview.png" class="card-img-top mx-auto"
+                                style="max-width:200px;" alt="Layanan Konsultasi BumDes">
+                            <div class="card-body d-flex flex-column">
+                                <button class="btn btn-success w-100 mt-auto" data-bs-toggle="modal"
                                     data-bs-target="#modalKonsultasi">
                                     Layanan Konsultasi BumDes
                                 </button>
@@ -79,12 +78,25 @@
                         </div>
                     </div>
                     <div class="col-lg-4 col-12 mb-4" id="item-3">
-                        <div class="card border p-3">
-                            <img src="/frontend/images/mail.png" class="card-img-top" alt="Pengajuan Surat">
-                            <div class="card-body">
-                                <button class="btn btn-warning w-100" data-bs-toggle="modal"
+                        <div class="card border p-3 h-100 d-flex flex-column justify-content-between">
+                            <img src="/frontend/images/mail.png" class="card-img-top mx-auto" style="max-width:200px;"
+                                alt="Pengajuan Surat">
+                            <div class="card-body d-flex flex-column">
+                                <button class="btn btn-warning w-100 mt-auto" data-bs-toggle="modal"
                                     data-bs-target="#modalSurat">
                                     Pengajuan Surat
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-12 mb-4" id="item-4">
+                        <div class="card border p-3 h-100 d-flex flex-column justify-content-between">
+                            <img src="/frontend/images/quiz.png" class="card-img-top mx-auto" style="max-width:200px;"
+                                alt="Latihan Soal Pelatihan">
+                            <div class="card-body d-flex flex-column">
+                                <button class="btn btn-info w-100 mt-auto" data-bs-toggle="modal"
+                                    data-bs-target="#modalKategoriSoal">
+                                    Latihan Soal Pelatihan
                                 </button>
                             </div>
                         </div>
@@ -196,33 +208,36 @@
                     <div class="modal-body px-4 py-3">
                         <form action="{{ route('simpan-surat') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <div class="mb-3">
-                                <label class="form-label">Nomor Surat</label>
-                                <input type="text" name="nomor_surat" class="form-control rounded-pill" required>
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Nomor Surat</label>
+                                    <input type="text" name="nomor_surat" class="form-control rounded-pill"
+                                        required>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Tanggal Surat</label>
+                                    <input type="date" name="tanggal_surat" class="form-control rounded-pill"
+                                        required>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Pengirim</label>
+                                    <input type="text" name="pengirim" class="form-control rounded-pill" required>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Telepon</label>
+                                    <input type="text" name="telepon" class="form-control rounded-pill" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Perihal</label>
+                                    <input type="text" name="perihal" class="form-control rounded-pill" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Lampiran</label>
+                                    <input type="file" name="file" id="file"
+                                        class="form-control rounded-pill" required>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tanggal Surat</label>
-                                <input type="date" name="tanggal_surat" class="form-control rounded-pill"
-                                    required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Pengirim</label>
-                                <input type="text" name="pengirim" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Telepon</label>
-                                <input type="text" name="telepon" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Perihal</label>
-                                <input type="text" name="perihal" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Lampiran</label>
-                                <input type="file" name="file" id="file"
-                                    class="form-control rounded-pill" required>
-                            </div>
-                            <div class="d-grid">
+                            <div class="d-grid mt-4">
                                 <button type="submit"
                                     class="btn btn-warning rounded-pill px-4 py-2 fw-bold">Ajukan</button>
                             </div>
@@ -233,6 +248,34 @@
             </div>
         </div>
 
+        <!-- Modal Kategori Soal Pelatihan -->
+        <div class="modal fade" id="modalKategoriSoal" tabindex="-1" aria-labelledby="modalKategoriSoalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-4">
+                    <div class="modal-header bg-info rounded-top-4">
+                        <h5 class="modal-title text-white" id="modalKategoriSoalLabel">
+                            <i class="bi bi-list-task me-2"></i> Pilih Kategori Latihan Soal
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Tutup"></button>
+                    </div>
+                    <div class="modal-body px-4 py-3">
+                        <div class="list-group">
+                            @forelse ($kategoriList as $kategori)
+                                <a href="{{ route('masyarakat.soal.latihan', $kategori->id) }}"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <span>{{ $kategori->nama_kategori }}</span>
+                                    <span class="badge bg-secondary ms-2">{{ ucfirst($kategori->tipe) }}</span>
+                                </a>
+                            @empty
+                                <div class="text-center text-muted">Belum ada kategori soal.</div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <section class="py-lg-5"></section>
         <section class="py-lg-5"></section>
@@ -466,7 +509,8 @@
                 </div>
                 <div class="row">
                     <div class="col-12 text-center mt-3">
-                        <a href="{{ route('masyarakat.videopelatihan') }}" class="btn btn-success rounded-pill px-4 py-2 fw-bold">
+                        <a href="{{ route('masyarakat.videopelatihan') }}"
+                            class="btn btn-success rounded-pill px-4 py-2 fw-bold">
                             Lihat Selengkapnya
                         </a>
                     </div>

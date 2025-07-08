@@ -6,6 +6,9 @@ use App\Http\Controllers\SuratController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\KategoriSoalPelatihanController;
+use App\Http\Controllers\SoalPelatihanController;
+use App\Http\Controllers\RekapNilaiController;
+use App\Http\Controllers\CetakPDFController;
 
 
 
@@ -17,18 +20,6 @@ Route::post('/auth/update/{id}', [AdminController::class, 'authUpdate'])->name('
 Route::post('/auth/hapus', [AdminController::class, 'authHapus'])->name('admin.auth.hapus');
 
 Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-
-Route::get('/tamu', [AdminController::class, 'dataTamu'])->name('admin.tamu');
-Route::post('/form-simpan', [AdminController::class, 'simpanData'])->name('admin-simpan-tamu');
-Route::post('/update-data', [AdminController::class, 'updateTamu'])->name('admin-update-data');
-Route::post('/hapus-data', [AdminController::class, 'hapusTamu'])->name('admin-hapus-data');
-Route::get('/filter-data', [AdminController::class, 'filterData'])->name('admin.filter-data');
-Route::get('/resetfilter-data', [AdminController::class, 'resetfilterdata'])->name('admin.resetfilter-data');
-
-Route::get('/admin/report/tamu', [AdminController::class, 'reportdataTamu'])->name('admin.report.tamu');
-Route::get('/admin/report/tamu/filter-data', [AdminController::class, 'reportfilterData'])->name('admin.report.tamu.filter-data');
-Route::get('/admin/report/tamu/resetfilter-data', [AdminController::class, 'reportresetfilterData'])->name('admin.report.tamu.resetfilter-data');
-Route::get('/admin/report/tamu/cetak-pdf', [AdminController::class, 'cetakPDF'])->name('admin.report.tamu.cetak-pdf');
 
 Route::get('/surat', [SuratController::class, 'Suratindex'])->name('admin.master.surat');
 Route::put('/surat/update/{id}', [SuratController::class, 'MasterUpdate'])->name('admin.master.surat.update');
@@ -51,14 +42,6 @@ Route::get('/admin/laporan/surat/tolak', [SuratController::class, 'tolakindex'])
 Route::get('/admin/laporan/surat/tolak/filter', [SuratController::class, 'filtertolak'])->name('admin.tolak.surat.filter');
 Route::get('/admin/laporan/surat/tolak/resetfilter', [SuratController::class, 'resetfiltertolak'])->name('admin.tolak.surat.resetfilter');
 
-Route::get('/admin/laporan/konsultasi/pending', [KonsultasiController::class, 'pendingindex'])->name('admin.konsultasi.pending');
-Route::get('/admin/laporan/konsultasi/pending/filter', [KonsultasiController::class, 'filterpending'])->name('admin.pending.konsultasi.filter');
-Route::get('/admin/laporan/konsultasi/pending/resetfilter', [KonsultasiController::class, 'resetfilterpending'])->name('admin.pending.konsultasi.resetfilter');
-
-Route::get('/admin/laporan/konsultasi/dijawab', [KonsultasiController::class, 'dijawabindex'])->name('admin.konsultasi.dijawab');
-Route::get('/admin/laporan/konsultasi/dijawab/filter', [KonsultasiController::class, 'filterdijawab'])->name('admin.dijawab.konsultasi.filter');
-Route::get('/admin/laporan/konsultasi/dijawab/resetfilter', [KonsultasiController::class, 'resetfilterdijawab'])->name('admin.dijawab.konsultasi.resetfilter');
-
 Route::get('/konsultasi', [KonsultasiController::class, 'index'])->name('admin.konsultasi.index');
 Route::post('/konsultasi/store', [KonsultasiController::class, 'store'])->name('admin.konsultasi.store');
 Route::get('/konsultasi/{id}', [KonsultasiController::class, 'show'])->name('admin.konsultasi.show');
@@ -69,12 +52,32 @@ Route::get('/konsultasi/filter', [KonsultasiController::class, 'filter'])->name(
 Route::get('/konsultasi/resetfilter', [KonsultasiController::class, 'resetfilter'])->name('admin.konsultasi.resetfilter');
 Route::get('/konsultasi/cetak-pdf', [KonsultasiController::class, 'cetakPDF'])->name('admin.konsultasi.cetak-pdf');
 
-Route::get('/admin/video', [VideoController::class, 'index'])->name('admin.video.index');
-Route::post('/admin/video', [VideoController::class, 'store'])->name('admin.video.store');
+Route::get('/video', [VideoController::class, 'index'])->name('admin.video.index');
+Route::post('/video', [VideoController::class, 'store'])->name('admin.video.store');
 // Route::get('/admin/video/{id}/edit', [VideoController::class, 'edit'])->name('admin.video.edit');
-Route::put('/admin/video/{id}', [VideoController::class, 'update'])->name('admin.video.update');
-Route::delete('/admin/video/{id}', [VideoController::class, 'destroy'])->name('admin.video.destroy');
+Route::put('/video/{id}', [VideoController::class, 'update'])->name('admin.video.update');
+Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('admin.video.destroy');
 
-Route::resource('admin/kategori-soal-pelatihan', KategoriSoalPelatihanController::class)
+Route::resource('/kategori-soal-pelatihan', KategoriSoalPelatihanController::class)
     ->names('admin.kategori-soal-pelatihan')
     ->except(['create', 'show', 'edit']); // karena tambah/edit pakai modal, tidak perlu route create/edit/show
+
+Route::resource('/soal-pelatihan', SoalPelatihanController::class)
+    ->names('admin.soal-pelatihan')
+    ->except(['create', 'show', 'edit']);
+
+// Rekap Nilai Routes
+Route::resource('rekap-nilai', RekapNilaiController::class)->names('admin.rekap-nilai');
+
+// Get soal by kategori for rekap nilai
+Route::get('soal-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'getByKategori'])
+    ->name('admin.soal-pelatihan.by-kategori');
+
+Route::post('hasil-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'store'])->name('admin.hasil-pelatihan.store');
+Route::post('hasil-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'update'])->name('admin.hasil-pelatihan.update');
+
+// Statistik Soal
+Route::get('statistik-soal', [\App\Http\Controllers\StatistikSoalController::class, 'index'])
+    ->name('admin.statistik-soal.index');
+
+

@@ -54,10 +54,9 @@ Route::middleware(['auth', 'role:kasubag'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin,kasubag'])->group(function () {
-    Route::get('/report/tamu/cetak-pdf', [CetakPDFController::class, 'tamucetakPDF'])->name('report.tamu.cetak-pdf');
-    Route::get('/report/surat/proses/cetak-pdf', [SuratController::class, 'cetakproses'])->name('report.surat.proses.cetak-pdf');
-    Route::get('/report/surat/terima/cetak-pdf', [SuratController::class, 'cetakterima'])->name('report.surat.terima.cetak-pdf');
-    Route::get('/report/surat/tolak/cetak-pdf', [SuratController::class, 'cetaktolak'])->name('report.surat.tolak.cetak-pdf');
+    // Route::get('/report/surat/proses/cetak-pdf', [SuratController::class, 'cetakproses'])->name('report.surat.proses.cetak-pdf');
+    // Route::get('/report/surat/terima/cetak-pdf', [SuratController::class, 'cetakterima'])->name('report.surat.terima.cetak-pdf');
+    // Route::get('/report/surat/tolak/cetak-pdf', [SuratController::class, 'cetaktolak'])->name('report.surat.tolak.cetak-pdf');
     Route::get('/report/konsultasi/pending/cetak-pdf', [KonsultasiController::class, 'cetakpending'])->name('report.konsultasi.pending.cetak-pdf');
     Route::get('/report/konsultasi/dijawab/cetak-pdf', [KonsultasiController::class, 'cetakdijawab'])->name('report.konsultasi.dijawab.cetak-pdf');
 });

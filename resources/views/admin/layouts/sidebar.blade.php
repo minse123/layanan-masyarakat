@@ -61,7 +61,7 @@
     @php
         $isSoalMenu =
             request()->routeIs('admin.kategori-soal-pelatihan.*') ||
-            request()->routeIs('admin.bank-soal.*') ||
+            request()->routeIs('admin.soal-pelatihan.*') ||
             request()->routeIs('admin.rekap-nilai.*') ||
             request()->routeIs('admin.statistik-soal.*');
     @endphp
@@ -80,17 +80,17 @@
                     href="{{ route('admin.kategori-soal-pelatihan.index') }}">
                     <i class="fas fa-folder text-primary"></i> Kategori Pelatihan
                 </a>
-                {{-- <a class="collapse-item {{ url()->routeIs('admin.bank-soal.*') ? 'active' : '' }}"
-                    href="{{ url('admin.bank-soal.index') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.soal-pelatihan.*') ? 'active' : '' }}"
+                    href="{{ route('admin.soal-pelatihan.index') }}">
                     <i class="fas fa-clipboard-list text-success"></i> Bank Soal
                 </a>
-                <a class="collapse-item {{ url()->routeIs('admin.rekap-nilai.*') ? 'active' : '' }}"
-                    href="{{ url('admin.rekap-nilai.index') }}">
+                <a class="collapse-item {{ request()->routeIs('admin.rekap-nilai.*') ? 'active' : '' }}"
+                    href="{{ route('admin.rekap-nilai.index') }}">
                     <i class="fas fa-user text-info"></i> Rekap Nilai Peserta
                 </a>
-                <a class="collapse-item {{ url()->routeIs('admin.statistik-soal.*') ? 'active' : '' }}"
-                    href="{{ url('admin.statistik-soal.index') }}">
-                    <i class="fas fa-chart-bar text-warning"></i> Statistik Soal --}}
+                <a class="collapse-item {{ request()->routeIs('admin.statistik-soal.*') ? 'active' : '' }}"
+                    href="{{ route('admin.statistik-soal.index') }}">
+                    <i class="fas fa-chart-bar text-warning"></i> Statistik Soal
                 </a>
             </div>
         </div>

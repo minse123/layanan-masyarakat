@@ -12,4 +12,9 @@ class KategoriSoalPelatihan extends Model
         'nama_kategori',
         'tipe',
     ];
+
+    public function soalPelatihan()
+    {
+        return $this->hasMany(SoalPelatihan::class, 'kategori_id');
+    }
 }

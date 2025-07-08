@@ -52,7 +52,7 @@
                                         data-target="#editVideoModal{{ $video->id }}">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <!-- Tombol Hapus --> 
+                                    <!-- Tombol Hapus -->
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                         data-target="#deleteVideoModal{{ $video->id }}">
                                         <i class="fas fa-trash"></i>
@@ -94,13 +94,13 @@
 
                             <!-- Modal Detail Video -->
                             <div class="modal fade" id="detailVideoModal{{ $video->id }}" tabindex="-1" role="dialog"
-                                aria-labelledby="detailVideoModalLabel{{ $video->id }}" aria-hidden="true">
+                                aria-labelledby="detailVideoModalLabel{{ $video->id }}" aria-hidden="true"
+                                data-video-id="{{ $video->youtube_id }}">
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="detailVideoModalLabel{{ $video->id }}">Detail
-                                                Video
-                                            </h5>
+                                                Video</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -137,9 +137,8 @@
                                             </div>
                                             <div class="row mt-3">
                                                 <div class="col-12 text-center">
-                                                    <iframe width="100%" height="315"
-                                                        src="https://www.youtube.com/embed/{{ $video->youtube_id }}"
-                                                        frameborder="0" allowfullscreen></iframe>
+                                                    <iframe width="100%" height="315" src="" frameborder="0"
+                                                        allowfullscreen id="videoFrame{{ $video->id }}"></iframe>
                                                 </div>
                                             </div>
                                         </div>
@@ -272,10 +271,24 @@
     </div>
 @endsection
 
-@section('script')
-    <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable();
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        // Handle the 'show' event for the detail modal
+        $('[id^="detailVideoModal"]').on('show.bs.modal', function(event) {
+            var modal = $(this);
+            var youtubeId = modal.data('video-id');
+            if (youtubeId) {
+                var videoUrl = 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1';
+                modal.find('iframe').attr('src', videoUrl);
+            }
         });
-    </script>
-@endsection
+
+        // Handle the 'hidden' event for the detail modal to stop the video
+        $('[id^="detailVideoModal"]').on('hidden.bs.modal', function(event) {
+            var modal = $(this);
+            modal.find('iframe').attr('src', '');
+        });
+    });
+</script>
+@endpush
