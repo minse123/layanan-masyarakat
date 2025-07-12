@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SoalController;
 
 use App\Models\SoalPelatihan;
 use App\Models\KategoriSoalPelatihan;
 use App\Models\JawabanPeserta;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-class SoalPelatihanController extends Controller
+class SoalPelatihanController
 {
     public function index(Request $request)
     {

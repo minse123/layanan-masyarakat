@@ -22,7 +22,7 @@
     <!-- Custom styles for datatable-->
     <link href="{{ asset('/backend/css/datatable.min.css') }}" rel="stylesheet">
 
-    {{-- <link href="{{ asset('/backend/css/custom.css') }}" rel="stylesheet"> --}}
+    <link href="{{ asset('/backend/css/custom.css') }}" rel="stylesheet">
 
 
 

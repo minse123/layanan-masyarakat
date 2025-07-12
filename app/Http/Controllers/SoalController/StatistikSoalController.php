@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SoalController;
 
 use App\Models\SoalPelatihan;
 use App\Models\JawabanPeserta;
@@ -8,7 +8,7 @@ use App\Models\KategoriSoalPelatihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class StatistikSoalController extends Controller
+class StatistikSoalController
 {
     public function index(Request $request)
     {

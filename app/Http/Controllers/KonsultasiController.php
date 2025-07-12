@@ -10,12 +10,37 @@ use App\Models\JenisPelatihan;
 use RealRashid\SweetAlert\Facades\Alert;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
 class KonsultasiController extends Controller
 {
     public function index()
     {
-        // Ambil data konsultasi beserta relasi kategori dan jenis pelatihan
+        $filter = session('filter', 'all_time');
+        $tanggal = session('tanggal');
+        $minggu = session('minggu');
+        $bulan = session('bulan');
+        $tahun = session('tahun');
+        $statusFilter = session('status_filter', 'all'); // Default to 'all' for status filter
+
+        // Determine if any active filter is present that requires redirecting to the filter method
+        $hasActiveDateFilter = ($filter && $filter !== 'all_time');
+        $hasActiveStatusFilter = ($statusFilter && $statusFilter !== 'all');
+
+        if ($hasActiveDateFilter || $hasActiveStatusFilter) {
+            return redirect()->route('admin.konsultasi.filter', [
+                'filter' => $filter,
+                'tanggal' => $tanggal,
+                'minggu' => $minggu,
+                'bulan' => $bulan,
+                'tahun' => $tahun,
+                'status_filter' => $statusFilter,
+            ]);
+        }
+
+        // If no active filters, fetch all consultations
         $konsultasi = MasterKonsultasi::with(['kategoriPelatihan.jenisPelatihan', 'jawabPelatihan'])->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")->get();
         return view('admin.konsultasi.index', compact('konsultasi'));
     }
@@ -138,6 +163,31 @@ class KonsultasiController extends Controller
                 'tanggal_dijawab' => now(),
             ]
         );
+
+        // Kirim notifikasi WhatsApp melalui Fonnte
+        try {
+            $telepon = $konsultasi->telepon;
+            if (substr($telepon, 0, 1) === '0') {
+                $telepon = '62' . substr($telepon, 1);
+            }
+
+            $message = "Yth. {$konsultasi->nama},\n\n";
+            $message .= "Jawaban untuk konsultasi Anda dengan judul \"{$konsultasi->judul_konsultasi}\" telah kami kirimkan.\n\n";
+            $message .= "Pertanyaan anda {$konsultasi->deskripsi}\n\n";
+            $message .= "Jawaban:\n*{$request->jawaban}*\n\n";
+            $message .= "Terima kasih telah menggunakan layanan kami.\n";
+
+            Http::withHeaders([
+                'Authorization' => env('FONNTE_API_KEY'),
+            ])->post('https://api.fonnte.com/send', [
+                'target' => $telepon,                                                       
+                'message' => $message,
+            ]);
+        } catch (Exception $e) {
+            // Tangani error jika pengiriman gagal, misalnya dengan logging
+            Log::error('Gagal mengirim notifikasi WhatsApp: ' . $e->getMessage());
+        }
+
         Alert::success('Berhasil', 'Data Konsultasi berhasil dijawab!');
         return redirect()->route('admin.konsultasi.index')->with('success', 'Konsultasi berhasil dijawab.');
     }
@@ -149,10 +199,11 @@ class KonsultasiController extends Controller
         $minggu = $request->minggu;
         $bulan = $request->bulan;
         $tahun = $request->tahun;
+        $statusFilter = $request->status_filter;
 
         $query = MasterKonsultasi::with(['kategoriPelatihan.jenisPelatihan'])->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END");
 
-        if ($filter) {
+        if ($filter && $filter !== 'all_time') {
             switch ($filter) {
                 case 'harian':
                     if ($tanggal) {
@@ -182,13 +233,19 @@ class KonsultasiController extends Controller
                     break;
             }
         }
+
+        if ($statusFilter && $statusFilter !== 'all') {
+            $query->where('status', $statusFilter);
+        }
+
         $konsultasi = $query->get();
         session([
             'filter' => $filter,
             'tanggal' => $tanggal,
             'minggu' => $minggu,
             'bulan' => $bulan,
-            'tahun' => $tahun
+            'tahun' => $tahun,
+            'status_filter' => $statusFilter,
         ]);
 
         $message = '';
@@ -200,7 +257,7 @@ class KonsultasiController extends Controller
 
     public function resetfilter(Request $request)
     {
-        $request->session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun']);
+        $request->session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun', 'status_filter']);
         return redirect()->route('admin.konsultasi.index');
     }
 

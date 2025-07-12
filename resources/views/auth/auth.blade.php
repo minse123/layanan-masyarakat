@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo-kementerian.png') }}">
 
     <link rel="stylesheet" href="{{ asset('/frontend/css/style.css') }}">
-    <title>Aplikasi Buku Tamu</title>
+    <title>Layanan Masyarakat</title>
 </head>
 
 <body class="bg-light">

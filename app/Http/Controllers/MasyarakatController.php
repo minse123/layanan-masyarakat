@@ -146,7 +146,7 @@ class MasyarakatController extends Controller
                 ['jawaban_peserta' => $jawaban, 'benar' => $isBenar]
             );
         }
-
+        alert()->success('Berhasil', 'Jawaban berhasil disimpan!');
         return redirect()->route('masyarakat.soal.hasil')->with('success', 'Jawaban berhasil disimpan!');
     }
 

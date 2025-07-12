@@ -13,7 +13,8 @@
                     <select name="kategori" class="form-control mr-2" onchange="this.form.submit()">
                         <option value="">-- Semua Kategori --</option>
                         @foreach ($kategoriList as $kategori)
-                            <option value="{{ $kategori->id }}" {{ request('kategori') == $kategori->id ? 'selected' : '' }}>
+                            <option value="{{ $kategori->id }}"
+                                {{ request('kategori') == $kategori->id ? 'selected' : '' }}>
                                 {{ $kategori->nama_kategori }} ({{ ucfirst($kategori->tipe) }})
                             </option>
                         @endforeach
@@ -194,7 +195,8 @@
                                 <option value="">-- Pilih Kategori --</option>
                                 @foreach ($kategoriList as $kategori)
                                     <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}
-                                        ({{ ucfirst($kategori->tipe) }})</option>
+                                        ({{ ucfirst($kategori->tipe) }})
+                                    </option>
                                 @endforeach
                             </select>
                         </div>

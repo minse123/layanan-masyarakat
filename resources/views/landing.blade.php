@@ -15,7 +15,7 @@
 <body>
 
     @include('guest/layouts.navbar')
-
+    @include('sweetalert::alert')
     <main>
 
         <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
@@ -24,13 +24,15 @@
 
                     <div class="col-lg-6 col-12 mb-5 pb-5 pb-lg-0 mb-lg-0">
 
-                        <h6>Selamat Datang di</h6>
+                        <h6>
+                            Selamat Datang di
+                        </h6>
 
                         <h1 class="text-white mb-4">Sistem Informasi Layanan Masyarakat</h1>
 
-                        <a href="#item-2" class="btn custom-btn smoothscroll me-3">Layanan Konsultasi BumDes</a>
+                        <a href="{{ route('login') }}" class="btn custom-btn me-3">Layanan Konsultasi BumDes</a>
 
-                        <a href="#item-3" class="link link--kale smoothscroll">Pengajuan Surat</a>
+                        <a href="{{ route('login') }}" class="link link--kale">Pengajuan Surat</a>
                     </div>
 
                     <div class="hero-image-wrap col-lg-6 col-12 mt-3 mt-lg-0">
@@ -58,133 +60,47 @@
             <div class="container">
                 <div class="row text-center">
                     <div class="col-lg-12 col-12">
-                        <h6>Apa Saja Layanannya?</h6>
-                        <h2 class="mb-5">Layanan yang Kami Tawarkan</h2>
+                        <h6 style="font-size: 1.5rem;">Apa Saja Layanannya?</h6>
+                        <h2 class="mb-5" style="font-size: 2.5rem;">Layanan yang Kami Tawarkan</h2>
                     </div>
                 </div>
-
                 <div class="row text-center">
                     <div class="col-lg-4 col-12 mb-4" id="item-2">
-                        <div class="card border p-3">
-                            <img src="/frontend/images/interview.png" class="card-img-top"
-                                alt="Layanan Konsultasi BumDes">
-                            <div class="card-body">
-                                <button class="btn btn-success w-100" data-bs-toggle="modal"
-                                    data-bs-target="#modalKonsultasi">
+                        <div class="card border p-3 h-100 d-flex flex-column justify-content-between">
+                            <img src="/frontend/images/interview.png" class="card-img-top mx-auto"
+                                style="max-width:200px;" alt="Layanan Konsultasi BumDes">
+                            <div class="card-body d-flex flex-column">
+                                <a href="{{ route('login') }}" class="btn btn-success w-100 mt-auto">
                                     Layanan Konsultasi BumDes
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-12 mb-4" id="item-3">
-                        <div class="card border p-3">
-                            <img src="/frontend/images/mail.png" class="card-img-top" alt="Pengajuan Surat">
-                            <div class="card-body">
-                                <button class="btn btn-warning w-100" data-bs-toggle="modal"
-                                    data-bs-target="#modalSurat">
+                        <div class="card border p-3 h-100 d-flex flex-column justify-content-between">
+                            <img src="/frontend/images/mail.png" class="card-img-top mx-auto" style="max-width:200px;"
+                                alt="Pengajuan Surat">
+                            <div class="card-body d-flex flex-column">
+                                <a href="{{ route('login') }}" class="btn btn-warning w-100 mt-auto">
                                     Pengajuan Surat
-                                </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-12 mb-4" id="item-4">
+                        <div class="card border p-3 h-100 d-flex flex-column justify-content-between">
+                            <img src="/frontend/images/quiz.png" class="card-img-top mx-auto" style="max-width:200px;"
+                                alt="Latihan Soal Pelatihan">
+                            <div class="card-body d-flex flex-column">
+                                <a href="{{ route('login') }}" class="btn btn-info w-100 mt-auto">
+                                    Latihan Soal Pelatihan
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- Modal Konsultasi BumDes -->
-        <div class="modal fade" id="modalKonsultasi" tabindex="-1" aria-labelledby="modalKonsultasiLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg rounded-4">
-                    <div class="modal-header bg-success rounded-top-4">
-                        <h5 class="modal-title text-white" id="modalKonsultasiLabel">Layanan Konsultasi BumDes</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body px-4 py-3">
-                        <form action="{{ route('simpan-konsultasi') }}" method="POST">
-                            @csrf
-                            <div class="mb-3">
-                                <label class="form-label">Nama</label>
-                                <input type="text" name="nama" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Telepon</label>
-                                <input type="text" name="telepon" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Judul Konsultasi</label>
-                                <input type="text" name="judul_konsultasi" class="form-control rounded-pill"
-                                    required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Deskripsi</label>
-                                <textarea name="deskripsi" class="form-control rounded-3" rows="3" required></textarea>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit"
-                                    class="btn btn-success rounded-pill px-4 py-2 fw-bold">Ajukan</button>
-                            </div>
-                            @include('sweetalert::alert')
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Pengajuan Surat -->
-        <div class="modal fade" id="modalSurat" tabindex="-1" aria-labelledby="modalSuratLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg rounded-4">
-                    <div class="modal-header bg-warning rounded-top-4">
-                        <h5 class="modal-title" id="modalSuratLabel">Pengajuan Surat</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body px-4 py-3">
-                        <form action="{{ route('simpan-surat') }}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-3">
-                                <label class="form-label">Nomor Surat</label>
-                                <input type="text" name="nomor_surat" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Tanggal Surat</label>
-                                <input type="date" name="tanggal_surat" class="form-control rounded-pill"
-                                    required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Pengirim</label>
-                                <input type="text" name="pengirim" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Telepon</label>
-                                <input type="text" name="telepon" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Perihal</label>
-                                <input type="text" name="perihal" class="form-control rounded-pill" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Lampiran</label>
-                                <input type="file" name="file" id="file"
-                                    class="form-control rounded-pill" required>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit"
-                                    class="btn btn-warning rounded-pill px-4 py-2 fw-bold">Ajukan</button>
-                            </div>
-                            @include('sweetalert::alert')
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
         <section class="py-lg-5"></section>
         <section class="py-lg-5"></section>
@@ -387,8 +303,53 @@
                 </div>
             </div>
         </section>
+
+        <!-- Tonton Video Pelatihan -->
+        <section id="section_video" class="pt-5">
+            <div class="container">
+                <div class="row text-center mb-4">
+                    <div class="col-12">
+                        <h6>Pelatihan Online</h6>
+                        <h2 class="mb-4">Tonton Video Pelatihan</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="card border shadow-sm h-100">
+                            <a href="{{ route('login') }}">
+                                <img src="https://img.youtube.com/vi/kxEvmyriwfA/0.jpg" class="card-img-top" alt="Video Thumbnail">
+                            </a>
+                            <div class="card-body">
+                                <h6 class="card-title mb-2">Video Pelatihan</h6>
+                                <p class="card-text small">Tonton video pelatihan kami untuk meningkatkan pengetahuan Anda.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="card border shadow-sm h-100">
+                            <a href="{{ route('login') }}">
+                                <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" class="card-img-top" alt="Video Thumbnail">
+                            </a>
+                            <div class="card-body">
+                                <h6 class="card-title mb-2">Video Lainnya</h6>
+                                <p class="card-text small">Berbagai video lain tersedia untuk Anda setelah login.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center mt-3">
+                        <a href="{{ route('login') }}"
+                            class="btn btn-success rounded-pill px-4 py-2 fw-bold">
+                            Lihat Selengkapnya
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
     @include('guest/layouts.js')
+
 </body>
 @include('guest/layouts.footer')
 

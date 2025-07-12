@@ -37,10 +37,20 @@
                             <div class="form-group col-md-3">
                                 <label for="filter">Pilih Periode:</label>
                                 <select name="filter" id="filter" class="form-control" onchange="updateFilterInput()">
-                                    <option value="harian" {{ request('filter', 'harian') == 'harian' ? 'selected' : '' }}>Harian</option>
+                                    <option value="all_time" {{ request('filter', 'all_time') == 'all_time' ? 'selected' : '' }}>Semua Waktu</option>
+                                    <option value="harian" {{ request('filter') == 'harian' ? 'selected' : '' }}>Harian</option>
                                     <option value="mingguan" {{ request('filter') == 'mingguan' ? 'selected' : '' }}>Mingguan</option>
                                     <option value="bulanan" {{ request('filter') == 'bulanan' ? 'selected' : '' }}>Bulanan</option>
                                     <option value="tahunan" {{ request('filter') == 'tahunan' ? 'selected' : '' }}>Tahunan</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="status_filter">Status Konsultasi:</label>
+                                <select name="status_filter" id="status_filter" class="form-control">
+                                    <option value="all" {{ request('status_filter', 'all') == 'all' ? 'selected' : '' }}>Semua</option>
+                                    <option value="Pending" {{ request('status_filter') == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="Dijawab" {{ request('status_filter') == 'Dijawab' ? 'selected' : '' }}>Dijawab</option>
                                 </select>
                             </div>
 
@@ -79,10 +89,20 @@
             <script>
                 function updateFilterInput() {
                     const selectedFilter = document.getElementById("filter").value;
+                    const isDateFilter = (selectedFilter === "harian" || selectedFilter === "mingguan" || selectedFilter === "bulanan" || selectedFilter === "tahunan");
+
                     document.getElementById("filter-harian").style.display = (selectedFilter === "harian") ? "block" : "none";
                     document.getElementById("filter-mingguan").style.display = (selectedFilter === "mingguan") ? "block" : "none";
                     document.getElementById("filter-bulanan").style.display = (selectedFilter === "bulanan") ? "block" : "none";
                     document.getElementById("filter-tahunan").style.display = (selectedFilter === "tahunan") ? "block" : "none";
+
+                    // If no date filter is selected, clear the values of date inputs
+                    if (!isDateFilter) {
+                        document.querySelector('#filter-harian input[name="tanggal"]').value = '';
+                        document.querySelector('#filter-mingguan input[name="minggu"]').value = '';
+                        document.querySelector('#filter-bulanan input[name="bulan"]').value = '';
+                        document.querySelector('#filter-tahunan input[name="tahun"]').value = '';
+                    }
                 }
                 document.addEventListener('DOMContentLoaded', function() {
                     updateFilterInput();

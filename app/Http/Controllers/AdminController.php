@@ -9,7 +9,10 @@ use App\Models\SuratTerima;
 use App\Models\SuratTolak;
 use App\Models\MasterKonsultasi;
 use App\Models\Video;
+use App\Models\MasterSurat; // New: Import MasterSurat modelrt Log facade // Import MasterKonsultasi model
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -19,21 +22,48 @@ class AdminController extends Controller
         $totalSuratProses = SuratProses::count();
         $totalSuratTerima = SuratTerima::count();
         $totalSuratTolak = SuratTolak::count();
+        $totalMasterSurat = MasterSurat::count(); // New: Total Master Surat
         $totalKonsultasi = MasterKonsultasi::count();
         $totalKonsultasiDijawab = MasterKonsultasi::where('status', 'Dijawab')->count();
-        $totalKonsultasiPending = MasterKonsultasi::where('status', 'Belum Dijawab')->count();
+        $totalKonsultasiPending = MasterKonsultasi::where('status', 'Pending')->count(); // Fixed: 'Pending'
+
+        // Data for Charts
+        $suratStatusData = MasterSurat::select('status', DB::raw('count(*) as total'))->groupBy('status')->pluck('total', 'status')->toArray();
+        $konsultasiStatusData = MasterKonsultasi::select('status', DB::raw('count(*) as total'))->groupBy('status')->pluck('total', 'status')->toArray();
+
+        // Data for Recent Activities
+        $recentSurat = MasterSurat::orderBy('created_at', 'desc')->limit(5)->get();
+        $recentKonsultasi = MasterKonsultasi::orderBy('created_at', 'desc')->limit(5)->get();
+
         $totalVideoPublish = Video::where('ditampilkan', 1)->count();
         $totalVideoBelumPublish = Video::where('ditampilkan', 0)->count();
+        $totalVideos = Video::count(); // New: Total Videos
+        $totalUsers = User::count(); // New: Total Users
+
+        // Calculate active users
+        $activeThreshold = Carbon::now()->subMinutes(5)->timestamp;
+        $totalActiveUsers = DB::table('sessions')
+                                ->where('last_activity', '>=', $activeThreshold)
+                                ->whereNotNull('user_id') // Only count logged-in users
+                                ->count();
 
         return view('admin.dashboard', compact(
             'totalSuratProses',
             'totalSuratTerima',
             'totalSuratTolak',
+            'totalMasterSurat',
             'totalVideoPublish',
             'totalVideoBelumPublish',
+            'totalVideos',
             'totalKonsultasi',
             'totalKonsultasiDijawab',
-            'totalKonsultasiPending', // <-- ini yang benar
+            'totalKonsultasiPending',
+            'totalUsers',
+            'totalActiveUsers',
+            'suratStatusData',
+            'konsultasiStatusData',
+            'recentSurat',
+            'recentKonsultasi'
         ));
     }
     public function authIndex()

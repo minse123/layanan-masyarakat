@@ -1,5 +1,5 @@
 @extends('auth.auth')
-
+@include('sweetalert::alert')
 @section('content')
     <div class="row justify-content-center h-100">
         <div class="col-lg-9 col-12">
@@ -20,7 +20,7 @@
                 <form method="POST" action="{{ url('/register-process') }}">
                     @csrf
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <input required type="text" name="name" class="form-control" placeholder="Nama">
+                        <input required type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Nama">
                         <div class="form-control-icon">
                             <i class="bi bi-person"></i>
                         </div>
@@ -42,7 +42,7 @@
                         @enderror
                     </div> --}}
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <textarea required name="alamat" class="form-control" placeholder="Alamat"></textarea>
+                        <textarea required name="alamat" class="form-control @error('alamat') is-invalid @enderror" placeholder="Alamat"></textarea>
                         <div class="form-control-icon">
                             <i class="bi bi-geo-alt"></i>
                         </div>
@@ -53,7 +53,7 @@
                         @enderror
                     </div>
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <input required type="telepon" name="telepon" class="form-control" placeholder="Nomor Telepon"
+                        <input required type="text" name="telepon" class="form-control @error('telepon') is-invalid @enderror" placeholder="Nomor Telepon"
                             data-parsley-type="number"
                             data-parsley-error-message="Masukkan format nomor telepon yang valid.">
                         <div class="form-control-icon">
@@ -66,7 +66,7 @@
                         @enderror
                     </div>
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <input required type="email" name="email" class="form-control" placeholder="Email">
+                        <input required type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email">
                         <div class="form-control-icon">
                             <i class="bi bi-envelope"></i>
                         </div>
@@ -77,7 +77,7 @@
                         @enderror
                     </div>
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <input required type="password" name="password" id="password" class="form-control"
+                        <input required type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror"
                             placeholder="Password" data-parsley-minlength="8"
                             data-parsley-error-message="Kata sandi harus lebih besar dari atau sama dengan 8.">
                         <div class="form-control-icon">
@@ -90,7 +90,7 @@
                         @enderror
                     </div>
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <input required type="password" name="password_confirm" class="form-control"
+                        <input required type="password" name="password_confirm" class="form-control @error('password_confirm') is-invalid @enderror"
                             placeholder="Konfirmasi Password" data-parsley-equalto="#password"
                             data-parsley-error-message="Kata sandi tidak cocok.">
                         <div class="form-control-icon">

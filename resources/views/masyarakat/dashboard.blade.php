@@ -15,7 +15,7 @@
 <body>
 
     @include('masyarakat/layouts.navbar')
-
+    @include('sweetalert::alert')
     <main>
 
         <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">

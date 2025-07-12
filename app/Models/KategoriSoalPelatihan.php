@@ -15,6 +15,6 @@ class KategoriSoalPelatihan extends Model
 
     public function soalPelatihan()
     {
-        return $this->hasMany(SoalPelatihan::class, 'kategori_id');
+        return $this->hasMany(SoalPelatihan::class, 'id_kategori_soal_pelatihan');
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SoalController;
 
 use App\Models\KategoriSoalPelatihan;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class KategoriSoalPelatihanController extends Controller
+class KategoriSoalPelatihanController
 {
     public function index()
     {

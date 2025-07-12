@@ -36,8 +36,8 @@ class SesiController extends Controller
             // Redirect berdasarkan role
             switch ($user->role) {
                 case 'admin':
-                    Alert::success('Login Berhasil', 'Selamat datang di dashboard!');
-                    return redirect('/admin/dashboard')->with('message', 'Selamat datang, Operator!');
+                    Alert()->success('Login Berhasil', 'Selamat datang di dashboard!'); 
+                    return redirect('/admin/dashboard')->with('message', 'Selamat datang, Admin');
                 case 'psm':
                     return redirect('/psm/dashboard')->with('message', 'Selamat datang, PSM');
                 case 'kasubag':
@@ -48,13 +48,14 @@ class SesiController extends Controller
                     return redirect('/')->with('message', 'Berhasil login.');
             }
         }
-
+alert()->error('Login Gagal', 'Email atau password salah.');
         return back()->with('salah', 'Email atau password salah.')->withInput();
 
     }
 
     public function register()
     {
+
         return view('auth.register');
     }
 
@@ -72,7 +73,7 @@ class SesiController extends Controller
             'email' => $request->email,
             'telepon' => $request->telepon,
             'password' => bcrypt($request->password),
-            'role' => 'user', // Default role
+            'role' => 'masyarakat', // Default role
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');

@@ -46,10 +46,10 @@
     <li class="nav-item {{ request()->is('admin/surat') ? 'active' : '' }}">
         <a class="nav-link" href="{{ url('admin/surat') }}" title="Master Administrasi Surat">
             <i class="fas fa-fw fa-file-alt text-success"></i>
-            <span>Master Administrasi Surat</span>
+            <span>Master Administrasi <br> Surat</span>
         </a>
     </li>
-    <li class="nav-item {{ request()->is('admin/konsultasi') ? 'active' : '' }}">
+    <li class="nav-item {{ request()->routeIs('admin.konsultasi.*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ url('admin/konsultasi') }}" title="Master Konsultasi Pelatihan">
             <i class="fas fa-fw fa-comments text-warning"></i>
             <span>Master Konsultasi Pelatihan</span>

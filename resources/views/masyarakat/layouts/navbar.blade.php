@@ -140,6 +140,8 @@
                                     @if ($konsul->status == 'Dijawab' && optional($konsul->jawabPelatihan)->jawaban)
                                         <div class="alert alert-success py-2 px-3 mb-0 mt-2">
                                             <strong>Jawaban:</strong><br>
+                                            <div class="small text-muted">{{ $konsul->jawabPelatihan->created_at->format('d M Y H:i') }}
+                                            </div>
                                             {{ \Illuminate\Support\Str::limit($konsul->jawabPelatihan->jawaban, 100) }}
                                         </div>
                                     @endif

@@ -4,6 +4,14 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">Rekap Nilai Peserta</h6>
+            <div>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalCetakHasil">
+                    <i class="fas fa-print"></i> Cetak Hasil Peserta
+                </button>
+                <a href="{{ route('rekap-nilai.cetak-pdf') }}" class="btn btn-success" target="_blank">
+                    <i class="fas fa-file-pdf"></i> Cetak Rekap Nilai Keseluruhan
+                </a>
+            </div>
         </div>
         <div class="card-body">
             @if (session('success'))
@@ -168,6 +176,8 @@
         </div>
     @endforeach --}}
 @endsection
+
+@include('admin.soal.modals.cetak-hasil')
 
 @push('scripts')
     <script>

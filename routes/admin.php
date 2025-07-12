@@ -5,9 +5,10 @@ use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\SuratController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VideoController;
-use App\Http\Controllers\KategoriSoalPelatihanController;
-use App\Http\Controllers\SoalPelatihanController;
-use App\Http\Controllers\RekapNilaiController;
+use App\Http\Controllers\SoalController\KategoriSoalPelatihanController;
+use App\Http\Controllers\SoalController\SoalPelatihanController;
+use App\Http\Controllers\SoalController\RekapNilaiController;
+use App\Http\Controllers\SoalController\StatistikSoalController;
 use App\Http\Controllers\CetakPDFController;
 
 
@@ -44,12 +45,12 @@ Route::get('/admin/laporan/surat/tolak/resetfilter', [SuratController::class, 'r
 
 Route::get('/konsultasi', [KonsultasiController::class, 'index'])->name('admin.konsultasi.index');
 Route::post('/konsultasi/store', [KonsultasiController::class, 'store'])->name('admin.konsultasi.store');
+Route::get('/konsultasi/filter', [KonsultasiController::class, 'filter'])->name('admin.konsultasi.filter');
+Route::get('/konsultasi/resetfilter', [KonsultasiController::class, 'resetfilter'])->name('admin.konsultasi.resetfilter');
 Route::get('/konsultasi/{id}', [KonsultasiController::class, 'show'])->name('admin.konsultasi.show');
 Route::put('/konsultasi/update/{id}', [KonsultasiController::class, 'update'])->name('admin.konsultasi.update'); // Changed to PUT
 Route::delete('/konsultasi/destroy/{id}', [KonsultasiController::class, 'destroy'])->name('admin.konsultasi.destroy'); // Changed to DELETE
 Route::post('/konsultasi/{id}/answer', [KonsultasiController::class, 'answer'])->name('admin.konsultasi.answer');
-Route::get('/konsultasi/filter', [KonsultasiController::class, 'filter'])->name('admin.konsultasi.filter');
-Route::get('/konsultasi/resetfilter', [KonsultasiController::class, 'resetfilter'])->name('admin.konsultasi.resetfilter');
 Route::get('/konsultasi/cetak-pdf', [KonsultasiController::class, 'cetakPDF'])->name('admin.konsultasi.cetak-pdf');
 
 Route::get('/video', [VideoController::class, 'index'])->name('admin.video.index');
@@ -67,7 +68,7 @@ Route::resource('/soal-pelatihan', SoalPelatihanController::class)
     ->except(['create', 'show', 'edit']);
 
 // Rekap Nilai Routes
-Route::resource('rekap-nilai', RekapNilaiController::class)->names('admin.rekap-nilai');
+Route::resource('rekap-nilai', RekapNilaiController::class)->names('admin.rekap-nilai')->except(['show']);
 
 // Get soal by kategori for rekap nilai
 Route::get('soal-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'getByKategori'])
@@ -77,7 +78,11 @@ Route::post('hasil-pelatihan/by-kategori/{kategori}', [RekapNilaiController::cla
 Route::post('hasil-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'update'])->name('admin.hasil-pelatihan.update');
 
 // Statistik Soal
-Route::get('statistik-soal', [\App\Http\Controllers\StatistikSoalController::class, 'index'])
+Route::get('statistik-soal', [StatistikSoalController::class, 'index'])
     ->name('admin.statistik-soal.index');
+
+Route::get('/soal-pelatihan/cetak-pdf', [CetakPDFController::class, 'cetakSoalPdf'])->name('soal-pelatihan.cetak-pdf');
+Route::get('/hasil-pelatihan/cetak-pdf', [CetakPDFController::class, 'cetakHasilPdf'])->name('hasil-pelatihan.cetak-pdf');
+Route::get('/rekap-nilai/cetak-pdf', [CetakPDFController::class, 'cetakRekapNilaiPdf'])->name('rekap-nilai.cetak-pdf');
 
 

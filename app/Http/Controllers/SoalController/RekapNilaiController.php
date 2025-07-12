@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SoalController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,13 +11,17 @@ use App\Models\SoalPelatihan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class RekapNilaiController extends Controller
+class RekapNilaiController
 {
     public function index()
     {
         $kategoriList = KategoriSoalPelatihan::all();
         $pesertaList = User::whereHas('jawabanPeserta')->get();
-        $users = User::where('role', 'user')->get(); // Get all users with role 'user'
+        $users = User::where('role', 'masyarakat')->get(); // Get all users with role 'masyarakat'
+
+        // If no users with role 'user' are found, the dropdown will be empty.
+        // Ensure that there are users with 'user' role in the database.
+        // You can check this by running `php artisan tinker` and then `App\Models\User::where('role', 'user')->count();`
 
         $rekapList = collect();
 

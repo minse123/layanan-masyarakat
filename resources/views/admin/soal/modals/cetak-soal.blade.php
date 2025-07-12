@@ -1,7 +1,7 @@
 <!-- Modal Cetak Soal -->
 <div class="modal fade" id="modalCetakSoal" tabindex="-1" role="dialog" aria-labelledby="modalCetakSoalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form action="{{ route('admin.soal-pelatihan.cetak-pdf') }}" method="GET" target="_blank">
+        <form action="{{ route('soal-pelatihan.cetak-pdf') }}" method="GET" target="_blank">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalCetakSoalLabel">Cetak Soal per Kategori</h5>

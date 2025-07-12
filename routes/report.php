@@ -14,7 +14,7 @@ Route::middleware(['auth', 'role:admin,psm'])->group(function () {
     Route::get('/konsultasi/pendukung/cetak-pdf', [ReportController::class, 'cetakpendukung'])->name('report.konsultasi.pendukung.cetak-pdf');
 
     Route::get('soal-pelatihan/cetak-pdf', [CetakPDFController::class, 'cetakSoalPdf'])
-        ->name('admin.soal-pelatihan.cetak-pdf');
+        ->name('soal-pelatihan.cetak-pdf');
 });
 
 Route::middleware(['auth', 'role:admin,kasubag'])->group(function () {

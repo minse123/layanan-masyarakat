@@ -3,11 +3,31 @@
 
 @include('admin.layouts.css')
 
+<style>
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+        /* Prevent main body scroll */
+    }
+
+    #wrapper {
+        height: 100%;
+    }
+
+    #content-wrapper {
+        height: 100%;
+        overflow-y: auto;
+        /* Enable scrolling for main content */
+    }
+    
+</style>
+
 <body id="page-top">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
- 
+
         @include('admin.layouts.sidebar')
         <!-- End of Sidebar -->
 
