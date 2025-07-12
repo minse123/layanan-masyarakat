@@ -81,8 +81,6 @@ Route::post('hasil-pelatihan/by-kategori/{kategori}', [RekapNilaiController::cla
 Route::get('statistik-soal', [StatistikSoalController::class, 'index'])
     ->name('admin.statistik-soal.index');
 
-Route::get('/soal-pelatihan/cetak-pdf', [CetakPDFController::class, 'cetakSoalPdf'])->name('soal-pelatihan.cetak-pdf');
-Route::get('/hasil-pelatihan/cetak-pdf', [CetakPDFController::class, 'cetakHasilPdf'])->name('hasil-pelatihan.cetak-pdf');
-Route::get('/rekap-nilai/cetak-pdf', [CetakPDFController::class, 'cetakRekapNilaiPdf'])->name('rekap-nilai.cetak-pdf');
+
 
 

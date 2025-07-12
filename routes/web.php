@@ -22,6 +22,8 @@ Route::post('/konsultasi', [GuestController::class, 'storeKonsultasi'])->name('s
 Route::middleware('web')->group(function () {
     Route::get('/login', [SesiController::class, 'index'])->name('login');
     Route::post('/login', [SesiController::class, 'login'])->name('login.process');
+    Route::get('/login-pegawai', [SesiController::class, 'indexPegawai'])->name('login.pegawai');
+    Route::post('/login-pegawai', [SesiController::class, 'loginPegawai'])->name('login.pegawai.process');
     Route::post('/register-process', [SesiController::class, 'simpanRegister'])->name('register.process');
     Route::get('/register', [SesiController::class, 'register'])->name('register');
     Route::post('/logout', [SesiController::class, 'logout'])->name('logout');

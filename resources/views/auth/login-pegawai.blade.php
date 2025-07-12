@@ -7,7 +7,8 @@
                 <div class="text-center mb-4">
                     <a href="/"><img src="/frontend/images/logo-kementerian.png" alt="Logo" style="width: 100px;"></a>
                 </div>
-                <p class="auth-subtitle mb-3">Masuakn Akun Anda</p>
+                <h4 class="auth-title">Login Pegawai</h4>
+                <p class="auth-subtitle mb-3">Masukan Akun Anda</p>
 
                 {{-- Alert --}}
                 @if (session()->has('message'))
@@ -24,7 +25,7 @@
                 @endif
 
                 {{-- Form Login --}}
-                <form method="POST" action="/login" data-parsley-validate>
+                <form method="POST" action="/login-pegawai" data-parsley-validate>
                     @csrf
                     <div class="form-group position-relative has-icon-left mb-3">
                         <input type="email" name="email" class="form-control" placeholder="Email"
@@ -54,11 +55,6 @@
                 </form>
                 @include('sweetalert::alert')
 
-                <div class="text-center mt-3">
-                    <p class="text-gray-600">Belum memiliki akun? <a href="/register" class="font-bold">Daftar</a>.</p>
-                    <p><a class="font-bold" href="/login-pegawai">Login sebagai Pegawai</a></p>
-                    <p><a class="font-bold" href="/">Kembali Kehalaman Awal</a></p>
-                </div>
             </div>
         </div>
     </div>

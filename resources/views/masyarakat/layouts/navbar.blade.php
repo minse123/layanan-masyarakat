@@ -28,6 +28,9 @@
                 <li class="nav-item">
                     <a class="nav-link click-scroll" href="#section_4">Kontak</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="#section_video">Video Pelatihan</a>
+                </li>
 
                 <div class="d-none d-lg-flex align-items-center ms-lg-3">
                     @auth

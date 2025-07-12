@@ -1,7 +1,25 @@
 /* public/backend/css/custom.css */
 
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+#wrapper {
+    display: flex;
+    height: 100%;
+}
+
+#content-wrapper {
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 /* Make sidebar scrollable */
 .sidebar {
+    width: 10rem;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -32,4 +50,9 @@
 
 .sidebar .sidebar-brand-text {
     text-align: center;
+}
+
+/* Ensure scrollbar is visible when sidebar is toggled */
+body.sidebar-toggled {
+    overflow-y: auto;
 }

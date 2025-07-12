@@ -48,34 +48,13 @@
 }
 
 html {
-  font-family: sans-serif;
-  line-height: 1.15;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-article,
-aside,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-main,
-nav,
-section {
-  display: block;
+  height: 100%;
+  overflow: auto;
 }
 
 body {
-  margin: 0;
-  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #858796;
-  text-align: left;
-  background-color: #fff;
+  height: auto;
+  min-height: 100vh;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -10979,7 +10958,8 @@ html {
 }
 
 body {
-  height: 100%;
+  height: auto;
+  min-height: 100vh;
 }
 
 a:focus {
@@ -11523,7 +11503,7 @@ a:focus {
 }
 
 .sidebar {
-  width: 6.5rem;
+  width: 10rem;
   min-height: 100vh;
 }
 
@@ -11552,7 +11532,7 @@ a:focus {
 
 .sidebar .nav-item .collapse {
   position: absolute;
-  left: calc(6.5rem + 1.5rem / 2);
+  left: calc(10rem + 1.5rem / 2);
   z-index: 1;
   top: 2px;
 }
@@ -11638,7 +11618,6 @@ a:focus {
 
 .sidebar.toggled {
   width: 0 !important;
-  overflow: hidden;
 }
 
 .sidebar.toggled #sidebarToggle::after {
@@ -11712,7 +11691,7 @@ a:focus {
 
 @media (min-width: 768px) {
   .sidebar {
-    width: 14rem !important;
+    width: 18rem !important;
   }
 
   .sidebar .nav-item .collapse {
@@ -11744,7 +11723,7 @@ a:focus {
     width: 100%;
     text-align: left;
     padding: 1rem;
-    width: 14rem;
+    width: 18rem;
   }
 
   .sidebar .nav-item .nav-link i {

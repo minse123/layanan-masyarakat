@@ -14,6 +14,8 @@ use App\Models\MasterKonsultasi;
 use App\Models\KategoriSoalPelatihan;
 use App\Models\SoalPelatihan;
 use App\Models\JawabanPeserta;
+use App\Models\MasterSurat;
+use App\Models\SuratProses;
 use App\Models\HasilPelatihan;
 
 class MasyarakatController extends Controller
@@ -41,6 +43,8 @@ class MasyarakatController extends Controller
             ->latest()
             ->take(10)
             ->get();
+
+            
 
         // Ambil kategori soal pelatihan untuk modal
         $kategoriList = KategoriSoalPelatihan::orderBy('nama_kategori')->get();
@@ -88,6 +92,57 @@ class MasyarakatController extends Controller
         $user->save();
         Alert::success('Berhasil', 'Profil berhasil diperbarui!');
         return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    public function storeSurat(Request $request)
+    {
+        // dd($request->all());
+        // Validasi input
+        $request->validate([
+            'nomor_surat' => 'required|string|max:255|unique:master_surat,nomor_surat',
+            'tanggal_surat' => 'required|date',
+            'perihal' => 'nullable|string|max:255',
+            'pengirim' => 'required|string|max:255',
+            'telepon' => 'required|string|max:255',
+            'keterangan' => 'nullable|string',
+            'catatan_proses' => 'nullable|string',
+            'id_user' => 'nullable|exists:users,id',
+            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        ]);
+        // dd($request->all());
+        // Menyimpan file dan mendapatkan path
+        $filePath = null;
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('uploads', 'public');
+            \Log::info('File uploaded: ' . $filePath); // Log file path
+        }
+
+        // Membuat entri di MasterSurat
+        $surat = MasterSurat::create([
+            'nomor_surat' => $request->nomor_surat,
+            'tanggal_surat' => $request->tanggal_surat,
+            'perihal' => $request->perihal,
+            'pengirim' => $request->pengirim,
+            'telepon' => $request->telepon,
+            'status' => 'Proses',
+            'keterangan' => null,
+            'id_user' => null,
+            'file_path' => $filePath,
+        ]);
+
+
+        if ($surat) {
+            // Langsung masuk ke proses
+            SuratProses::create([
+                'id_surat' => $surat->id_surat,
+                'tanggal_proses' => now(),
+                'catatan_proses' => $request->catatan_proses,
+            ]);
+
+        }
+
+        Alert::success('Selamat', 'Data Berhasil Disimpan');
+        return back()->with('status', 'Data Berhasil Disimpan');
     }
 
     // Tampilkan daftar kategori soal (untuk modal atau halaman)
