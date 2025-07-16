@@ -4,11 +4,13 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\SuratController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\VideoController;
 use App\Http\Controllers\SoalController\KategoriSoalPelatihanController;
 use App\Http\Controllers\SoalController\SoalPelatihanController;
 use App\Http\Controllers\SoalController\RekapNilaiController;
 use App\Http\Controllers\SoalController\StatistikSoalController;
+use App\Http\Controllers\ConfigurationController\JadwalPelatihanController;
+use App\Http\Controllers\ConfigurationController\VideoController;
+
 use App\Http\Controllers\CetakPDFController;
 
 
@@ -67,19 +69,28 @@ Route::resource('/soal-pelatihan', SoalPelatihanController::class)
     ->names('admin.soal-pelatihan')
     ->except(['create', 'show', 'edit']);
 
+Route::post('/soal-pelatihan/import', [SoalPelatihanController::class, 'importSoal'])->name('admin.soal-pelatihan.import');
+Route::get('/soal-pelatihan/export-example', [SoalPelatihanController::class, 'exportSoalExample'])->name('admin.soal-pelatihan.export-example');
+
 // Rekap Nilai Routes
 Route::resource('rekap-nilai', RekapNilaiController::class)->names('admin.rekap-nilai')->except(['show']);
 
 // Get soal by kategori for rekap nilai
 Route::get('soal-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'getByKategori'])
     ->name('admin.soal-pelatihan.by-kategori');
-
 Route::post('hasil-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'store'])->name('admin.hasil-pelatihan.store');
 Route::post('hasil-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'update'])->name('admin.hasil-pelatihan.update');
 
 // Statistik Soal
 Route::get('statistik-soal', [StatistikSoalController::class, 'index'])
     ->name('admin.statistik-soal.index');
+
+Route::resource('jadwal-pelatihan', JadwalPelatihanController::class)->names('admin.jadwal-pelatihan')->except(['create', 'show', 'edit']);
+Route::delete('jadwal-pelatihan/{id}', [JadwalPelatihanController::class, 'destroy'])->name('admin.jadwal-pelatihan.destroy');
+Route::get('jadwal-pelatihan/file/{filename}', [JadwalPelatihanController::class, 'showFile'])
+    ->where('filename', '.*')
+    ->name('admin.jadwal-pelatihan.file');
+// Route::get('jadwal-pelatihan/file/{filename}', [JadwalPelatihanController::class, 'showFile'])->name('admin.jadwal-pelatihan.file');
 
 
 

@@ -8,6 +8,7 @@ use App\Models\SoalPelatihan;
 use App\Models\JawabanPeserta;
 use App\Models\User;
 use App\Models\Video;
+use App\Models\JadwalPelatihan;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as PDF; // Tambahkan ini jika pakai barryvdh/laravel-dompdf
 
@@ -248,11 +249,23 @@ class ReportController extends Controller
         return $pdf->stream('laporan-statistik-tersulit.pdf');
     }
 
-    public function printVideo()
+    public function printVideo(Request $request)
     {
-        $videos = Video::all();
-        $pdf = Pdf::loadView('report.video.report-video-pdf', compact('videos'));
+        $query = Video::query();
+
+        if ($request->filled('jenis_pelatihan')) {
+            $query->where('jenis_pelatihan', $request->jenis_pelatihan);
+        }
+
+        $videos = $query->get();
+        $pdf = Pdf::loadView('report.configuration.report-video-pdf', compact('videos'));
         return $pdf->stream('laporan-video.pdf');
     }
 
+    public function printReport()
+    {
+        $data = JadwalPelatihan::all();
+        $pdf = PDF::loadView('report.configuration.jadwal-pelatihan-report', compact('data'));
+        return $pdf->stream('laporan-jadwal-pelatihan.pdf');
+    }
 }

@@ -3,7 +3,8 @@
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CetakPDFController;
 use App\Http\Controllers\SuratController;
-use App\Http\Controllers\VideoController;
+use App\Http\Controllers\ConfigurationController\VideoController;
+use App\Http\Controllers\ConfigurationController\JadwalPelatihanController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/report/tamu/cetak-pdf', [CetakPDFController::class, 'tamucetakPDF'])->name('report.tamu.cetak-pdf');
@@ -31,6 +32,7 @@ Route::middleware(['auth', 'role:admin,kasubag'])->group(function () {
 
 Route::middleware(['auth', 'role:admin,operator'])->group(function () {
     Route::get('/video/print-report', [ReportController::class, 'printVideo'])->name('admin.video.print_report');
+    Route::get('/jadwal-pelatihan/print-report', [ReportController::class, 'printReport'])->name('jadwal-pelatihan.print-report');
 });
 
-    
+

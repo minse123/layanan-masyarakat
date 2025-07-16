@@ -5,7 +5,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('admin/dashboard') }}">
         <div class="img"
-            style="background-image: url('{{ asset('frontend/images/logo-kementerian-1.png') }}'); background-size: contain; background-repeat: no-repeat; background-position: center; width: 60px; height: 60px;">
+            style="background-image: url('{{ asset('frontend/images/logo-kementerian-1.png') }}'); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100px; height: 100px;">
         </div>
         <div class="sidebar-brand-text mx-3 font-weight-bold text-white">Pelayanan Masyarakat Digital</div>
     </a>
@@ -14,28 +14,32 @@
     <!-- Dashboard -->
     <li class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
         <a class="nav-link" href="{{ url('admin/dashboard') }}" title="Dashboard">
-            <i class="fas fa-fw fa-tachometer-alt text-info"></i>
+            <i class="fas fa-fw fa-tachometer-alt text-white"></i>
             <span class="font-weight-bold">Dashboard</span>
         </a>
     </li>
     <hr class="sidebar-divider">
 
     <!-- Konfigurasi -->
-    <div class="sidebar-heading text-light">Konfigurasi Dashboard</div>
-    @php $isVideo = request()->routeIs('admin.video.*'); @endphp
+    <div class="sidebar-heading text-light">Konfigurasi Website</div>
+    @php $isVideo = request()->routeIs('admin.video.*') || request()->routeIs('admin.jadwal-pelatihan.*'); @endphp
     <li class="nav-item {{ $isVideo ? 'active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#configVideoCollapse" role="button"
-            aria-expanded="{{ $isVideo ? 'true' : 'false' }}" aria-controls="configVideoCollapse"
-            title="Konfigurasi Video">
-            <i class="fas fa-fw fa-video text-warning"></i>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#configCollapse"
+            aria-expanded="{{ $isVideo ? 'true' : 'false' }}" aria-controls="configCollapse" title="Konfigurasi">
+            <i class="fas fa-fw fa-cogs text-white"></i>
             <span>Konfigurasi</span>
         </a>
-        <div id="configVideoCollapse" class="collapse {{ $isVideo ? 'show' : '' }}" aria-labelledby="headingUtilities"
+        <div id="configCollapse" class="collapse {{ $isVideo ? 'show' : '' }}" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header text-primary">Konfigurasi:</h6>
-                <a class="collapse-item {{ request()->routeIs('admin.video.index') ? 'active' : '' }}"
-                    href="{{ route('admin.video.index') }}"><i class="fas fa-list text-info"></i> Daftar Video</a>
+                <h6 class="collapse-header text-primary">Atur Konten:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.video.*') ? 'active' : '' }}"
+                    href="{{ route('admin.video.index') }}"><i class="fas fa-fw fa-video text-primary"></i> Video
+                    Edukasi</a>
+                <a class="collapse-item {{ request()->routeIs('admin.jadwal-pelatihan.*') ? 'active' : '' }}"
+                    href="{{ route('admin.jadwal-pelatihan.index') }}"><i
+                        class="fas fa-fw fa-calendar-alt text-primary"></i>
+                    Jadwal Pelatihan</a>
             </div>
         </div>
     </li>
@@ -45,14 +49,14 @@
     <div class="sidebar-heading text-light">Master Data</div>
     <li class="nav-item {{ request()->is('admin/surat') ? 'active' : '' }}">
         <a class="nav-link" href="{{ url('admin/surat') }}" title="Master Administrasi Surat">
-            <i class="fas fa-fw fa-file-alt text-success"></i>
-            <span>Master Administrasi <br> Surat</span>
+            <i class="fas fa-fw fa-folder-open text-white"></i>
+            <span>Master Administrasi</span>
         </a>
     </li>
     <li class="nav-item {{ request()->routeIs('admin.konsultasi.*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ url('admin/konsultasi') }}" title="Master Konsultasi Pelatihan">
-            <i class="fas fa-fw fa-comments text-warning"></i>
-            <span>Master Konsultasi Pelatihan</span>
+            <i class="fas fa-fw fa-comments text-white"></i>
+            <span>Master Konsultasi</span>
         </a>
     </li>
     <hr class="sidebar-divider">
@@ -65,95 +69,77 @@
             request()->routeIs('admin.rekap-nilai.*') ||
             request()->routeIs('admin.statistik-soal.*');
     @endphp
-    <div class="sidebar-heading text-light">Manajemen Soal Pelatihan</div>
+    <div class="sidebar-heading text-light">Ujian & Pelatihan</div>
     <li class="nav-item {{ $isSoalMenu ? 'active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#soalPelatihanCollapse" role="button"
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#soalPelatihanCollapse"
             aria-expanded="{{ $isSoalMenu ? 'true' : 'false' }}" aria-controls="soalPelatihanCollapse"
-            title="Latihan Soal Pelatihan">
-            <i class="fas fa-book text-info"></i>
-            <span>Latihan Soal Pelatihan</span>
+            title="Manajemen Soal Pelatihan">
+            <i class="fas fa-fw fa-book-open text-white"></i>
+            <span>Manajemen Ujian</span>
         </a>
         <div id="soalPelatihanCollapse" class="collapse {{ $isSoalMenu ? 'show' : '' }}" aria-labelledby="headingSoal"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header text-primary">Kelola Ujian:</h6>
                 <a class="collapse-item {{ request()->routeIs('admin.kategori-soal-pelatihan.*') ? 'active' : '' }}"
                     href="{{ route('admin.kategori-soal-pelatihan.index') }}">
-                    <i class="fas fa-folder text-primary"></i> Kategori Pelatihan
+                    <i class="fas fa-fw fa-tags text-primary"></i> Kategori Soal
                 </a>
                 <a class="collapse-item {{ request()->routeIs('admin.soal-pelatihan.*') ? 'active' : '' }}"
                     href="{{ route('admin.soal-pelatihan.index') }}">
-                    <i class="fas fa-clipboard-list text-success"></i> Bank Soal
+                    <i class="fas fa-fw fa-list-alt text-primary"></i> Bank Soal
                 </a>
                 <a class="collapse-item {{ request()->routeIs('admin.rekap-nilai.*') ? 'active' : '' }}"
                     href="{{ route('admin.rekap-nilai.index') }}">
-                    <i class="fas fa-user text-info"></i> Rekap Nilai Peserta
+                    <i class="fas fa-fw fa-award text-primary"></i> Rekap Nilai Peserta
                 </a>
                 <a class="collapse-item {{ request()->routeIs('admin.statistik-soal.*') ? 'active' : '' }}"
                     href="{{ route('admin.statistik-soal.index') }}">
-                    <i class="fas fa-chart-bar text-warning"></i> Statistik Soal
+                    <i class="fas fa-fw fa-chart-pie text-primary"></i> Statistik Soal
                 </a>
             </div>
         </div>
     </li>
     <hr class="sidebar-divider">
 
-    <!-- Report Surat -->
-    <div class="sidebar-heading text-light">Report Surat</div>
+    <!-- Laporan -->
+    <div class="sidebar-heading text-light">Laporan</div>
     @php
-        $isSuratReport =
+        $isReportMenu =
             request()->routeIs('admin.proses.surat') ||
             request()->routeIs('admin.terima.surat') ||
-            request()->routeIs('admin.tolak.surat');
+            request()->routeIs('admin.tolak.surat') ||
+            request()->routeIs('konsultasi.inti.report') ||
+            request()->routeIs('konsultasi.pendukung.report');
     @endphp
-    <li class="nav-item {{ $isSuratReport ? 'active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#reportSuratCollapse" role="button"
-            aria-expanded="{{ $isSuratReport ? 'true' : 'false' }}" aria-controls="reportSuratCollapse"
-            title="Administrasi Surat">
-            <i class="fas fa-fw fa-file-invoice text-info"></i>
-            <span>Administrasi Surat</span>
+    <li class="nav-item {{ $isReportMenu ? 'active' : '' }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#reportCollapse"
+            aria-expanded="{{ $isReportMenu ? 'true' : 'false' }}" aria-controls="reportCollapse" title="Laporan">
+            <i class="fas fa-fw fa-file-alt text-white"></i>
+            <span>Laporan</span>
         </a>
-        <div id="reportSuratCollapse" class="collapse {{ $isSuratReport ? 'show' : '' }}"
-            aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div id="reportCollapse" class="collapse {{ $isReportMenu ? 'show' : '' }}" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header text-primary">Reports:</h6>
+                <h6 class="collapse-header text-primary">Laporan Administrasi:</h6>
                 <a class="collapse-item {{ request()->routeIs('admin.proses.surat') ? 'active' : '' }}"
-                    href="{{ route('admin.proses.surat') }}"><i class="fas fa-spinner text-warning"></i> Surat
+                    href="{{ route('admin.proses.surat') }}"><i class="fas fa-fw fa-sync-alt text-warning"></i> Surat
                     Proses</a>
                 <a class="collapse-item {{ request()->routeIs('admin.terima.surat') ? 'active' : '' }}"
-                    href="{{ route('admin.terima.surat') }}"><i class="fas fa-envelope-open-text text-success"></i>
+                    href="{{ route('admin.terima.surat') }}"><i class="fas fa-fw fa-check-circle text-success"></i>
                     Surat Terima</a>
                 <a class="collapse-item {{ request()->routeIs('admin.tolak.surat') ? 'active' : '' }}"
-                    href="{{ route('admin.tolak.surat') }}"><i class="fas fa-times-circle text-danger"></i> Surat
-                    Tolak</a>
-            </div>
-        </div>
-    </li>
-    <hr class="sidebar-divider">
-
-    <!-- Report Konsultasi -->
-    <div class="sidebar-heading text-light">Report Konsultasi</div>
-    @php
-        $isKonsultasiReport =
-            request()->routeIs('konsultasi.inti.report') || request()->routeIs('konsultasi.pendukung.report');
-    @endphp
-    <li class="nav-item {{ $isKonsultasiReport ? 'active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#reportKonsultasiCollapse" role="button"
-            aria-expanded="{{ $isKonsultasiReport ? 'true' : 'false' }}" aria-controls="reportKonsultasiCollapse"
-            title="Report Konsultasi">
-            <i class="fas fa-fw fa-file-alt text-warning"></i>
-            <span>Report Konsultasi</span>
-        </a>
-        <div id="reportKonsultasiCollapse" class="collapse {{ $isKonsultasiReport ? 'show' : '' }}"
-            aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header text-primary">Reports:</h6>
+                    href="{{ route('admin.tolak.surat') }}"><i class="fas fa-fw fa-times-circle text-danger"></i>
+                    Surat Tolak</a>
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header text-primary">Laporan Konsultasi:</h6>
                 <a class="collapse-item {{ request()->routeIs('konsultasi.inti.report') ? 'active' : '' }}"
                     href="{{ route('konsultasi.inti.report') }}">
-                    <i class="fas fa-file-alt text-warning"></i> Pelatihan Inti
+                    <i class="fas fa-fw fa-star text-info"></i> Pelatihan Inti
                 </a>
                 <a class="collapse-item {{ request()->routeIs('konsultasi.pendukung.report') ? 'active' : '' }}"
                     href="{{ route('konsultasi.pendukung.report') }}">
-                    <i class="fas fa-file-alt text-success"></i> Pelatihan Pendukung
+                    <i class="fas fa-fw fa-puzzle-piece text-secondary"></i> Pelatihan Pendukung
                 </a>
             </div>
         </div>
@@ -161,10 +147,10 @@
     <hr class="sidebar-divider">
 
     <!-- Akun Pengguna -->
-    <div class="sidebar-heading text-light">Akun</div>
+    <div class="sidebar-heading text-light">Manajemen Akun</div>
     <li class="nav-item {{ request()->is('admin/auth') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.akun') }}" title="Akun Pengguna">
-            <i class="fas fa-fw fa-user text-light"></i>
+            <i class="fas fa-fw fa-users-cog text-white"></i>
             <span>Akun Pengguna</span>
         </a>
     </li>

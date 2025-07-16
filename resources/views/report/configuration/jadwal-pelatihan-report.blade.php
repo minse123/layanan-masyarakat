@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Video Pelatihan</title>
+    <title>Laporan Jadwal Pelatihan</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -50,59 +50,21 @@
         .text-center {
             text-align: center;
         }
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #ccc;
-        }
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        .info-table td {
-            padding: 5px 0;
-        }
         .table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        .table th, .table td {
-            border: 1px solid #dee2e6;
+        .table th,
+        .table td {
+            border: 1px solid #000;
             padding: 8px;
             text-align: left;
-            font-size: 12px;
         }
         .table th {
-            background-color: #007bff;
-            color: white;
-        }
-        .badge {
-            padding: 0.35em 0.65em;
-            border-radius: 0.25rem;
-            font-size: 75%;
-            font-weight: 700;
-            line-height: 1;
+            background-color: #f2f2f2;
+            font-weight: bold;
             text-align: center;
-            white-space: nowrap;
-            vertical-align: baseline;
-            display: inline-block;
-        }
-        .badge-primary {
-            color: #fff;
-            background-color: #007bff;
-        }
-        .badge-secondary {
-            color: #fff;
-            background-color: #6c757d;
-        }
-        .badge-success {
-            color: #fff;
-            background-color: #28a745;
         }
         .footer {
             text-align: center;
@@ -136,55 +98,43 @@
         </table>
         <hr>
 
-        <h2 class="text-center">Laporan Data Video Pelatihan</h2>
-        <p class="text-center">Dicetak pada: {{ \Carbon\Carbon::now()->format('d F Y H:i:s') }}</p>
+        <h2 class="text-center">Laporan Jadwal Pelatihan</h2>
+        <p class="text-center">Dicetak pada: {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y H:i:s') }}</p>
 
-        <table class="table table-bordered">
+        <table class="table">
             <thead>
                 <tr>
                     <th style="width: 5%;">No.</th>
-                    <th>Judul</th>
-                    <th>Jenis Pelatihan</th>
-                    <th>Deskripsi</th>
-                    <th>Link YouTube</th>
-                    <th>Ditampilkan</th>
+                    <th>Nama Pelatihan</th>
+                    <th>Tanggal Mulai</th>
+                    <th>Tanggal Selesai</th>
+                    <th>Lokasi</th>
+                    <th>Kategori</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($videos as $key => $video)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ $video->judul }}</td>
-                        <td>
-                            @if ($video->jenis_pelatihan == 'inti')
-                                <span class="badge badge-primary">Inti</span>
-                            @else
-                                <span class="badge badge-secondary">Pendukung</span>
-                            @endif
-                        </td>
-                        <td>{{ $video->deskripsi }}</td>
-                        <td>https://www.youtube.com/watch?v={{ $video->youtube_id }}</td>
-                        <td>
-                            @if ($video->ditampilkan)
-                                <span class="badge badge-success">Ya</span>
-                            @else
-                                <span class="badge badge-secondary">Tidak</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
+                @forelse($data as $key => $item)
+                <tr>
+                    <td class="text-center">{{ $key + 1 }}</td>
+                    <td>{{ $item->nama_pelatihan }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->tanggal_selesai)->translatedFormat('d F Y') }}</td>
+                    <td>{{ $item->lokasi }}</td>
+                    <td>{{ $item->kategori }}</td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" class="text-center" style="padding: 20px;">
+                        Tidak ada data jadwal pelatihan yang tersedia untuk ditampilkan.
+                    </td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
 
         <div class="footer">
-            Laporan ini dibuat secara otomatis oleh sistem.
+            Laporan ini dihasilkan oleh sistem dan merupakan dokumen resmi.
         </div>
     </div>
-
-    <script>
-        window.onload = function() {
-            window.print();
-        };
-    </script>
 </body>
 </html>

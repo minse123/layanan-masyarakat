@@ -11,6 +11,8 @@ use App\Models\MasterKonsultasi;
 use App\Models\Video;
 use App\Models\MasterSurat; // New: Import MasterSurat modelrt Log facade // Import MasterKonsultasi model
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Imports\SoalImport;
+use App\Exports\SoalExport;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -124,7 +126,6 @@ class AdminController extends Controller
 
         return redirect(route('admin.akun'))->with('status', 'Data Berhasil Dihapus');
     }
-
 
 
 }

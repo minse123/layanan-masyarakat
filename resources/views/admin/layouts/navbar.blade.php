@@ -2,7 +2,7 @@
 
     <!-- Sidebar Toggle (Topbar) -->
     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-        <i class="fa fa-bars"></i>
+        <i class="fas fa-bars text-primary"></i>
     </button>
 
     <!-- Topbar Search (Desktop) -->
@@ -29,7 +29,7 @@
         <li class="nav-item dropdown no-arrow d-sm-none">
             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-search fa-fw"></i>
+                <i class="fas fa-search fa-fw text-primary"></i>
             </a>
             <!-- Dropdown - Search -->
             <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
@@ -48,7 +48,7 @@
             </div>
         </li>
 
-        <!-- Nav Item - Alerts (aktifkan jika ingin notifikasi) -->
+        <!-- Nav Item - Alerts (Contoh Notifikasi) -->
         {{-- 
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
@@ -58,8 +58,8 @@
             </a>
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header text-warning">
-                    Notifikasi
+                <h6 class="dropdown-header bg-warning text-white border-0">
+                    Pusat Notifikasi
                 </h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="mr-3">
@@ -68,11 +68,22 @@
                         </div>
                     </div>
                     <div>
-                        <div class="small text-gray-500">Hari ini</div>
-                        <span class="font-weight-bold">Ada konsultasi baru masuk!</span>
+                        <div class="small text-gray-500">12 Juli 2025</div>
+                        <span class="font-weight-bold">Laporan bulanan siap diunduh!</span>
                     </div>
                 </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Lihat Semua Notifikasi</a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                    <div class="mr-3">
+                        <div class="icon-circle bg-success">
+                            <i class="fas fa-check-circle text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="small text-gray-500">10 Juli 2025</div>
+                        Pengajuan surat telah disetujui.
+                    </div>
+                </a>
+                <a class="dropdown-item text-center small text-gray-500" href="#">Tampilkan Semua Notifikasi</a>
             </div>
         </li>
         --}}
@@ -92,17 +103,17 @@
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                {{-- <a class="dropdown-item" href="#">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Profile
+                <a class="dropdown-item" href="#">
+                    <i class="fas fa-user-circle fa-sm fa-fw mr-2 text-primary"></i>
+                    Profil Saya
                 </a>
                 <a class="dropdown-item" href="#">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Settings
-                </a> --}}
+                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-success"></i>
+                    Pengaturan
+                </a>
                 <a class="dropdown-item" href="#">
-                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Activity Log
+                    <i class="fas fa-history fa-sm fa-fw mr-2 text-info"></i>
+                    Log Aktivitas
                 </a>
                 <div class="dropdown-divider"></div>
                 <form action="{{ route('logout') }}" method="POST" id="logout-form" style="display: none;">
@@ -110,8 +121,8 @@
                 </form>
                 <a class="dropdown-item" href="#"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-danger"></i>
+                    Keluar
                 </a>
             </div>
         </li>

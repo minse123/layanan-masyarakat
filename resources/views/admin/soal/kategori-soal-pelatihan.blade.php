@@ -16,6 +16,7 @@
                     <thead class="bg-primary text-white">
                         <tr>
                             <th width="40">No</th>
+                            <th>ID</th>
                             <th>Nama Kategori</th>
                             <th>Tipe</th>
                             <th width="120">Aksi</th>
@@ -25,6 +26,7 @@
                         @foreach ($kategori as $i => $row)
                             <tr>
                                 <td>{{ $i + 1 }}</td>
+                                <td>{{ $row->id }}</td>
                                 <td>{{ $row->nama_kategori }}</td>
                                 <td>
                                     <span class="badge badge-{{ $row->tipe == 'inti' ? 'primary' : 'secondary' }}">

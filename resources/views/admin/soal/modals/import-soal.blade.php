@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label for="file_excel">Pilih File Excel</label>
                         <input type="file" name="file_excel" id="file_excel" class="form-control-file" required accept=".xls,.xlsx">
-                        <small class="form-text text-muted">Pastikan format file Excel sesuai dengan contoh: <a href="{{ asset('excel/contoh_soal.xlsx') }}" target="_blank">contoh_soal.xlsx</a></small>
+                        <small class="form-text text-muted">Pastikan format file Excel sesuai dengan contoh: <a href="{{ route('admin.soal-pelatihan.export-example') }}" target="_blank">contoh_soal.xlsx</a></small>
                     </div>
                 </div>
                 <div class="modal-footer">

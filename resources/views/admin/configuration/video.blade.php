@@ -7,11 +7,28 @@
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahVideoModal">
                 <i class="fas fa-plus"></i> Tambah Video
             </button>
-            <a href="{{ route('admin.video.print_report') }}" class="btn btn-info" target="_blank">
+            <a href="{{ route('admin.video.print_report', ['jenis_pelatihan' => request('jenis_pelatihan')]) }}" class="btn btn-info" target="_blank">
                 <i class="fas fa-print"></i> Cetak Laporan
             </a>
         </div>
         <div class="card-body">
+            {{-- Filter --}}
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <form action="{{ route('admin.video.index') }}" method="GET">
+                        <div class="input-group">
+                            <select name="jenis_pelatihan" class="form-control">
+                                <option value="">Semua Jenis</option>
+                                <option value="inti" {{ request('jenis_pelatihan') == 'inti' ? 'selected' : '' }}>Inti</option>
+                                <option value="pendukung" {{ request('jenis_pelatihan') == 'pendukung' ? 'selected' : '' }}>Pendukung</option>
+                            </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             {{-- Tabel Data --}}
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\SoalController;
 use App\Models\SoalPelatihan;
 use App\Models\KategoriSoalPelatihan;
 use App\Models\JawabanPeserta;
+use App\Imports\SoalImport;
+use App\Exports\SoalExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 class SoalPelatihanController
@@ -86,5 +89,24 @@ class SoalPelatihanController
         return redirect()->back()->with('success', 'Soal berhasil dihapus.');
     }
 
+    public function importSoal(Request $request)
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xls,xlsx'
+        ]);
 
+        try {
+            Excel::import(new SoalImport, $request->file('file_excel'));
+            Alert::success('Berhasil', 'Soal berhasil diimpor!');
+        } catch (\Exception $e) {
+            Alert::error('Gagal', 'Terjadi kesalahan saat mengimpor soal: ' . $e->getMessage());
+        }
+
+        return redirect()->back();
+    }
+
+    public function exportSoalExample()
+    {
+        return Excel::download(new SoalExport, 'contoh_soal.xlsx');
+    }
 }

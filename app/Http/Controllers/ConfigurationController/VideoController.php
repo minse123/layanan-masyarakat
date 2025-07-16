@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ConfigurationController;
 
 
 use Illuminate\Http\Request;
@@ -8,15 +8,22 @@ use App\Models\Video;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
-class VideoController extends Controller
+class VideoController
 {
 
-    
+
     // Tampilkan daftar video & form tambah
-    public function index()
+    public function index(Request $request)
     {
-        $videos = Video::latest()->paginate(10);
-        return view('admin.video.video', compact('videos'));
+        $query = Video::latest();
+
+        if ($request->filled('jenis_pelatihan')) {
+            $query->where('jenis_pelatihan', $request->jenis_pelatihan);
+        }
+
+        $videos = $query->get();
+
+        return view('admin.configuration.video', compact('videos'));
     }
 
     // Simpan video baru
