@@ -97,6 +97,8 @@ class SesiController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'telepon' => 'required',
+            'alamat' => 'required',
+            'nik' => 'required',
             'password' => 'required|min:8',
         ]);
 
@@ -104,6 +106,8 @@ class SesiController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'telepon' => $request->telepon,
+            'alamat' => $request->alamat,
+            'nik' => $request->nik,
             'password' => bcrypt($request->password),
             'role' => 'masyarakat', // Default role
         ]);

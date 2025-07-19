@@ -30,3 +30,14 @@
     });
 
 })(window.jQuery);
+
+function togglePelatihan() {
+    var kategori = document.getElementById('jenis_kategori').value;
+    document.getElementById('pelatihan_inti_wrap').classList.add('d-none');
+    document.getElementById('pelatihan_pendukung_wrap').classList.add('d-none');
+    if (kategori === 'inti') {
+        document.getElementById('pelatihan_inti_wrap').classList.remove('d-none');
+    } else if (kategori === 'pendukung') {
+        document.getElementById('pelatihan_pendukung_wrap').classList.remove('d-none');
+    }
+}

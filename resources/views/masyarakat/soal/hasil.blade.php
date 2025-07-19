@@ -1,98 +1,149 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('masyarakat.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo-kementerian.png') }}">
-    <title>Layanan Masyarakat</title>
+@section('content')
+    <div style="background-color: black; height: 100px;"></div>
 
-    <!-- Include CSS -->
-    @include('masyarakat/layouts.css')
-    <style>
-        /* Style khusus untuk navbar di halaman ini saja */
-        body .navbar {
-            background-color: #000 !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+    <div class="container-fluid" style="padding-top: 100px;">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Hasil Latihan Soal</h1>
+            <a href="{{ route('masyarakat.dashboard') }}#section_2"
+                class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+                <i class="fas fa-arrow-left fa-sm text-white-50"></i> Kembali
+            </a>
+        </div>
 
-        body .navbar .nav-link,
-        body .navbar .navbar-brand {
-            color: #fff !important;
-        }
-    </style>
-
-</head>
-
-<body>
-
-    @include('masyarakat/layouts.navbar')
-
-    <main>
-        <div class="container">
-            <h2 class="mb-4">Hasil Jawaban Kamu</h2>
-
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
+        <!-- Content Row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Filter Hasil Latihan</h6>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ route('masyarakat.soal.hasil') }}" method="GET"
+                            class="row g-3 align-items-center">
+                            <div class="col-md-4">
+                                <label for="jenis_pelatihan" class="form-label mb-0">Filter Jenis Pelatihan:</label>
+                            </div>
+                            <div class="col-md-6">
+                                <select class="form-select" id="jenis_pelatihan" name="jenis_pelatihan"
+                                    onchange="this.form.submit()">
+                                    <option value="">Semua Jenis Pelatihan</option>
+                                    @foreach ($jenisPelatihan as $jenis)
+                                        <option value="{{ $jenis->id }}"
+                                            {{ request('jenis_pelatihan') == $jenis->id ? 'selected' : '' }}>
+                                            {{ $jenis->nama_kategori }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary w-100">Filter</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            @endif
-
-            <table class="table table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>No</th>
-                        <th>Pertanyaan</th>
-                        <th>Jawaban Kamu</th>
-                        <th>Kunci Jawaban</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($jawabanPeserta as $index => $jawaban)
-                        @php
-                            $soal = $jawaban->soal;
-                            $pilihan = [
-                                'a' => $soal->pilihan_a ?? '-',
-                                'b' => $soal->pilihan_b ?? '-',
-                                'c' => $soal->pilihan_c ?? '-',
-                                'd' => $soal->pilihan_d ?? '-',
-                            ];
-                
-                            $jawabanKamu = strtolower(trim($jawaban->jawaban_peserta));
-                            $jawabanBenar = strtolower(trim($soal->jawaban_benar ?? ''));
-                        @endphp
-                
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $soal->pertanyaan ?? '-' }}</td>
-                            <td>
-                                <strong>({{ strtoupper($jawabanKamu) }})</strong>
-                                {{ $pilihan[$jawabanKamu] ?? 'Tidak diketahui' }}
-                            </td>
-                            <td>
-                                <strong>({{ strtoupper($jawabanBenar) }})</strong>
-                                {{ $pilihan[$jawabanBenar] ?? '-' }}
-                            </td>
-                            <td>
-                                @if ($jawaban->benar == 1)
-                                    <span class="badge bg-success">Benar</span>
-                                @else
-                                    <span class="badge bg-danger">Salah</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">Belum ada jawaban</td>
-                        </tr>
-                    @endforelse
-                </tbody>                
-            </table>
-
-            <div class="mt-4">
-                <h4>Total Skor: <strong>{{ $skor }}</strong> dari {{ $totalSoal }} soal</h4>
             </div>
         </div>
-    </main>
-</body>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Detail Hasil Latihan:
+                            {{ $kategori->nama_kategori ?? 'Semua Kategori' }}</h6>
+                    </div>
+                    <div class="card-body">
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">No</th>
+                                        <th width="35%">Pertanyaan</th>
+                                        <th width="20%">Jawaban Kamu</th>
+                                        <th width="20%">Jawaban Benar</th>
+                                        <th width="10%">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $counter = 1; @endphp
+                                    @foreach ($jawabanPeserta as $jawaban)
+                                        @php
+                                            $soal = $jawaban->soal;
+                                            $options = [
+                                                'a' => $soal->pilihan_a ?? 'Tidak ada pilihan',
+                                                'b' => $soal->pilihan_b ?? 'Tidak ada pilihan',
+                                                'c' => $soal->pilihan_c ?? 'Tidak ada pilihan',
+                                                'd' => $soal->pilihan_d ?? 'Tidak ada pilihan',
+                                            ];
+
+                                            $userAnswer = strtolower(trim($jawaban->jawaban_peserta));
+                                            $correctAnswer = strtolower(trim($soal->jawaban_benar));
+                                        @endphp
+
+                                        <tr>
+                                            <td>{{ $counter++ }}</td>
+                                            <td>{{ $soal->pertanyaan }}</td>
+                                            <td>
+                                                @if (array_key_exists($userAnswer, $options))
+                                                    <strong>({{ strtoupper($userAnswer) }})</strong>
+                                                    {{ $options[$userAnswer] }}
+                                                @else
+                                                    <span class="text-danger">Jawaban tidak valid</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if (array_key_exists($correctAnswer, $options))
+                                                    <strong>({{ strtoupper($correctAnswer) }})</strong>
+                                                    {{ $options[$correctAnswer] }}
+                                                @else
+                                                    <span class="text-danger">Kunci jawaban tidak valid</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($jawaban->is_correct)
+                                                    <span class="badge bg-success">Benar</span>
+                                                @else
+                                                    <span class="badge bg-danger">Salah</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="mt-4 text-right">
+                            <h4>Total Skor: <strong class="text-primary">{{ $skor }}</strong> dari
+                                {{ $totalSoal }} soal</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+{{-- @push('scripts')
+    <!-- Page level plugins -->
+    <script src="{{ asset('backend/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{{ asset('backend/js/demo/datatables-demo.js') }}"></script>
+@endpush
+
+@push('styles')
+    <link href="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+@endpush --}}

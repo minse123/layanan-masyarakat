@@ -17,6 +17,7 @@ use App\Models\JawabanPeserta;
 use App\Models\MasterSurat;
 use App\Models\SuratProses;
 use App\Models\HasilPelatihan;
+use App\Models\JadwalPelatihan;
 
 class MasyarakatController extends Controller
 {
@@ -44,17 +45,22 @@ class MasyarakatController extends Controller
             ->take(10)
             ->get();
 
-            
+        // Ambil 5 jadwal pelatihan terbaru
+        $jadwalPelatihan = JadwalPelatihan::latest()->take(4)->get();
 
         // Ambil kategori soal pelatihan untuk modal
         $kategoriList = KategoriSoalPelatihan::orderBy('nama_kategori')->get();
 
-        return view('masyarakat.dashboard', compact('videos', 'konsultasi', 'kategoriList'));
+        return view('masyarakat.dashboard', compact('videos', 'konsultasi', 'kategoriList', 'jadwalPelatihan'));
     }
 
 
     public function semuaVideo(Request $request)
     {
+        $konsultasi = MasterKonsultasi::where('id_user', $user->id ?? 0)
+            ->latest()
+            ->take(10)
+            ->get();
         $query = Video::where('ditampilkan', 1);
 
         if ($request->jenis_pelatihan) {
@@ -63,7 +69,7 @@ class MasyarakatController extends Controller
 
         $videos = $query->orderBy('created_at', 'desc')->paginate(12);
 
-        return view('masyarakat.videopelatihan', compact('videos'));
+        return view('masyarakat.videopelatihan', compact('videos', 'konsultasi'));
     }
 
     public function updateProfile(Request $request)
@@ -170,8 +176,18 @@ class MasyarakatController extends Controller
             ->take(10)
             ->get();
 
-
         $kategori = KategoriSoalPelatihan::findOrFail($kategoriId);
+
+        // Check if the user has already answered questions for this category
+        $hasAnswered = JawabanPeserta::where('id_user', $user->id)
+            ->whereHas('soal', function ($query) use ($kategoriId) {
+                $query->where('id_kategori_soal_pelatihan', $kategoriId);
+            })
+            ->exists();
+
+        if ($hasAnswered) {
+            return redirect()->route('masyarakat.soal.hasil', ['jenis_pelatihan' => $kategoriId]);
+        }
 
         $soalList = SoalPelatihan::where('id_kategori_soal_pelatihan', $kategoriId)->get();
         return view('masyarakat.soal.latihan', compact('kategori', 'soalList', 'konsultasi'));
@@ -205,32 +221,80 @@ class MasyarakatController extends Controller
         return redirect()->route('masyarakat.soal.hasil')->with('success', 'Jawaban berhasil disimpan!');
     }
 
-    public function hasil()
+    public function hasil(Request $request)
     {
+        $user = Auth::user();
+
+        $userId = Auth::id();
+
         $konsultasi = MasterKonsultasi::where('id_user', $user->id ?? 0)
             ->latest()
             ->take(10)
             ->get();
 
-        $userId = Auth::id();
-        $jawabanPeserta = JawabanPeserta::with('soal')
-            ->where('id_user', $userId)
-            ->get();
+        $query = JawabanPeserta::with(['soal', 'soal.kategori'])
+            ->where('id_user', $userId);
 
-        // Hitung skor (misalnya: jawaban benar = +1)
-        $skor = 0;
-        foreach ($jawabanPeserta as $item) {
-            if (strtolower(trim($item->jawaban_peserta)) === strtolower(trim($item->soal->jawaban_benar))) {
-                $skor++;
-            }
+        // Filter by jenis_pelatihan
+        if ($request->has('jenis_pelatihan') && $request->jenis_pelatihan != '') {
+            $query->whereHas('soal', function ($q) use ($request) {
+                $q->where('id_kategori_soal_pelatihan', $request->jenis_pelatihan);
+            });
+        }
+
+        $jawabanPeserta = $query->get()
+            ->map(function ($item) {
+                // Tambahkan field is_correct yang jelas
+                $item->is_correct = $item->benar == 1;
+                return $item;
+            });
+
+        // Hitung skor berdasarkan field benar
+        $skor = $jawabanPeserta->sum('benar');
+        $totalSoal = $jawabanPeserta->count();
+
+        $jenisPelatihan = KategoriSoalPelatihan::orderBy('nama_kategori')->get();
+
+        $kategori = null;
+        if ($request->has('jenis_pelatihan') && $request->jenis_pelatihan != '') {
+            $kategori = KategoriSoalPelatihan::find($request->jenis_pelatihan);
         }
 
         return view('masyarakat.soal.hasil', [
+            'konsultasi' => $konsultasi,
             'jawabanPeserta' => $jawabanPeserta,
             'skor' => $skor,
-            'totalSoal' => SoalPelatihan::count(),
-            'konsultasi' => $konsultasi,
+            'totalSoal' => $totalSoal,
+            'jenisPelatihan' => $jenisPelatihan,
+            'kategori' => $kategori
         ]);
+    }
+
+
+    public function jadwalPelatihan(Request $request)
+    {
+        $user = Auth::user();
+        $konsultasi = MasterKonsultasi::where('id_user', $user->id ?? 0)
+            ->latest()
+            ->take(10)
+            ->get();
+
+        $query = JadwalPelatihan::latest();
+
+        if ($request->has('search') && $request->search != '') {
+            $query->where('nama_pelatihan', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('jenis_pelatihan') && $request->jenis_pelatihan != '') {
+            if ($request->jenis_pelatihan == 'pelatihan_inti') {
+                $query->whereNotNull('pelatihan_inti');
+            } elseif ($request->jenis_pelatihan == 'pelatihan_pendukung') {
+                $query->whereNotNull('pelatihan_pendukung');
+            }
+        }
+
+        $data = $query->paginate(10);
+        return view('masyarakat.jadwal-pelatihan', compact('data', 'konsultasi'));
     }
 
 }

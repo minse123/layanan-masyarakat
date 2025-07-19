@@ -6,21 +6,22 @@ use App\Models\JadwalPelatihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-use Barryvdh\DomPDF\Facade\Pdf;
 use RealRashid\SweetAlert\Facades\Alert;
+
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class JadwalPelatihanController
 {
     public function index()
     {
-        \Log::info('Testing logging functionality.');
         $data = JadwalPelatihan::all();
         return view('admin.configuration.jadwal-pelatihan', compact('data'));
     }
 
     public function store(Request $request)
     {
+        // Log::info('JadwalPelatihanController@store: Received request', ['request' => $request->all()]);
+
         $validator = Validator::make($request->all(), [
             'nama_pelatihan' => 'required|string|max:255',
             'tanggal_mulai' => 'required|date',
@@ -30,10 +31,11 @@ class JadwalPelatihanController
             'lokasi' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'jenis_pelatihan' => 'required|string',
-            'file_path' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx|max:2048',
+            'file_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
+            // Log::error('JadwalPelatihanController@store: Validation failed', ['errors' => $validator->errors()]);
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -57,13 +59,18 @@ class JadwalPelatihanController
         }
 
         if ($request->hasFile('file_path')) {
-            $file = $request->file('file_path');
-            $filename = 'pelatihan/' . time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public', $filename);
-            $data['file_path'] = $filename;
+            $file = $request->file('file_path')->store('pelatihan', 'public');
+            $data['file_path'] = $file;
+            // Log::info('JadwalPelatihanController@store: File uploaded', ['filename' => $file]);
+        } else {
+            $data['file_path'] = null;
         }
 
+        // Log::info('JadwalPelatihanController@store: Creating new JadwalPelatihan', ['data' => $data]);
+
         JadwalPelatihan::create($data);
+
+        // Log::info('JadwalPelatihanController@store: JadwalPelatihan created successfully');
 
         Alert::success('Selamat', 'Jadwal Pelatihan berhasil ditambahkan.');
         return redirect()->route('admin.jadwal-pelatihan.index');
@@ -71,8 +78,7 @@ class JadwalPelatihanController
 
     public function update(Request $request, $id)
     {
-        // Log the start of the update process
-        \Log::info("Starting update process for JadwalPelatihan with ID: {$id}");
+        
 
         $validator = Validator::make($request->all(), [
             'nama_pelatihan' => 'required|string|max:255',
@@ -87,7 +93,7 @@ class JadwalPelatihanController
         ]);
 
         if ($validator->fails()) {
-            \Log::warning("Validation failed for JadwalPelatihan with ID: {$id}", $validator->errors()->toArray());
+            
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -112,14 +118,9 @@ class JadwalPelatihanController
         }
 
         if ($request->hasFile('file_path')) {
-            // Log file upload attempt
-            \Log::info("File upload detected for JadwalPelatihan with ID: {$id}");
+            
 
-            // Hapus file lama jika ada
-            if ($jadwal->file_path) {
-                Storage::delete($jadwal->file_path);
-                \Log::info("Old file deleted for JadwalPelatihan with ID: {$id}");
-            }
+            
 
             $file = $request->file('file_path')->store('pelatihan', 'public');
             $jadwal->file_path = $file;
@@ -158,16 +159,16 @@ class JadwalPelatihanController
 
     public function showFile($filename)
     {
-        // Log the attempt to show the file
-        \Log::info("Attempting to show file: {$filename}");
+        // Ensure the filename has the 'pelatihan/' prefix if it's missing
+        if (strpos($filename, 'pelatihan/') !== 0) {
+            $filename = 'pelatihan/' . $filename;
+        }
 
         if (!Storage::disk('public')->exists($filename)) {
-            \Log::error("File not found: {$filename}");
             abort(404);
         }
 
         $path = Storage::disk('public')->path($filename);
-        \Log::info("File found, serving file: {$path}");
 
         return response()->file($path);
     }

@@ -17,4 +17,5 @@ Route::get('/masyarakat/soal/{kategori}', [MasyarakatController::class, 'latihan
 Route::post('/masyarakat/soal/jawaban', [MasyarakatController::class, 'storeSoal'])->name('masyarakat.soal.jawab.submit');
 Route::get('/soal/hasil', [MasyarakatController::class, 'hasil'])->name('masyarakat.soal.hasil');
 
+Route::get('/jadwal-pelatihan', [MasyarakatController::class, 'jadwalPelatihan'])->name('jadwal-pelatihan');
 

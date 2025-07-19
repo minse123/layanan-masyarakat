@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [LandingController::class, 'landing']);
-
 // guest akses
 Route::post('/surat', [GuestController::class, 'storeSurat'])->name('simpan-surat');
 Route::post('/konsultasi', [GuestController::class, 'storeKonsultasi'])->name('simpan-konsultasi');

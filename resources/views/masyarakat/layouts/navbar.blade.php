@@ -17,19 +17,19 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-lg-auto me-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_1">Beranda</a>
+                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_1">Beranda</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_2">Layanan</a>
+                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_2">Layanan</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_3">Tentang Kami</a>
+                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_3">Tentang Kami</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_4">Kontak</a>
+                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_4">Kontak</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_video">Video Pelatihan</a>
+                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_video">Video Pelatihan</a>
                 </li>
 
                 <div class="d-none d-lg-flex align-items-center ms-lg-3">
