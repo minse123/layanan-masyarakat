@@ -106,11 +106,14 @@
     <div class="sidebar-heading text-light">Laporan</div>
     @php
         $isReportMenu =
+            request()->routeIs('report.video') ||
+            request()->routeIs('laporan.jadwal-pelatihan') ||
             request()->routeIs('admin.proses.surat') ||
             request()->routeIs('admin.terima.surat') ||
             request()->routeIs('admin.tolak.surat') ||
             request()->routeIs('konsultasi.inti.report') ||
-            request()->routeIs('konsultasi.pendukung.report');
+            request()->routeIs('konsultasi.pendukung.report') ||
+            request()->routeIs('report-soal-pelatihan');
     @endphp
     <li class="nav-item {{ $isReportMenu ? 'active' : '' }}">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#reportCollapse"
@@ -121,6 +124,14 @@
         <div id="reportCollapse" class="collapse {{ $isReportMenu ? 'show' : '' }}" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header text-primary">Laporan Konfigurasi:</h6>
+                <a class="collapse-item {{ request()->routeIs('report.video') ? 'active' : '' }}"
+                    href="{{ route('report.video') }}"><i class="fas fa-fw fa-video text-primary"></i> Video
+                    Edukasi</a>
+                <a class="collapse-item {{ request()->routeIs('laporan.jadwal-pelatihan') ? 'active' : '' }}"
+                    href="{{ route('laporan.jadwal-pelatihan') }}"><i
+                        class="fas fa-fw fa-calendar-alt text-primary"></i> Jadwal Pelatihan</a>
+                <div class="collapse-divider"></div>
                 <h6 class="collapse-header text-primary">Laporan Administrasi:</h6>
                 <a class="collapse-item {{ request()->routeIs('admin.proses.surat') ? 'active' : '' }}"
                     href="{{ route('admin.proses.surat') }}"><i class="fas fa-fw fa-sync-alt text-warning"></i> Surat
@@ -141,6 +152,11 @@
                     href="{{ route('konsultasi.pendukung.report') }}">
                     <i class="fas fa-fw fa-puzzle-piece text-secondary"></i> Pelatihan Pendukung
                 </a>
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header text-primary">Laporan Ujian:</h6>
+                <a class="collapse-item {{ request()->routeIs('report-soal-pelatihan') ? 'active' : '' }}"
+                    href="{{ route('report-soal-pelatihan') }}">
+                    <i class="fas fa-fw fa-question-circle text-primary"></i> Soal Pelatihan
             </div>
         </div>
     </li>

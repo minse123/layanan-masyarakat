@@ -31,8 +31,7 @@ Route::post('/surat/store', [SuratController::class, 'store'])->name('admin.sura
 Route::post('/surat/terima/{id}', [SuratController::class, 'terimaSurat'])->name('admin.surat.terima');
 Route::post('/surat/tolak/{id}', [SuratController::class, 'tolakSurat'])->name('admin.surat.tolak');
 route::post('/surat/hapus/{id}', [SuratController::class, 'delete'])->name('admin.surat.hapus');
-Route::get('/surat/filter', [SuratController::class, 'filterSurat'])->name('admin.surat.filter');
-Route::get('/surat/resetfilter', [SuratController::class, 'resetfilterSurat'])->name('admin.surat.resetfilter');
+
 
 Route::get('/laporan/surat/proses', [SuratController::class, 'ProsesIndex'])->name('admin.proses.surat');
 Route::get('/laporan/surat/proses/filter', [SuratController::class, 'filterproses'])->name('admin.proses.surat.filter');

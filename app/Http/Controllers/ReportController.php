@@ -131,6 +131,17 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('report.soal.report-soal-pdf', compact('kategoriWithSoal'));
         return $pdf->stream('laporan-soal-pelatihan.pdf');
     }
+    public function reportSoal(Request $request)
+    {
+        $kategoriList = KategoriSoalPelatihan::orderBy('nama_kategori')->get();
+        $soalQuery = SoalPelatihan::with('kategori');
+        if ($request->filled('kategori')) {
+            $soalQuery->where('id_kategori_soal_pelatihan', $request->kategori);
+        }
+        $soalList = $soalQuery->orderBy('id', 'desc')->get();
+
+        return view('report.soal.report-soal', compact('kategoriList', 'soalList'));
+    }
 
     public function cetakHasilPdf(Request $request)
     {
@@ -249,6 +260,19 @@ class ReportController extends Controller
         return $pdf->stream('laporan-statistik-tersulit.pdf');
     }
 
+    public function reportVideo(Request $request)
+    {
+        $query = Video::latest();
+
+        if ($request->filled('jenis_pelatihan')) {
+            $query->where('jenis_pelatihan', $request->jenis_pelatihan);
+        }
+
+        $videos = $query->get();
+
+        return view('report.configuration.report-video', compact('videos'));
+    }
+
     public function printVideo(Request $request)
     {
         $query = Video::query();
@@ -281,8 +305,29 @@ class ReportController extends Controller
         }
 
         $data = $query->get();
-        $pdf = PDF::loadView('report.configuration.jadwal-pelatihan-report', compact('data'));
+        $pdf = PDF::loadView('report.configuration.report-jadwal-pelatihan-pdf', compact('data'));
         return $pdf->stream('laporan-jadwal-pelatihan.pdf');
+    }
+    public function reportJadwalPelatihan(Request $request)
+    {
+        $query = JadwalPelatihan::query();
+
+        if ($request->has('jenis_pelatihan') && $request->jenis_pelatihan != '') {
+            $jenis_pelatihan = $request->jenis_pelatihan;
+            $parts = explode('_', $jenis_pelatihan, 2);
+            if (count($parts) == 2) {
+                $type = $parts[0];
+                $value = $parts[1];
+                if ($type === 'inti') {
+                    $query->where('pelatihan_inti', $value);
+                } elseif ($type === 'pendukung') {
+                    $query->where('pelatihan_pendukung', $value);
+                }
+            }
+        }
+
+        $data = $query->get();
+        return view('report.configuration.report-jadwal-pelatihan', compact('data'));
     }
 
     

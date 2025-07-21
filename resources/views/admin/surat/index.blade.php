@@ -16,21 +16,21 @@
                     <h6 class="m-0 font-weight-bold text-primary">Filter Data Surat</h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.surat.filter') }}" method="GET">
+                    <form action="{{ route('admin.master.surat') }}" method="GET">
                         <div class="form-row align-items-end">
                             <div class="form-group col-md-3">
                                 <label for="filter">Pilih Periode:</label>
                                 <select name="filter" id="filter" class="form-control" onchange="updateFilterInput()">
                                     <option value="all_time"
-                                        {{ request('filter', 'all_time') == 'all_time' ? 'selected' : '' }}>Semua Waktu
+                                        {{ request()->input('filter', 'all_time') == 'all_time' ? 'selected' : '' }}>Semua Waktu
                                     </option>
-                                    <option value="harian" {{ request('filter') == 'harian' ? 'selected' : '' }}>
+                                    <option value="harian" {{ request()->input('filter') == 'harian' ? 'selected' : '' }}>
                                         Harian</option>
-                                    <option value="mingguan" {{ request('filter') == 'mingguan' ? 'selected' : '' }}>
+                                    <option value="mingguan" {{ request()->input('filter') == 'mingguan' ? 'selected' : '' }}>
                                         Mingguan</option>
-                                    <option value="bulanan" {{ request('filter') == 'bulanan' ? 'selected' : '' }}>Bulanan
+                                    <option value="bulanan" {{ request()->input('filter') == 'bulanan' ? 'selected' : '' }}>Bulanan
                                     </option>
-                                    <option value="tahunan" {{ request('filter') == 'tahunan' ? 'selected' : '' }}>Tahunan
+                                    <option value="tahunan" {{ request()->input('filter') == 'tahunan' ? 'selected' : '' }}>Tahunan
                                     </option>
                                 </select>
                             </div>
@@ -38,13 +38,13 @@
                             <div class="form-group col-md-3">
                                 <label for="status_filter">Status Surat:</label>
                                 <select name="status_filter" id="status_filter" class="form-control">
-                                    <option value="all" {{ request('status_filter', 'all') == 'all' ? 'selected' : '' }}>
+                                    <option value="all" {{ request()->input('status_filter', 'all') == 'all' ? 'selected' : '' }}>
                                         Semua</option>
-                                    <option value="Proses" {{ request('status_filter') == 'Proses' ? 'selected' : '' }}>
+                                    <option value="Proses" {{ request()->input('status_filter') == 'Proses' ? 'selected' : '' }}>
                                         Proses</option>
-                                    <option value="Terima" {{ request('status_filter') == 'Terima' ? 'selected' : '' }}>
+                                    <option value="Terima" {{ request()->input('status_filter') == 'Terima' ? 'selected' : '' }}>
                                         Terima</option>
-                                    <option value="Tolak" {{ request('status_filter') == 'Tolak' ? 'selected' : '' }}>Tolak
+                                    <option value="Tolak" {{ request()->input('status_filter') == 'Tolak' ? 'selected' : '' }}>Tolak
                                     </option>
                                 </select>
                             </div>
@@ -52,32 +52,32 @@
                             <div class="form-group col-md-4" id="filter-harian">
                                 <label for="tanggal">Tanggal:</label>
                                 <input type="date" name="tanggal" id="tanggal" class="form-control"
-                                    value="{{ request('tanggal', date('Y-m-d')) }}">
+                                    value="{{ request()->input('tanggal', date('Y-m-d')) }}">
                             </div>
 
                             <div class="form-group col-md-4" id="filter-mingguan" style="display: none;">
                                 <label for="minggu">Minggu:</label>
                                 <input type="week" name="minggu" id="minggu" class="form-control"
-                                    value="{{ request('minggu') }}">
+                                    value="{{ request()->input('minggu') }}">
                             </div>
 
                             <div class="form-group col-md-4" id="filter-bulanan" style="display: none;">
                                 <label for="bulan">Bulan:</label>
                                 <input type="month" name="bulan" id="bulan" class="form-control"
-                                    value="{{ request('bulan') }}">
+                                    value="{{ request()->input('bulan') }}">
                             </div>
 
                             <div class="form-group col-md-4" id="filter-tahunan" style="display: none;">
                                 <label for="tahun">Tahun:</label>
                                 <input type="number" name="tahun" id="tahun" class="form-control" min="2000"
-                                    max="2099" step="1" value="{{ request('tahun', now()->year) }}">
+                                    max="2099" step="1" value="{{ request()->input('tahun', now()->year) }}">
                             </div>
 
                             <div class="form-group col-md-5">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-filter"></i> Filter
                                 </button>
-                                <a href="{{ route('admin.surat.resetfilter') }}" class="btn btn-outline-secondary ml-2">
+                                <a href="{{ route('admin.master.surat') }}" class="btn btn-outline-secondary ml-2">
                                     <i class="fas fa-sync"></i> Reset
                                 </a>
                             </div>

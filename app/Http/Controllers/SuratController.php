@@ -19,13 +19,13 @@ class SuratController extends Controller
     {
         $query = MasterSurat::query();
 
-        // Get filter values from session, with defaults
-        $filter = session('filter', 'all_time');
-        $tanggal = session('tanggal');
-        $minggu = session('minggu');
-        $bulan = session('bulan');
-        $tahun = session('tahun');
-        $statusFilter = session('status_filter', 'all');
+        // Get filter values directly from request, with defaults
+        $filter = $request->input('filter', 'all_time');
+        $tanggal = $request->input('tanggal');
+        $minggu = $request->input('minggu');
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun');
+        $statusFilter = $request->input('status_filter', 'all');
 
         Log::info('Suratindex Filters:', [
             'filter' => $filter,
@@ -260,31 +260,7 @@ class SuratController extends Controller
         alert()->success('Berhasil', 'Data surat berhasil dihapus.');
         return redirect()->route('admin.master.surat')->with('success', 'Data surat berhasil dihapus.');
     }
-    public function filterSurat(Request $request)
-    {
-        $filter = $request->filter;
-        $statusFilter = $request->status_filter;
-
-        // Hapus semua session filter sebelumnya
-        session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun', 'status_filter']);
-
-        // Set session for filter and statusFilter
-        session([
-            'filter' => $filter,
-            'tanggal' => $request->tanggal,
-            'minggu' => $request->minggu,
-            'bulan' => $request->bulan,
-            'tahun' => $request->tahun,
-            'status_filter' => $statusFilter,
-        ]);
-
-        return redirect()->route('admin.master.surat');
-    }
-    public function resetfiltersurat(Request $request)
-    {
-        $request->session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun', 'status_filter']); // Hapus session filter
-        return redirect()->route('admin.master.surat'); // Redirect ke halaman utama laporan
-    }
+    
 
 
 

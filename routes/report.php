@@ -16,6 +16,8 @@ Route::middleware(['auth', 'role:admin,psm'])->group(function () {
     Route::get('/konsultasi/pendukung/cetak-pdf', [ReportController::class, 'cetakpendukung'])->name('report.konsultasi.pendukung.cetak-pdf');
 
     Route::get('/soal-pelatihan/cetak-pdf', [ReportController::class, 'cetakSoalPdf'])->name('soal-pelatihan.cetak-pdf');
+    Route::get('/report-soal-pelatihan', [ReportController::class, 'reportSoal'])->name('report-soal-pelatihan');
+    
     Route::get('/hasil-pelatihan/cetak-pdf', [ReportController::class, 'cetakHasilPdf'])->name('hasil-pelatihan.cetak-pdf');
     Route::get('/rekap-nilai/cetak-pdf', [ReportController::class, 'cetakRekapNilaiPdf'])->name('rekap-nilai.cetak-pdf');
     Route::get('/statistik-tersulit/cetak-pdf', [ReportController::class, 'cetakStatistikTersulitPdf'])->name('statistik-tersulit.cetak-pdf');
@@ -32,8 +34,11 @@ Route::middleware(['auth', 'role:admin,kasubag'])->group(function () {
 
 Route::middleware(['auth', 'role:admin,operator'])->group(function () {
     Route::get('/video/print-report', [ReportController::class, 'printVideo'])->name('admin.video.print_report');
+    Route::get('/report-video', [ReportController::class, 'reportVideo'])->name('report.video');
+
     Route::get('/jadwal-pelatihan/print-report', [ReportController::class, 'printReport'])->name('jadwal-pelatihan.print-report');
     Route::get('report/jadwal-pelatihan', [ReportController::class, 'jadwalPelatihan'])->name('report.jadwal-pelatihan');
+    Route::get('jadwal-pelatihan', [ReportController::class, 'reportJadwalPelatihan'])->name('laporan.jadwal-pelatihan');
 
 });
 
