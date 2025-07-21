@@ -66,6 +66,20 @@
             font-weight: bold;
             text-align: center;
         }
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #fff;
+        }
+        .badge-primary {
+            background-color: #007bff;
+        }
+        .badge-info {
+            background-color: #17a2b8;
+        }
         .footer {
             text-align: center;
             margin-top: 40px;
@@ -109,25 +123,31 @@
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Selesai</th>
                     <th>Lokasi</th>
-                    <th>Kategori</th>
+                    <th>Jenis Pelatihan</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($data as $key => $item)
-                <tr>
-                    <td class="text-center">{{ $key + 1 }}</td>
-                    <td>{{ $item->nama_pelatihan }}</td>
-                    <td>{{ \Carbon\Carbon::parse($item->tanggal_mulai)->translatedFormat('d F Y') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($item->tanggal_selesai)->translatedFormat('d F Y') }}</td>
-                    <td>{{ $item->lokasi }}</td>
-                    <td>{{ $item->kategori }}</td>
-                </tr>
+                @forelse ($data as $key => $item)
+                    <tr>
+                        <td style="text-align:center;">{{ $key + 1 }}</td>
+                        <td>{{ $item->nama_pelatihan }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d M Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}</td>
+                        <td>{{ $item->lokasi }}</td>
+                        <td>
+                            @if ($item->pelatihan_inti)
+                                <span>{{ str_replace('_', ' ', ucwords($item->pelatihan_inti)) }}</span>
+                            @elseif ($item->pelatihan_pendukung)
+                                <span>{{ str_replace('_', ' ', ucwords($item->pelatihan_pendukung)) }}</span>
+                            @endif
+                        </td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="6" class="text-center" style="padding: 20px;">
-                        Tidak ada data jadwal pelatihan yang tersedia untuk ditampilkan.
-                    </td>
-                </tr>
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding: 20px;">
+                            Tidak ada data jadwal pelatihan yang tersedia untuk ditampilkan.
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>

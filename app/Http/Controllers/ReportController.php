@@ -262,10 +262,28 @@ class ReportController extends Controller
         return $pdf->stream('laporan-video.pdf');
     }
 
-    public function printReport()
+    public function jadwalPelatihan(Request $request)
     {
-        $data = JadwalPelatihan::all();
+        $query = JadwalPelatihan::query();
+
+        if ($request->has('jenis_pelatihan') && $request->jenis_pelatihan != '') {
+            $jenis_pelatihan = $request->jenis_pelatihan;
+            $parts = explode('_', $jenis_pelatihan, 2);
+            if (count($parts) == 2) {
+                $type = $parts[0];
+                $value = $parts[1];
+                if ($type === 'inti') {
+                    $query->where('pelatihan_inti', $value);
+                } elseif ($type === 'pendukung') {
+                    $query->where('pelatihan_pendukung', $value);
+                }
+            }
+        }
+
+        $data = $query->get();
         $pdf = PDF::loadView('report.configuration.jadwal-pelatihan-report', compact('data'));
         return $pdf->stream('laporan-jadwal-pelatihan.pdf');
     }
+
+    
 }

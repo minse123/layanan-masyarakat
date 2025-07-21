@@ -33,6 +33,8 @@ Route::middleware(['auth', 'role:admin,kasubag'])->group(function () {
 Route::middleware(['auth', 'role:admin,operator'])->group(function () {
     Route::get('/video/print-report', [ReportController::class, 'printVideo'])->name('admin.video.print_report');
     Route::get('/jadwal-pelatihan/print-report', [ReportController::class, 'printReport'])->name('jadwal-pelatihan.print-report');
+    Route::get('report/jadwal-pelatihan', [ReportController::class, 'jadwalPelatihan'])->name('report.jadwal-pelatihan');
+
 });
 
 

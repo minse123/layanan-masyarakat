@@ -10,6 +10,7 @@ use App\Http\Controllers\SoalController\RekapNilaiController;
 use App\Http\Controllers\SoalController\StatistikSoalController;
 use App\Http\Controllers\ConfigurationController\JadwalPelatihanController;
 use App\Http\Controllers\ConfigurationController\VideoController;
+use App\Http\Controllers\ReportController;
 
 use App\Http\Controllers\CetakPDFController;
 
@@ -87,10 +88,11 @@ Route::get('statistik-soal', [StatistikSoalController::class, 'index'])
 
 Route::resource('jadwal-pelatihan', JadwalPelatihanController::class)->names('admin.jadwal-pelatihan')->except(['create', 'show', 'edit']);
 Route::delete('jadwal-pelatihan/{id}', [JadwalPelatihanController::class, 'destroy'])->name('admin.jadwal-pelatihan.destroy');
+Route::get('jadwal-pelatihan/cetak_pdf', [JadwalPelatihanController::class, 'cetak_pdf'])->name('admin.jadwal-pelatihan.cetak_pdf');
 Route::get('jadwal-pelatihan/file/{filename}', [JadwalPelatihanController::class, 'showFile'])
     ->where('filename', '.*')
     ->name('admin.jadwal-pelatihan.file');
-// Route::get('jadwal-pelatihan/file/{filename}', [JadwalPelatihanController::class, 'showFile'])->name('admin.jadwal-pelatihan.file');
+
 
 
 

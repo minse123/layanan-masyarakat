@@ -4,12 +4,14 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">Konfigurasi Video Pelatihan</h6>
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahVideoModal">
-                <i class="fas fa-plus"></i> Tambah Video
-            </button>
-            <a href="{{ route('admin.video.print_report', ['jenis_pelatihan' => request('jenis_pelatihan')]) }}" class="btn btn-info" target="_blank">
-                <i class="fas fa-print"></i> Cetak Laporan
-            </a>
+            <div>
+                <a href="{{ route('admin.video.print_report', ['jenis_pelatihan' => request('jenis_pelatihan')]) }}" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-print"></i> Cetak Laporan
+                </a>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahVideoModal">
+                    <i class="fas fa-plus"></i> Tambah Video
+                </button>
+            </div>
         </div>
         <div class="card-body">
             {{-- Filter --}}
@@ -17,14 +19,11 @@
                 <div class="col-md-4">
                     <form action="{{ route('admin.video.index') }}" method="GET">
                         <div class="input-group">
-                            <select name="jenis_pelatihan" class="form-control">
+                            <select name="jenis_pelatihan" class="form-control" onchange="this.form.submit()">
                                 <option value="">Semua Jenis</option>
                                 <option value="inti" {{ request('jenis_pelatihan') == 'inti' ? 'selected' : '' }}>Inti</option>
                                 <option value="pendukung" {{ request('jenis_pelatihan') == 'pendukung' ? 'selected' : '' }}>Pendukung</option>
                             </select>
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">Filter</button>
-                            </div>
                         </div>
                     </form>
                 </div>
