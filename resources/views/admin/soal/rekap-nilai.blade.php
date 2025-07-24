@@ -21,6 +21,23 @@
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
 
+            <form action="{{ route('admin.rekap-nilai.index') }}" method="GET" class="mb-4" id="filterForm">
+                <div class="form-row align-items-end">
+                    <div class="col-md-4">
+                        <label for="kategori_id">Filter by Kategori:</label>
+                        <select name="kategori_id" id="kategori_id" class="form-control" onchange="this.form.submit()">
+                            <option value=""> Semua Kategori</option>
+                            @foreach ($kategoriList as $kategori)
+                                <option value="{{ $kategori->id }}"
+                                    {{ request('kategori_id') == $kategori->id ? 'selected' : '' }}>
+                                    {{ $kategori->nama_kategori }} ({{ ucfirst($kategori->tipe) }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </form>
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
                     <thead class="bg-primary text-white">
@@ -189,92 +206,10 @@
                 ] // Urutkan berdasarkan kolom waktu terbaru
             });
 
-            // // Load soal saat memilih kategori (untuk tambah rekap)
-            // $('#kategoriSelect').change(function() {
-            //     var kategoriId = $(this).val();
-            //     if (kategoriId) {
-            //         loadSoal(kategoriId, '#soalContainer');
-            //     } else {
-            //         $('#soalContainer').html('');
-            //     }
-            // });
-
-            // // Load soal saat membuka modal edit
-            // $('.modal').on('show.bs.modal', function() {
-            //     var $modal = $(this);
-            //     var modalId = $modal.attr('id');
-
-            //     if (modalId && modalId.startsWith('modalEditRekap')) {
-            //         var rekapId = modalId.replace('modalEditRekap', '');
-            //         var $form = $modal.find('form');
-            //         var action = $form.attr('action');
-            //         var rekapIdFromUrl = action.split('/').pop(); // Extract ID from URL
-
-            //         // Get kategori ID from the hidden input or data attribute
-            //         var kategoriId = $modal.find('input[name="id_kategori"]').val() || $modal.data(
-            //             'kategori-id');
-
-            //         if (kategoriId) {
-            //             loadSoal(kategoriId, '#editSoalContainer' + rekapId, rekapIdFromUrl);
-            //         }
-            //     }
-            // });
-
-            // // Fungsi untuk memuat soal berdasarkan kategori
-            // function loadSoal(kategoriId, container, rekapId = null) {
-            //     var url = '{{ route('admin.soal-pelatihan.by-kategori', '') }}/' + kategoriId;
-
-            //     // Add CSRF token to headers
-            //     $.ajaxSetup({
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //         }
-            //     });
-
-            //     // Add rekap_id to URL if provided
-            //     if (rekapId) {
-            //         url += '?rekap_id=' + rekapId;
-            //     }
-
-            //     // Show loading state
-            //     $(container).html(
-            //         '<div class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="sr-only">Memuat...</span></div></div>'
-            //         );
-
-            //     $.ajax({
-            //         url: url,
-            //         type: 'GET',
-            //         dataType: 'html',
-            //         success: function(response) {
-            //             $(container).html(response);
-            //         },
-            //         error: function(xhr, status, error) {
-            //             console.error('Error loading questions:', error);
-            //             var errorMessage = 'Gagal memuat soal. ';
-            //             if (xhr.responseJSON && xhr.responseJSON.message) {
-            //                 errorMessage += xhr.responseJSON.message;
-            //             } else {
-            //                 errorMessage += 'Silakan coba lagi.';
-            //             }
-            //             $(container).html('<div class="alert alert-danger">' + errorMessage + '</div>');
-            //         }
-            //     });
-            // }
-
-            // // Handle form submission
-            // // $('form').on('submit', function(e) {
-            //     var $form = $(this);
-            //     var $submitBtn = $form.find('button[type="submit"]');
-
-            //     // Disable submit button to prevent double submission
-            //     $submitBtn.prop('disabled', true).html(
-            //         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Memproses...'
-            //         );
-
-            //     // You can add additional form validation here if needed
-
-            //     // Form will be submitted normally if validation passes
-            // });
+            // Auto-submit form when kategori_id changes
+            $('#kategori_id').change(function() {
+                $('#filterForm').submit();
+            });
         });
     </script>
 @endpush

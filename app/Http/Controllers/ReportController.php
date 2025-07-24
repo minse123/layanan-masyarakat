@@ -14,7 +14,22 @@ use Barryvdh\DomPDF\Facade\Pdf as PDF; // Tambahkan ini jika pakai barryvdh/lara
 
 class ReportController extends Controller
 {
+    public function formReport()
+    {
+        // Ambil role user
+        $role = auth()->user()->role;
 
+        // Tentukan layout berdasarkan role
+        $layout = match ($role) {
+            'admin' => 'admin.app',
+            'psm' => 'psm.app',
+            'kasubag' => 'kasubag.app',
+            default => 'layouts.default', // fallback
+        };
+
+        // Kirim ke view
+        return view('report.form', compact('layout'));
+    }
     private function applyPeriodeFilter($query, $request)
     {
         if ($request->filter == 'harian' && $request->tanggal) {
@@ -56,7 +71,6 @@ class ReportController extends Controller
 
         return view('report.konsultasi.inti', compact('data'));
     }
-
     public function cetakInti(Request $request)
     {
         $query = MasterKonsultasi::whereHas('kategoriPelatihan.jenisPelatihan', function ($q) use ($request) {
@@ -76,7 +90,6 @@ class ReportController extends Controller
         $pdf = PDF::loadView('report.konsultasi.cetakinti', compact('data'));
         return $pdf->stream('laporan_konsultasi_pelatihan_inti.pdf');
     }
-
     // Report Konsultasi Pelatihan Pendukung
     public function reportPendukung(Request $request)
     {
@@ -96,7 +109,6 @@ class ReportController extends Controller
 
         return view('report.konsultasi.pendukung', compact('data'));
     }
-
     public function cetakPendukung(Request $request)
     {
         $query = MasterKonsultasi::whereHas('kategoriPelatihan.jenisPelatihan', function ($q) use ($request) {
@@ -239,6 +251,117 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('report.soal.report-rekap-pdf', compact('rekapData', 'kategoriList'))->setPaper('a4', 'landscape');
         return $pdf->stream('laporan-rekap-nilai-keseluruhan.pdf');
     }
+    public function reportRekapNilai(Request $request)
+    {
+        $kategoriList = KategoriSoalPelatihan::all();
+        $pesertaList = User::whereHas('jawabanPeserta')->get();
+        $users = User::where('role', 'masyarakat')->get();
+        $rekapList = collect();
+        $selectedKategoriId = $request->input('kategori_id');
+
+        $filteredKategoriList = $kategoriList;
+        if ($selectedKategoriId) {
+            $filteredKategoriList = $kategoriList->where('id', $selectedKategoriId);
+        }
+
+        foreach ($pesertaList as $peserta) {
+            foreach ($filteredKategoriList as $kategori) {
+                $soalIds = SoalPelatihan::where('id_kategori_soal_pelatihan', $kategori->id)->pluck('id');
+
+                if ($soalIds->isEmpty()) {
+                    continue;
+                }
+
+                $jawaban = JawabanPeserta::where('id_user', $peserta->id)
+                    ->whereIn('id_soal', $soalIds)
+                    ->get();
+
+                $jumlahSoal = $soalIds->count();
+                $jumlahBenar = $jawaban->where('benar', 1)->count();
+                $jumlahSalah = $jumlahSoal - $jumlahBenar;
+                $skor = $jumlahSoal > 0 ? round(($jumlahBenar / $jumlahSoal) * 100) : 0;
+
+                if ($jawaban->count() > 0) {
+                    $rekapList->push((object) [
+                        'id' => $peserta->id . '-' . $kategori->id, // Composite ID for reference
+                        'user' => $peserta,
+                        'kategori' => $kategori,
+                        'total_soal' => $jumlahSoal,
+                        'benar' => $jumlahBenar,
+                        'salah' => $jumlahSalah,
+                        'nilai' => $skor,
+                        'created_at' => $jawaban->first()->created_at,
+                    ]);
+                }
+            }
+        }
+
+        // Sort by created_at desc
+        $rekapList = $rekapList->sortByDesc('created_at');
+
+        return view('report.soal.report-rekap', [
+            'rekapList' => $rekapList,
+            'users' => $users,
+            'kategoriList' => $kategoriList,
+            'selectedKategoriId' => $selectedKategoriId
+        ]);
+    }
+    public function reportHasilPeserta(Request $request)
+    {
+        $kategoriList = KategoriSoalPelatihan::all();
+        $pesertaList = User::whereHas('jawabanPeserta')->get();
+        $users = User::where('role', 'masyarakat')->get();
+        $rekapList = collect();
+        $selectedKategoriId = $request->input('kategori_id');
+
+        $filteredKategoriList = $kategoriList;
+        if ($selectedKategoriId) {
+            $filteredKategoriList = $kategoriList->where('id', $selectedKategoriId);
+        }
+
+        foreach ($pesertaList as $peserta) {
+            foreach ($filteredKategoriList as $kategori) {
+                $soalIds = SoalPelatihan::where('id_kategori_soal_pelatihan', $kategori->id)->pluck('id');
+
+                if ($soalIds->isEmpty()) {
+                    continue;
+                }
+
+                $jawaban = JawabanPeserta::where('id_user', $peserta->id)
+                    ->whereIn('id_soal', $soalIds)
+                    ->get();
+
+                $jumlahSoal = $soalIds->count();
+                $jumlahBenar = $jawaban->where('benar', 1)->count();
+                $jumlahSalah = $jumlahSoal - $jumlahBenar;
+                $skor = $jumlahSoal > 0 ? round(($jumlahBenar / $jumlahSoal) * 100) : 0;
+
+                if ($jawaban->count() > 0) {
+                    $rekapList->push((object) [
+                        'id' => $peserta->id . '-' . $kategori->id, // Composite ID for reference
+                        'user' => $peserta,
+                        'kategori' => $kategori,
+                        'total_soal' => $jumlahSoal,
+                        'benar' => $jumlahBenar,
+                        'salah' => $jumlahSalah,
+                        'nilai' => $skor,
+                        'created_at' => $jawaban->first()->created_at,
+                    ]);
+                }
+            }
+        }
+
+        // Sort by created_at desc
+        $rekapList = $rekapList->sortByDesc('created_at');
+
+        return view('report.soal.report-hasil', [
+            'rekapList' => $rekapList,
+            'users' => $users,
+            'kategoriList' => $kategoriList,
+            'selectedKategoriId' => $selectedKategoriId
+        ]);
+    }
+
 
     public function cetakStatistikTersulitPdf()
     {
@@ -330,5 +453,5 @@ class ReportController extends Controller
         return view('report.configuration.report-jadwal-pelatihan', compact('data'));
     }
 
-    
+
 }

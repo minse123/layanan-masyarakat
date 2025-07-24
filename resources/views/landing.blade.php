@@ -230,7 +230,7 @@
             </div>
         </section>
 
-        <section class="contact-section section-padding">
+        <section class="contact-section section-padding" id="section_4">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5 col-12 mx-auto">

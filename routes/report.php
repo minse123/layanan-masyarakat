@@ -8,6 +8,10 @@ use App\Http\Controllers\ConfigurationController\JadwalPelatihanController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/report/tamu/cetak-pdf', [CetakPDFController::class, 'tamucetakPDF'])->name('report.tamu.cetak-pdf');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/report/form', [ReportController::class, 'formReport'])->name('report.form');
+    Route::post('/report/store', [ReportController::class, 'store'])->name('report.store');
+});
 
 Route::middleware(['auth', 'role:admin,psm'])->group(function () {
     Route::get('/konsultasi/inti', [ReportController::class, 'reportinti'])->name('konsultasi.inti.report');
@@ -17,8 +21,10 @@ Route::middleware(['auth', 'role:admin,psm'])->group(function () {
 
     Route::get('/soal-pelatihan/cetak-pdf', [ReportController::class, 'cetakSoalPdf'])->name('soal-pelatihan.cetak-pdf');
     Route::get('/report-soal-pelatihan', [ReportController::class, 'reportSoal'])->name('report-soal-pelatihan');
-    
+
+    Route::get('/hasil-peserta', [ReportController::class, 'reportHasilPeserta'])->name('report-hasil-peserta');
     Route::get('/hasil-pelatihan/cetak-pdf', [ReportController::class, 'cetakHasilPdf'])->name('hasil-pelatihan.cetak-pdf');
+    Route::get('/rekap-nilai', [ReportController::class, 'reportRekapNilai'])->name('report-rekap-nilai');
     Route::get('/rekap-nilai/cetak-pdf', [ReportController::class, 'cetakRekapNilaiPdf'])->name('rekap-nilai.cetak-pdf');
     Route::get('/statistik-tersulit/cetak-pdf', [ReportController::class, 'cetakStatistikTersulitPdf'])->name('statistik-tersulit.cetak-pdf');
 

@@ -16,6 +16,7 @@ use Exception;
 
 class KonsultasiController extends Controller
 {
+    
     public function index()
     {
         $filter = session('filter', 'all_time');
@@ -180,9 +181,9 @@ class KonsultasiController extends Controller
             Http::withHeaders([
                 'Authorization' => env('FONNTE_API_KEY'),
             ])->post('https://api.fonnte.com/send', [
-                'target' => $telepon,                                                       
-                'message' => $message,
-            ]);
+                        'target' => $telepon,
+                        'message' => $message,
+                    ]);
         } catch (Exception $e) {
             // Tangani error jika pengiriman gagal, misalnya dengan logging
             Log::error('Gagal mengirim notifikasi WhatsApp: ' . $e->getMessage());
@@ -191,7 +192,6 @@ class KonsultasiController extends Controller
         Alert::success('Berhasil', 'Data Konsultasi berhasil dijawab!');
         return redirect()->route('admin.konsultasi.index')->with('success', 'Konsultasi berhasil dijawab.');
     }
-
     public function filter(Request $request)
     {
         $filter = $request->filter;
@@ -254,52 +254,9 @@ class KonsultasiController extends Controller
         }
         return view('admin.konsultasi.index', compact('konsultasi', 'message'));
     }
-
     public function resetfilter(Request $request)
     {
         $request->session()->forget(['filter', 'tanggal', 'minggu', 'bulan', 'tahun', 'status_filter']);
         return redirect()->route('admin.konsultasi.index');
-    }
-
-    public function simpanKonsultasi(Request $request)
-    {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'telepon' => 'required|string|max:20',
-            'email' => 'required|email|max:255',
-            'judul_konsultasi' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
-            'jenis_kategori' => 'required|in:inti,pendukung',
-            'tanggal_pengajuan' => 'required|date',
-            // pelatihan_inti dan pelatihan_pendukung opsional tergantung kategori
-        ]);
-
-        // Simpan ke master_konsultasi
-        $konsultasi = MasterKonsultasi::create([
-            'id_user' => auth()->id() ?? null,
-            'nama' => $request->nama,
-            'telepon' => $request->telepon,
-            'email' => $request->email,
-            'judul_konsultasi' => $request->judul_konsultasi,
-            'deskripsi' => $request->deskripsi,
-            'status' => 'Pending',
-        ]);
-
-        // Simpan ke kategori_pelatihan
-        $kategori = KategoriPelatihan::create([
-            'id_konsultasi' => $konsultasi->id_konsultasi,
-            'jenis_kategori' => $request->jenis_kategori,
-        ]);
-
-        // Simpan ke jenis_pelatihan
-        JenisPelatihan::create([
-            'id_kategori' => $kategori->id_kategori,
-            'pelatihan_inti' => $request->jenis_kategori == 'inti' ? $request->pelatihan_inti : null,
-            'pelatihan_pendukung' => $request->jenis_kategori == 'pendukung' ? $request->pelatihan_pendukung : null,
-            'tanggal_pengajuan' => $request->tanggal_pengajuan,
-        ]);
-
-        Alert::success('Berhasil', 'Konsultasi berhasil diajukan!');
-        return redirect()->route('masyarakat.dashboard')->with('success', 'Konsultasi berhasil diajukan.');
     }
 }

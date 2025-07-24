@@ -1,4 +1,5 @@
 @extends('masyarakat.app')
+@include('sweetalert::alert')
 
 @section('content')
     <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
@@ -278,7 +279,7 @@
                                 <i class="bi bi-send me-1"></i> Ajukan Konsultasi
                             </button>
                         </div>
-                        @include('sweetalert::alert')
+                    
                     </form>
                 </div>
             </div>
@@ -331,7 +332,7 @@
                             <button type="submit"
                                 class="btn btn-warning rounded-pill px-4 py-2 fw-bold">Ajukan</button>
                         </div>
-                        @include('sweetalert::alert')
+            
                     </form>
                 </div>
             </div>

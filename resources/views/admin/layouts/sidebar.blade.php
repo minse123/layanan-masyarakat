@@ -113,7 +113,10 @@
             request()->routeIs('admin.tolak.surat') ||
             request()->routeIs('konsultasi.inti.report') ||
             request()->routeIs('konsultasi.pendukung.report') ||
-            request()->routeIs('report-soal-pelatihan');
+            request()->routeIs('report-soal-pelatihan') ||
+            request()->routeIs('report-rekap-nilai') ||
+            request()->routeIs('report-hasil-peserta') ||
+            request()->routeIs('report-statistik-soal');
     @endphp
     <li class="nav-item {{ $isReportMenu ? 'active' : '' }}">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#reportCollapse"
@@ -156,7 +159,20 @@
                 <h6 class="collapse-header text-primary">Laporan Ujian:</h6>
                 <a class="collapse-item {{ request()->routeIs('report-soal-pelatihan') ? 'active' : '' }}"
                     href="{{ route('report-soal-pelatihan') }}">
-                    <i class="fas fa-fw fa-question-circle text-primary"></i> Soal Pelatihan
+                    <i class="fas fa-fw fa-book text-primary"></i> Bank Soal
+                </a>
+                <a class="collapse-item {{ request()->routeIs('report-rekap-nilai') ? 'active' : '' }}"
+                    href="{{ route('report-rekap-nilai') }}">
+                    <i class="fas fa-fw fa-award text-primary"></i> Rekap Nilai Keseluruhan
+                </a>
+                <a class="collapse-item {{ request()->routeIs('report-hasil-peserta') ? 'active' : '' }}"
+                    href="{{ route('report-hasil-peserta') }}">
+                    <i class="fas fa-fw fa-user-check text-primary"></i> Hasil Peserta
+                </a>
+                <a class="collapse-item {{ request()->routeIs('report-statistik-soal') ? 'active' : '' }}"
+                    href="{{ url('report-statistik-soal') }}">
+                    <i class="fas fa-fw fa-chart-pie text-primary"></i> Statistik Soal
+                </a>
             </div>
         </div>
     </li>

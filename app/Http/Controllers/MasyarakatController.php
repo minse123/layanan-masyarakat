@@ -16,8 +16,9 @@ use App\Models\SoalPelatihan;
 use App\Models\JawabanPeserta;
 use App\Models\MasterSurat;
 use App\Models\SuratProses;
-use App\Models\HasilPelatihan;
 use App\Models\JadwalPelatihan;
+use App\Models\KategoriPelatihan;
+use App\Models\JenisPelatihan;
 
 class MasyarakatController extends Controller
 {
@@ -100,6 +101,7 @@ class MasyarakatController extends Controller
         return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
     }
 
+
     public function storeSurat(Request $request)
     {
         // dd($request->all());
@@ -151,14 +153,12 @@ class MasyarakatController extends Controller
         return back()->with('status', 'Data Berhasil Disimpan');
     }
 
-    // Tampilkan daftar kategori soal (untuk modal atau halaman)
+    //Soal Pelatihan
     public function kategori()
     {
         $kategoriList = KategoriSoalPelatihan::orderBy('nama_kategori')->get();
         return view('masyarakat.soal.latihan', compact('kategoriList', ));
     }
-
-    // Tampilkan soal-soal berdasarkan kategori yang dipilih
     public function latihan($kategoriId)
     {
         $user = Auth::user();
@@ -192,7 +192,6 @@ class MasyarakatController extends Controller
         $soalList = SoalPelatihan::where('id_kategori_soal_pelatihan', $kategoriId)->get();
         return view('masyarakat.soal.latihan', compact('kategori', 'soalList', 'konsultasi'));
     }
-
     public function storeSoal(Request $request)
     {
         $request->validate([
@@ -220,7 +219,6 @@ class MasyarakatController extends Controller
         alert()->success('Berhasil', 'Jawaban berhasil disimpan!');
         return redirect()->route('masyarakat.soal.hasil')->with('success', 'Jawaban berhasil disimpan!');
     }
-
     public function hasil(Request $request)
     {
         $user = Auth::user();
@@ -270,6 +268,47 @@ class MasyarakatController extends Controller
         ]);
     }
 
+    public function simpanKonsultasi(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'telepon' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
+            'judul_konsultasi' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'jenis_kategori' => 'required|in:inti,pendukung',
+            'tanggal_pengajuan' => 'required|date',
+            // pelatihan_inti dan pelatihan_pendukung opsional tergantung kategori
+        ]);
+
+        // Simpan ke master_konsultasi
+        $konsultasi = MasterKonsultasi::create([
+            'id_user' => auth()->id() ?? null,
+            'nama' => $request->nama,
+            'telepon' => $request->telepon,
+            'email' => $request->email,
+            'judul_konsultasi' => $request->judul_konsultasi,
+            'deskripsi' => $request->deskripsi,
+            'status' => 'Pending',
+        ]);
+
+        // Simpan ke kategori_pelatihan
+        $kategori = KategoriPelatihan::create([
+            'id_konsultasi' => $konsultasi->id_konsultasi,
+            'jenis_kategori' => $request->jenis_kategori,
+        ]);
+
+        // Simpan ke jenis_pelatihan
+        JenisPelatihan::create([
+            'id_kategori' => $kategori->id_kategori,
+            'pelatihan_inti' => $request->jenis_kategori == 'inti' ? $request->pelatihan_inti : null,
+            'pelatihan_pendukung' => $request->jenis_kategori == 'pendukung' ? $request->pelatihan_pendukung : null,
+            'tanggal_pengajuan' => $request->tanggal_pengajuan,
+        ]);
+
+        Alert::success('Berhasil', 'Konsultasi berhasil diajukan!');
+        return redirect()->route('masyarakat.dashboard')->with('success', 'Konsultasi berhasil diajukan.');
+    }
 
     public function jadwalPelatihan(Request $request)
     {

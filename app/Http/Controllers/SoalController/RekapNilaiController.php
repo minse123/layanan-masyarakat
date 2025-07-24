@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class RekapNilaiController
 {
-    public function index()
+    public function index(Request $request)
     {
         $kategoriList = KategoriSoalPelatihan::all();
         $pesertaList = User::whereHas('jawabanPeserta')->get();
@@ -24,9 +24,15 @@ class RekapNilaiController
         // You can check this by running `php artisan tinker` and then `App\Models\User::where('role', 'user')->count();`
 
         $rekapList = collect();
+        $selectedKategoriId = $request->input('kategori_id');
+
+        $filteredKategoriList = $kategoriList;
+        if ($selectedKategoriId) {
+            $filteredKategoriList = $kategoriList->where('id', $selectedKategoriId);
+        }
 
         foreach ($pesertaList as $peserta) {
-            foreach ($kategoriList as $kategori) {
+            foreach ($filteredKategoriList as $kategori) {
                 $soalIds = SoalPelatihan::where('id_kategori_soal_pelatihan', $kategori->id)->pluck('id');
 
                 if ($soalIds->isEmpty()) {
@@ -63,7 +69,8 @@ class RekapNilaiController
         return view('admin.soal.rekap-nilai', [
             'rekapList' => $rekapList,
             'users' => $users,
-            'kategoriList' => $kategoriList
+            'kategoriList' => $kategoriList,
+            'selectedKategoriId' => $selectedKategoriId
         ]);
     }
 

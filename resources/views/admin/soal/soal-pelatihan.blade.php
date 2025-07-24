@@ -11,7 +11,7 @@
                 <div class="form-group mr-3">
                     <label class="mr-2 font-weight-bold">Kategori:</label>
                     <select name="kategori" class="form-control mr-2" onchange="this.form.submit()">
-                        <option value="">-- Semua Kategori --</option>
+                        <option value="">Semua Kategori</option>
                         @foreach ($kategoriList as $kategori)
                             <option value="{{ $kategori->id }}"
                                 {{ request('kategori') == $kategori->id ? 'selected' : '' }}>
@@ -20,7 +20,6 @@
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Filter</button>
             </form>
         </div>
     </div>
@@ -163,15 +162,17 @@
                             </div>
 
                             <!-- Modal Delete Soal -->
-                            <div class="modal fade" id="modalDeleteSoal{{ $soal->id }}" tabindex="-1" role="dialog"
-                                aria-labelledby="modalDeleteSoalLabel{{ $soal->id }}" aria-hidden="true">
+                            <div class="modal fade" id="modalDeleteSoal{{ $soal->id }}" tabindex="-1"
+                                role="dialog" aria-labelledby="modalDeleteSoalLabel{{ $soal->id }}"
+                                aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <form action="{{ route('admin.soal-pelatihan.destroy', $soal->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="modalDeleteSoalLabel{{ $soal->id }}">Hapus
+                                                <h5 class="modal-title" id="modalDeleteSoalLabel{{ $soal->id }}">
+                                                    Hapus
                                                     Soal</h5>
                                                 <button type="button" class="close" data-dismiss="modal"
                                                     aria-label="Close">
@@ -194,15 +195,17 @@
                             </div>
 
                             <!-- Modal Delete Soal -->
-                            <div class="modal fade" id="modalDeleteSoal{{ $soal->id }}" tabindex="-1" role="dialog"
-                                aria-labelledby="modalDeleteSoalLabel{{ $soal->id }}" aria-hidden="true">
+                            <div class="modal fade" id="modalDeleteSoal{{ $soal->id }}" tabindex="-1"
+                                role="dialog" aria-labelledby="modalDeleteSoalLabel{{ $soal->id }}"
+                                aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <form action="{{ route('admin.soal-pelatihan.destroy', $soal->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="modalDeleteSoalLabel{{ $soal->id }}">Hapus
+                                                <h5 class="modal-title" id="modalDeleteSoalLabel{{ $soal->id }}">
+                                                    Hapus
                                                     Soal</h5>
                                                 <button type="button" class="close" data-dismiss="modal"
                                                     aria-label="Close">
@@ -235,7 +238,7 @@
         </div>
     </div>
 
-    
+
 
     <!-- Modal Tambah Soal -->
     @include('admin.soal.modals.tambah-soal')
