@@ -18,4 +18,3 @@ Route::post('/masyarakat/soal/jawaban', [MasyarakatController::class, 'storeSoal
 Route::get('/soal/hasil', [MasyarakatController::class, 'hasil'])->name('masyarakat.soal.hasil');
 
 Route::get('/jadwal-pelatihan', [MasyarakatController::class, 'jadwalPelatihan'])->name('jadwal-pelatihan');
-

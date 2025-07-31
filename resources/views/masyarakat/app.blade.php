@@ -15,7 +15,6 @@
 <body>
 
     @include('masyarakat.layouts.navbar')
-    @include('sweetalert::alert')
     
     <main>
         @yield('content')
@@ -25,6 +24,6 @@
     @include('masyarakat.layouts.js')
     
     @yield('script')
-
+    @include('sweetalert::alert')
 </body>
 </html>

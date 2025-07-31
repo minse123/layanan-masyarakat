@@ -1,5 +1,4 @@
 @extends('auth.auth')
-@include('sweetalert::alert')
 @section('content')
     <div class="row justify-content-center h-100">
         <div class="col-lg-9 col-12">
@@ -8,20 +7,6 @@
                     <a href="/"><img src="/frontend/images/logo-kementerian.png" alt="Logo" style="width: 100px;"></a>
                 </div>
                 <p class="auth-subtitle mb-3">Masuakn Akun Anda</p>
-
-                {{-- Alert --}}
-                @if (session()->has('message'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('message') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-                @if (session()->has('salah'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('salah') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
 
                 {{-- Form Login --}}
                 <form method="POST" action="/login" data-parsley-validate>
@@ -52,7 +37,6 @@
                     <button type="submit" class="btn btn-primary btn-block shadow-lg mt-3">Masuk</button>
                     <hr>
                 </form>
-                @include('sweetalert::alert')
 
                 <div class="text-center mt-3">
                     <p class="text-gray-600">Belum memiliki akun? <a href="/register" class="font-bold">Daftar</a>.</p>

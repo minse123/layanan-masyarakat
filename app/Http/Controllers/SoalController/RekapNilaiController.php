@@ -15,13 +15,13 @@ class RekapNilaiController
 {
     public function index(Request $request)
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $kategoriList = KategoriSoalPelatihan::all();
         $pesertaList = User::whereHas('jawabanPeserta')->get();
-        $users = User::where('role', 'masyarakat')->get(); // Get all users with role 'masyarakat'
-
-        // If no users with role 'user' are found, the dropdown will be empty.
-        // Ensure that there are users with 'user' role in the database.
-        // You can check this by running `php artisan tinker` and then `App\Models\User::where('role', 'user')->count();`
+        $users = User::where('role', 'masyarakat')->get();
 
         $rekapList = collect();
         $selectedKategoriId = $request->input('kategori_id');
@@ -67,6 +67,7 @@ class RekapNilaiController
         $rekapList = $rekapList->sortByDesc('created_at');
 
         return view('admin.soal.rekap-nilai', [
+            'layout' => $layout,
             'rekapList' => $rekapList,
             'users' => $users,
             'kategoriList' => $kategoriList,
@@ -167,11 +168,11 @@ class RekapNilaiController
         try {
             // Parse composite ID
             list($userId, $kategoriId) = explode('-', $id);
-            
+
             // Dapatkan semua soal dalam kategori
             $soalIds = SoalPelatihan::where('id_kategori_soal_pelatihan', $kategoriId)
                 ->pluck('id');
-                
+
             // Hapus semua jawaban peserta untuk soal-soal dalam kategori tersebut
             JawabanPeserta::where('id_user', $userId)
                 ->whereIn('id_soal', $soalIds)
@@ -196,7 +197,7 @@ class RekapNilaiController
             if ($request->has('rekap_id')) {
                 // Parse the composite ID (user_id-kategori_id)
                 list($userId, $kategoriId) = explode('-', $request->rekap_id);
-                
+
                 $jawabanPeserta = JawabanPeserta::where('id_user', $userId)
                     ->whereIn('id_soal', $soalList->pluck('id'))
                     ->pluck('jawaban_peserta', 'id_soal')

@@ -42,6 +42,7 @@
     <script src="{{ asset('/frontend/js/jquery.min.js') }}"></script>
     <script src="{{ asset('/frontend/js/bootstrap.min.js') }}"></script>
     {{-- <script src="{{ asset('/backend/js/sb-admin-2.min.js') }}"></script> --}}
+    @include('sweetalert::alert')
 </body>
 
 </html>

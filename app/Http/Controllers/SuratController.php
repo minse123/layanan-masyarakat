@@ -15,69 +15,29 @@ use Illuminate\Support\Facades\Log;
 
 class SuratController extends Controller
 {
-    public function Suratindex(Request $request)
+        public function Suratindex(Request $request)
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $query = MasterSurat::query();
 
-        // Get filter values directly from request, with defaults
         $filter = $request->input('filter', 'all_time');
         $tanggal = $request->input('tanggal');
-        $minggu = $request->input('minggu');
-        $bulan = $request->input('bulan');
-        $tahun = $request->input('tahun');
         $statusFilter = $request->input('status_filter', 'all');
 
-        Log::info('Suratindex Filters:', [
-            'filter' => $filter,
-            'tanggal' => $tanggal,
-            'minggu' => $minggu,
-            'bulan' => $bulan,
-            'tahun' => $tahun,
-            'status_filter' => $statusFilter,
-        ]);
-
-        // Apply date filter if not 'all_time'
-        if ($filter && $filter !== 'all_time') {
-            switch ($filter) {
-                case 'harian':
-                    if ($tanggal) {
-                        $query->whereDate('tanggal_surat', $tanggal);
-                    }
-                    break;
-                case 'mingguan':
-                    if ($minggu) {
-                        $start = Carbon::parse($minggu)->startOfWeek();
-                        $end = Carbon::parse($minggu)->endOfWeek();
-                        $query->whereBetween('tanggal_surat', [$start, $end]);
-                    }
-                    break;
-                case 'bulanan':
-                    if ($bulan) {
-                        $query->whereMonth('tanggal_surat', date('m', strtotime($bulan)))
-                            ->whereYear('tanggal_surat', date('Y', strtotime($bulan)));
-                    }
-                    break;
-                case 'tahunan':
-                    if ($tahun) {
-                        $query->whereYear('tanggal_surat', $tahun);
-                    }
-                    break;
-            }
+        if ($filter !== 'all_time') {
+            $this->applyDateFilter($query, 'tanggal_surat', $filter, $tanggal);
         }
 
-        // Apply status filter if not 'all'
-        if ($statusFilter && $statusFilter !== 'all') {
+        if ($statusFilter !== 'all') {
             $query->where('status', $statusFilter);
         }
 
         $masterSurat = $query->get();
 
-        Log::info('Suratindex Query:', [
-            'sql' => $query->toSql(),
-            'bindings' => $query->getBindings(),
-        ]);
-
-        return view('admin.surat.index', compact('masterSurat'));
+        return view('admin.surat.index', compact('masterSurat', 'layout'));
     }
     // MasterSurat View
     public function store(Request $request)
@@ -260,254 +220,32 @@ class SuratController extends Controller
         alert()->success('Berhasil', 'Data surat berhasil dihapus.');
         return redirect()->route('admin.master.surat')->with('success', 'Data surat berhasil dihapus.');
     }
-    
 
 
 
-
-    public function ProsesIndex()
+    private function applyDateFilter($query, $dateColumn, $filter, $date)
     {
-        $data = SuratProses::with('masterSurat')->get();
-        return view('admin.surat.proses.reportproses', compact('data')); // Pass the required data to the view
-    }
-    public function filterproses(Request $request)
-    {
-        $filter = $request->filter;
-        $tanggal = $request->tanggal;
+        if ($filter && $date) {
+            if ($filter === 'tahunan') {
+                $query->whereYear($dateColumn, $date);
+                return $query;
+            }
 
-        $query = SuratProses::query()->with('masterSurat');
-
-        if ($filter && $tanggal) {
-            $tanggal = Carbon::parse($tanggal);
-            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
-                switch ($filter) {
-                    case 'harian':
-                        $q->whereDate('tanggal_proses', $tanggal);
-                        break;
-                    case 'mingguan':
-                        $q->whereBetween('tanggal_proses', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
-                        break;
-                    case 'bulanan':
-                        $q->whereMonth('tanggal_proses', $tanggal->month)
-                            ->whereYear('tanggal_proses', $tanggal->year);
-                        break;
-                    case 'tahunan':
-                        $q->whereYear('tanggal_proses', $tanggal->year);
-                        break;
-                }
-            });
+            $carbonDate = Carbon::parse($date);
+            switch ($filter) {
+                case 'harian':
+                    $query->whereDate($dateColumn, $carbonDate);
+                    break;
+                case 'mingguan':
+                    $query->whereBetween($dateColumn, [$carbonDate->startOfWeek(), $carbonDate->endOfWeek()]);
+                    break;
+                case 'bulanan':
+                    $query->whereMonth($dateColumn, $carbonDate->month)
+                        ->whereYear($dateColumn, $carbonDate->year);
+                    break;
+            }
         }
-
-        $data = $query->get();
-        session(['filter' => $filter, 'tanggal' => $tanggal]);
-
-        // Menyiapkan pesan notifikasi jika data kosong
-        $message = '';
-        if ($data->isEmpty()) {
-            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
-        }
-
-        return view('admin.surat.proses.reportproses', compact('data', 'message'));
-    }
-    public function resetfilterproses(Request $request)
-    {
-        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
-        return redirect()->route('admin.proses.surat'); // Redirect ke halaman utama laporan
-    }
-    public function cetakproses(Request $request)
-    {
-        $filter = session('filter');
-        $tanggal = session('tanggal');
-
-        $query = SuratProses::query()->with('masterSurat');
-
-        if ($filter && $tanggal) {
-            $tanggal = Carbon::parse($tanggal);
-            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
-                switch ($filter) {
-                    case 'harian':
-                        $q->whereDate('tanggal_proses', $tanggal);
-                        break;
-                    case 'mingguan':
-                        $q->whereBetween('tanggal_proses', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
-                        break;
-                    case 'bulanan':
-                        $q->whereMonth('tanggal_proses', $tanggal->month)
-                            ->whereYear('tanggal_proses', $tanggal->year);
-                        break;
-                    case 'tahunan':
-                        $q->whereYear('tanggal_proses', $tanggal->year);
-                        break;
-                }
-            });
-        }
-
-        $data = $query->get();
-
-        $pdf = PDF::loadView('admin.surat.proses.formCetakProses', compact('data'));
-        return $pdf->stream('laporan-surat-masuk.pdf');
-    }
-
-
-    public function terimaindex()
-    {
-        $data = SuratTerima::with('masterSurat')->get();
-        return view('admin.surat.terima.reportterima', compact('data')); // Pass the required data to the new view
-    }
-    public function filterterima(Request $request)
-    {
-        $filter = $request->filter;
-        $tanggal = $request->tanggal;
-
-        $query = SuratTerima::query()->with('masterSurat');
-
-        if ($filter && $tanggal) {
-            $tanggal = Carbon::parse($tanggal);
-            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
-                switch ($filter) {
-                    case 'harian':
-                        $q->whereDate('tanggal_terima', $tanggal);
-                        break;
-                    case 'mingguan':
-                        $q->whereBetween('tanggal_terima', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
-                        break;
-                    case 'bulanan':
-                        $q->whereMonth('tanggal_terima', $tanggal->month)
-                            ->whereYear('tanggal_terima', $tanggal->year);
-                        break;
-                    case 'tahunan':
-                        $q->whereYear('tanggal_terima', $tanggal->year);
-                        break;
-                }
-            });
-        }
-
-        $data = $query->get();
-        session(['filter' => $filter, 'tanggal' => $tanggal]);
-
-        // Menyiapkan pesan notifikasi jika data kosong
-        $message = '';
-        if ($data->isEmpty()) {
-            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
-        }
-
-        return view('admin.surat.terima.reportterima', compact('data', 'message'));
-    }
-    public function resetfilterterima(Request $request)
-    {
-        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
-        return redirect()->route('admin.terima.surat'); // Redirect ke halaman utama laporan
-    }
-    public function cetakterima(Request $request)
-    {
-        $filter = session('filter');
-        $tanggal = session('tanggal');
-
-        $query = SuratTerima::query()->with('masterSurat');
-
-        if ($filter && $tanggal) {
-            $tanggal = Carbon::parse($tanggal);
-            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
-                switch ($filter) {
-                    case 'harian':
-                        $q->whereDate('tanggal_terima', $tanggal);
-                        break;
-                    case 'mingguan':
-                        $q->whereBetween('tanggal_terima', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
-                        break;
-                    case 'bulanan':
-                        $q->whereMonth('tanggal_terima', $tanggal->month)
-                            ->whereYear('tanggal_terima', $tanggal->year);
-                        break;
-                    case 'tahunan':
-                        $q->whereYear('tanggal_terima', $tanggal->year);
-                        break;
-                }
-            });
-        }
-
-        $data = $query->get();
-
-        $pdf = PDF::loadView('admin.surat.terima.formCetakTerima', compact('data'));
-        return $pdf->stream('laporan-surat-diterima.pdf');
-    }
-
-    public function tolakindex()
-    {
-        $data = SuratTolak::with('masterSurat')->get();
-        return view('admin.surat.tolak.reporttolak', compact('data')); // Pass the required data to the new view
-    }
-    public function filtertolak(Request $request)
-    {
-        $filter = $request->filter;
-        $tanggal = $request->tanggal;
-
-        $query = SuratTolak::query()->with('masterSurat');
-
-        if ($filter && $tanggal) {
-            $tanggal = Carbon::parse($tanggal);
-            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
-                switch ($filter) {
-                    case 'harian':
-                        $q->whereDate('tanggal_tolak', $tanggal);
-                        break;
-                    case 'mingguan':
-                        $q->whereBetween('tanggal_tolak', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
-                        break;
-                    case 'bulanan':
-                        $q->whereMonth('tanggal_tolak', $tanggal->month)
-                            ->whereYear('tanggal_tolak', $tanggal->year);
-                        break;
-                    case 'tahunan':
-                        $q->whereYear('tanggal_tolak', $tanggal->year);
-                        break;
-                }
-            });
-        }
-
-        $data = $query->get();
-        session(['filter' => $filter, 'tanggal' => $tanggal]);
-
-        // Menyiapkan pesan notifikasi jika data kosong
-        $message = '';
-        if ($data->isEmpty()) {
-            $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
-        }
-
-        return view('admin.surat.tolak.reporttolak', compact('data', 'message'));
-    }
-    public function resetfiltertolak(Request $request)
-    {
-        $request->session()->forget(['filter', 'tanggal']); // Hapus session filter
-        return redirect()->route('admin.tolak.surat'); // Redirect ke halaman utama laporan
-    }
-    public function cetaktolak(Request $request)
-    {
-        $filter = session('filter');
-        $tanggal = session('tanggal');
-        $query = SuratTolak::query()->with('masterSurat');
-        if ($filter && $tanggal) {
-            $tanggal = Carbon::parse($tanggal);
-            $query->whereHas('masterSurat', function ($q) use ($filter, $tanggal) {
-                switch ($filter) {
-                    case 'harian':
-                        $q->whereDate('tanggal_tolak', $tanggal);
-                        break;
-                    case 'mingguan':
-                        $q->whereBetween('tanggal_tolak', [$tanggal->startOfWeek(), $tanggal->endOfWeek()]);
-                        break;
-                    case 'bulanan':
-                        $q->whereMonth('tanggal_tolak', $tanggal->month)
-                            ->whereYear('tanggal_tolak', $tanggal->year);
-                        break;
-                    case 'tahunan':
-                        $q->whereYear('tanggal_tolak', $tanggal->year);
-                        break;
-                }
-            });
-        }
-        $data = $query->get();
-        $pdf = PDF::loadView('admin.surat.tolak.formCetakTolak', compact('data'));
-        return $pdf->stream('laporan-surat-ditolak.pdf');
+        return $query;
     }
 }
+

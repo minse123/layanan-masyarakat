@@ -11,16 +11,16 @@ class RoleMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  ...$roles
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param string ...$roles
      * @return mixed
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
         // Debugging (hapus setelah selesai)
         \Log::info('Role Middleware Triggered', [
-            'user_role' => Auth::user()->role ?? null,
+            'user_role' => Auth::check() ? Auth::user()->role : 'Guest',
             'allowed_roles' => $roles
         ]);
 
@@ -29,7 +29,18 @@ class RoleMiddleware
             return $next($request);
         }
 
-        // Redirect jika tidak memiliki akses
-        return redirect()->route('login')->with('salah', 'Akses ditolak.');
+        // Jika user sudah login tapi rolenya tidak sesuai, redirect ke dashboard masing-masing
+        if (Auth::check()) {
+            $role = Auth::user()->role;
+            $dashboardRoute = $role . '.dashboard';
+
+            // Cek apakah route untuk dashboard user tersebut ada
+            if (\Illuminate\Support\Facades\Route::has($dashboardRoute)) {
+                return redirect()->route($dashboardRoute)->with('error', 'Anda tidak memiliki hak untuk mengakses halaman tersebut.');
+            }
+        }
+
+        // Jika user belum login atau tidak ada route dashboard yang sesuai, redirect ke halaman login
+        return redirect()->route('login')->with('salah', 'Akses ditolak. Silakan login terlebih dahulu.');
     }
 }

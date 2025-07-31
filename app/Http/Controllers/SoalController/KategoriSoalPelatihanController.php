@@ -10,8 +10,12 @@ class KategoriSoalPelatihanController
 {
     public function index()
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $kategori = KategoriSoalPelatihan::orderBy('id', 'desc')->get();
-        return view('admin.soal.kategori-soal-pelatihan', compact('kategori'));
+        return view('admin.soal.kategori-soal-pelatihan', compact('kategori','layout'));
     }
 
     public function store(Request $request)

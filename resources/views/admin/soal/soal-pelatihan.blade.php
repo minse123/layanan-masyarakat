@@ -1,4 +1,4 @@
-@extends('admin.app')
+@extends($layout)
 @include('sweetalert::alert')
 @section('content')
     <!-- Filter Form -->

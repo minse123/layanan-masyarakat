@@ -15,6 +15,10 @@ class VideoController
     // Tampilkan daftar video & form tambah
     public function index(Request $request)
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $query = Video::latest();
 
         if ($request->filled('jenis_pelatihan')) {
@@ -23,7 +27,7 @@ class VideoController
 
         $videos = $query->get();
 
-        return view('admin.configuration.video', compact('videos'));
+        return view('admin.configuration.video', compact('videos','layout'));
     }
 
     // Simpan video baru

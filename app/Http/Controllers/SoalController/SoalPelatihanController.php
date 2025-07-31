@@ -14,6 +14,10 @@ class SoalPelatihanController
 {
     public function index(Request $request)
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $kategoriList = KategoriSoalPelatihan::orderBy('nama_kategori')->get();
         $soalQuery = SoalPelatihan::with('kategori');
         if ($request->filled('kategori')) {
@@ -21,7 +25,7 @@ class SoalPelatihanController
         }
         $soalList = $soalQuery->orderBy('id', 'desc')->get();
 
-        return view('admin.soal.soal-pelatihan', compact('kategoriList', 'soalList'));
+        return view('admin.soal.soal-pelatihan', compact('kategoriList', 'soalList', 'layout'));
     }
 
     public function store(Request $request)

@@ -14,6 +14,10 @@ class JadwalPelatihanController
 {
     public function index(Request $request)
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $query = JadwalPelatihan::query();
 
         if ($request->has('jenis_pelatihan') && $request->jenis_pelatihan != '') {
@@ -31,7 +35,7 @@ class JadwalPelatihanController
         }
 
         $data = $query->get();
-        return view('admin.configuration.jadwal-pelatihan', compact('data'));
+        return view('admin.configuration.jadwal-pelatihan', compact('data', 'layout'));
     }
 
     public function store(Request $request)

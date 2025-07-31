@@ -15,12 +15,27 @@ use App\Imports\SoalImport;
 use App\Exports\SoalExport;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
 
+    protected string $layout;
+
+    public function __construct()
+    {
+        $this->layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+        // default => 'layouts.default',
+        };
+    }
+
     public function index()
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $totalSuratProses = SuratProses::count();
         $totalSuratTerima = SuratTerima::count();
         $totalSuratTolak = SuratTolak::count();
@@ -45,11 +60,12 @@ class AdminController extends Controller
         // Calculate active users
         $activeThreshold = Carbon::now()->subMinutes(5)->timestamp;
         $totalActiveUsers = DB::table('sessions')
-                                ->where('last_activity', '>=', $activeThreshold)
-                                ->whereNotNull('user_id') // Only count logged-in users
-                                ->count();
+            ->where('last_activity', '>=', $activeThreshold)
+            ->whereNotNull('user_id') // Only count logged-in users
+            ->count();
 
-        return view('admin.dashboard', compact(
+        return view('admin.dashboard.admin', compact(
+            'layout',
             'totalSuratProses',
             'totalSuratTerima',
             'totalSuratTolak',
@@ -68,16 +84,25 @@ class AdminController extends Controller
             'recentKonsultasi'
         ));
     }
+
     public function authIndex()
-    { {
+    {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        }; {
             $users = User::all(); // Mengambil semua data pengguna
-            return view('admin.auth.index', compact('users')); // Pastikan nama view benar
+            return view('admin.auth.index', compact('users','layout')); // Pastikan nama view benar
         }
     }
     public function authTambah()
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $user = User::all();
-        return view('admin.auth.auth-formTambah');
+        return view('admin.auth.auth-formTambah', compact('user', 'layout'));
     }
     public function authSimpan(Request $request)
     {
@@ -88,15 +113,19 @@ class AdminController extends Controller
         $user->nik = $request->nik;
         $user->alamat = $request->alamat;
         $user->role = $request->role;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         $user->save();
 
         return redirect(route('admin.akun'))->with('status', 'Data Berhasil Disimpan');
     }
     public function authEdit($id)
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $user = User::findOrFail($id);
-        return view('admin.auth.auth-formEdit', compact('user'));
+        return view('admin.auth.auth-formEdit', compact('user', 'layout'));
     }
     public function authUpdate(Request $request, $id)
     {
@@ -109,7 +138,7 @@ class AdminController extends Controller
         $user->role = $request->role;
 
         if ($request->filled('password')) {
-            $user->password = $request->password; // tanpa bcrypt
+            $user->password = Hash::make($request->password);
         }
 
         $user->save();

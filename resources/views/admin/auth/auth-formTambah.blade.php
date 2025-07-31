@@ -1,4 +1,4 @@
-@extends('admin.app')
+@extends($layout)
 
 @section('content')
     <div class="container-fluid">
@@ -43,6 +43,7 @@
                                     <option value="admin">Admin</option>
                                     <option value="psm">PSM</option>
                                     <option value="kasubag">Kasubag</option>
+                                    <option value="operator">Operator</option>
                                     <option value="masyarakat">Masyarakat</option>
                                 </select>
                             </div>

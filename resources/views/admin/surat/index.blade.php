@@ -1,4 +1,4 @@
-@extends('admin.app')
+@extends($layout)
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -20,7 +20,7 @@
                         <div class="form-row align-items-end">
                             <div class="form-group col-md-3">
                                 <label for="filter">Pilih Periode:</label>
-                                <select name="filter" id="filter" class="form-control" onchange="updateFilterInput()">
+                                <select name="filter" id="filter" class="form-control">
                                     <option value="all_time"
                                         {{ request()->input('filter', 'all_time') == 'all_time' ? 'selected' : '' }}>Semua Waktu
                                     </option>
@@ -49,31 +49,11 @@
                                 </select>
                             </div>
 
-                            <div class="form-group col-md-4" id="filter-harian">
-                                <label for="tanggal">Tanggal:</label>
-                                <input type="date" name="tanggal" id="tanggal" class="form-control"
-                                    value="{{ request()->input('tanggal', date('Y-m-d')) }}">
+                            <div class="form-group col-md-4" id="date-input-container">
+                                {{-- Input dinamis berdasarkan filter --}}
                             </div>
 
-                            <div class="form-group col-md-4" id="filter-mingguan" style="display: none;">
-                                <label for="minggu">Minggu:</label>
-                                <input type="week" name="minggu" id="minggu" class="form-control"
-                                    value="{{ request()->input('minggu') }}">
-                            </div>
-
-                            <div class="form-group col-md-4" id="filter-bulanan" style="display: none;">
-                                <label for="bulan">Bulan:</label>
-                                <input type="month" name="bulan" id="bulan" class="form-control"
-                                    value="{{ request()->input('bulan') }}">
-                            </div>
-
-                            <div class="form-group col-md-4" id="filter-tahunan" style="display: none;">
-                                <label for="tahun">Tahun:</label>
-                                <input type="number" name="tahun" id="tahun" class="form-control" min="2000"
-                                    max="2099" step="1" value="{{ request()->input('tahun', now()->year) }}">
-                            </div>
-
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-2">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-filter"></i> Filter
                                 </button>
@@ -85,30 +65,6 @@
                     </form>
                 </div>
             </div>
-
-            <script>
-                function updateFilterInput() {
-                    const selectedFilter = document.getElementById("filter").value;
-                    const isDateFilter = (selectedFilter === "harian" || selectedFilter === "mingguan" || selectedFilter ===
-                        "bulanan" || selectedFilter === "tahunan");
-
-                    document.getElementById("filter-harian").style.display = (selectedFilter === "harian") ? "block" : "none";
-                    document.getElementById("filter-mingguan").style.display = (selectedFilter === "mingguan") ? "block" : "none";
-                    document.getElementById("filter-bulanan").style.display = (selectedFilter === "bulanan") ? "block" : "none";
-                    document.getElementById("filter-tahunan").style.display = (selectedFilter === "tahunan") ? "block" : "none";
-
-                    // If no date filter is selected, clear the values of date inputs
-                    if (!isDateFilter) {
-                        document.querySelector('#filter-harian input[name="tanggal"]').value = '';
-                        document.querySelector('#filter-mingguan input[name="minggu"]').value = '';
-                        document.querySelector('#filter-bulanan input[name="bulan"]').value = '';
-                        document.querySelector('#filter-tahunan input[name="tahun"]').value = '';
-                    }
-                }
-                document.addEventListener('DOMContentLoaded', function() {
-                    updateFilterInput();
-                });
-            </script>
 
             <!-- Tabel Data -->
             <div class="table-responsive">
@@ -634,6 +590,45 @@
         <script>
             $(document).ready(function() {
                 $('#dataTable').DataTable();
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const filterSelect = document.getElementById('filter');
+                const dateInputContainer = document.getElementById('date-input-container');
+                const currentFilter = '{{ request('filter', 'all_time') }}';
+                const currentValue = '{{ request('tanggal', '') }}';
+
+                function updateDateInput(filter, value) {
+                    let inputHtml = '';
+                    const today = new Date().toISOString().slice(0, 10);
+                    switch (filter) {
+                        case 'bulanan':
+                            inputHtml = `<input type="month" name="tanggal" id="tanggal" class="form-control" value="${value || today.slice(0, 7)}" required>`;
+                            break;
+                        case 'tahunan':
+                            const currentYear = new Date().getFullYear();
+                            inputHtml = `<input type="number" name="tanggal" id="tanggal" class="form-control" placeholder="Tahun" value="${value || currentYear}" min="2000" max="${currentYear}" required>`;
+                            break;
+                        case 'harian':
+                        case 'mingguan':
+                            inputHtml = `<input type="date" name="tanggal" id="tanggal" class="form-control" value="${value || today}" required>`;
+                            break;
+                    }
+                    dateInputContainer.innerHTML = inputHtml;
+                }
+
+                filterSelect.addEventListener('change', function() {
+                    if (this.value === 'all_time') {
+                        dateInputContainer.innerHTML = '';
+                    } else {
+                        updateDateInput(this.value, '');
+                    }
+                });
+
+                // Initial call
+                if (currentFilter !== 'all_time') {
+                    updateDateInput(currentFilter, currentValue);
+                }
             });
         </script>
     @endsection

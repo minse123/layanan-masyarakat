@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('alamat')->nullable();
             $table->string('nik')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'operator', 'psm', 'masyarakat']);
+            $table->enum('role', ['admin', 'operator','kasubag', 'psm', 'masyarakat']);
             $table->rememberToken();
             $table->timestamps();
         });

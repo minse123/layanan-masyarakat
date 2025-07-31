@@ -12,18 +12,22 @@ class StatistikSoalController
 {
     public function index(Request $request)
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $kategoriId = $request->input('kategori');
         $limit = $request->input('limit', 10);
         $soal = SoalPelatihan::all();
 
         $query = SoalPelatihan::select([
-                'soal_pelatihan.id',
-                'soal_pelatihan.pertanyaan',
-                'kategori_soal_pelatihan.nama_kategori',
-                DB::raw('COUNT(jawaban_peserta.id) as total_jawaban'),
-                DB::raw('SUM(CASE WHEN jawaban_peserta.benar = 0 THEN 1 ELSE 0 END) as total_salah'),
-                DB::raw('ROUND((SUM(CASE WHEN jawaban_peserta.benar = 0 THEN 1 ELSE 0 END) / COUNT(jawaban_peserta.id)) * 100, 2) as persentase_salah')
-            ])
+            'soal_pelatihan.id',
+            'soal_pelatihan.pertanyaan',
+            'kategori_soal_pelatihan.nama_kategori',
+            DB::raw('COUNT(jawaban_peserta.id) as total_jawaban'),
+            DB::raw('SUM(CASE WHEN jawaban_peserta.benar = 0 THEN 1 ELSE 0 END) as total_salah'),
+            DB::raw('ROUND((SUM(CASE WHEN jawaban_peserta.benar = 0 THEN 1 ELSE 0 END) / COUNT(jawaban_peserta.id)) * 100, 2) as persentase_salah')
+        ])
             ->leftJoin('jawaban_peserta', 'soal_pelatihan.id', '=', 'jawaban_peserta.id_soal')
             ->leftJoin('kategori_soal_pelatihan', 'soal_pelatihan.id_kategori_soal_pelatihan', '=', 'kategori_soal_pelatihan.id')
             ->groupBy('soal_pelatihan.id', 'soal_pelatihan.pertanyaan', 'kategori_soal_pelatihan.nama_kategori')
@@ -40,6 +44,7 @@ class StatistikSoalController
         $kategoriList = KategoriSoalPelatihan::all();
 
         return view('admin.soal.statistik-soal', [
+            'layout' => $layout,
             'soal' => $soal,
             'soalTersulit' => $soalTersulit,
             'kategoriList' => $kategoriList,
@@ -48,8 +53,8 @@ class StatistikSoalController
         ]);
     }
 
-    
-    
 
-    
+
+
+
 }

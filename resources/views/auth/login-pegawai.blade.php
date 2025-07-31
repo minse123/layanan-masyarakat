@@ -10,20 +10,6 @@
                 <h4 class="auth-title">Login Pegawai</h4>
                 <p class="auth-subtitle mb-3">Masukan Akun Anda</p>
 
-                {{-- Alert --}}
-                @if (session()->has('message'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('message') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-                @if (session()->has('salah'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('salah') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-
                 {{-- Form Login --}}
                 <form method="POST" action="/login-pegawai" data-parsley-validate>
                     @csrf

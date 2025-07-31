@@ -19,6 +19,10 @@ class KonsultasiController extends Controller
     
     public function index()
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
         $filter = session('filter', 'all_time');
         $tanggal = session('tanggal');
         $minggu = session('minggu');
@@ -43,7 +47,7 @@ class KonsultasiController extends Controller
 
         // If no active filters, fetch all consultations
         $konsultasi = MasterKonsultasi::with(['kategoriPelatihan.jenisPelatihan', 'jawabPelatihan'])->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")->get();
-        return view('admin.konsultasi.index', compact('konsultasi'));
+        return view('admin.konsultasi.index', compact('konsultasi','layout'));
     }
 
     public function store(Request $request)

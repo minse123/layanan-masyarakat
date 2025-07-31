@@ -1,4 +1,4 @@
-@extends('admin.app')
+@extends($layout)
 @include('sweetalert::alert')
 @section('content')
     <div class="card shadow mb-4">

@@ -1,5 +1,4 @@
-{{-- filepath: resources/views/admin/soal/kategori_soal_pelatihan.blade.php --}}
-@extends('admin.app')
+@extends($layout)
 @include('sweetalert::alert')
 
 @section('content')

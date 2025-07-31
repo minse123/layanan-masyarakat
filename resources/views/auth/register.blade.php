@@ -10,13 +10,6 @@
                 </div>
                 <p class="auth-subtitle mb-3">Masukkan data Anda untuk mendaftar ke situs web kami.</p>
 
-                @if (session()->has('salah'))
-                    <div class="alert alert-danger alert-dismissible show fade">
-                        {{ session('salah') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-
                 <form method="POST" action="{{ url('/register-process') }}">
                     @csrf
                     <div class="form-group position-relative has-icon-left mb-3">

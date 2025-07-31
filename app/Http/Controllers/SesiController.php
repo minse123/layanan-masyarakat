@@ -35,12 +35,12 @@ class SesiController extends Controller
             $user = Auth::user();
             // Redirect berdasarkan role
             if ($user->role === 'masyarakat') {
-                Alert()->success('Login Berhasil', 'Selamat datang di dashboard!');
-                return redirect('/masyarakat/dashboard')->with('message', 'Selamat datang, Masyarakat!');
+                alert()->success('Login Berhasil', 'Selamat datang di dashboard!');
+                return redirect('/masyarakat/dashboard');
             }
         }
         alert()->error('Login Gagal', 'Email atau password salah.');
-        return back()->with('salah', 'Email atau password salah.')->withInput();
+        return back()->withInput();
     }
 
     public function indexPegawai()
@@ -69,20 +69,25 @@ class SesiController extends Controller
             // Redirect berdasarkan role
             switch ($user->role) {
                 case 'admin':
-                    Alert()->success('Login Berhasil', 'Selamat datang di dashboard!');
-                    return redirect('/admin/dashboard')->with('message', 'Selamat datang, Admin');
+                    alert()->success('Login Berhasil', 'Selamat datang ' . $user->name . '!');
+                    return redirect('/admin/dashboard');
                 case 'psm':
-                    return redirect('/psm/dashboard')->with('message', 'Selamat datang, PSM');
+                    alert()->success('Login Berhasil', 'Selamat datang ' . $user->name . '!');
+                    return redirect('/psm/dashboard');
                 case 'kasubag':
-                    return redirect('/kasubag/dashboard')->with('message', 'Selamat datang, Kasubag!');
+                    alert()->success('Login Berhasil', 'Selamat datang ' . $user->name . '!');
+                    return redirect('/kasubag/dashboard');
+                case 'operator':
+                    alert()->success('Login Berhasil', 'Selamat datang ' . $user->name . '!');
+                    return redirect('/operator/dashboard');
                 default:
                     Auth::logout();
                     alert()->error('Login Gagal', 'Anda tidak memiliki akses.');
-                    return back()->with('salah', 'Anda tidak memiliki akses.')->withInput();
+                    return back()->withInput();
             }
         }
         alert()->error('Login Gagal', 'Email atau password salah.');
-        return back()->with('salah', 'Email atau password salah.')->withInput();
+        return back()->withInput();
     }
 
     public function register()
@@ -112,13 +117,22 @@ class SesiController extends Controller
             'role' => 'masyarakat', // Default role
         ]);
 
-        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
+        alert()->success('Registrasi berhasil!', 'Silakan login.');
+        return redirect()->route('login');
     }
 
 
 
     public function logout(Request $request)
     {
+        $redirectPath = '/login';
+        if (Auth::check()) {
+            $user = Auth::user();
+            if (in_array($user->role, ['admin', 'psm', 'kasubag', 'operator'])) {
+                $redirectPath = '/login-pegawai';
+            }
+        }
+
         Auth::logout();
 
         // Invalidate the session
@@ -127,7 +141,7 @@ class SesiController extends Controller
         // Regenerate CSRF token
         $request->session()->regenerateToken();
         alert()->success('Berhasil', 'Anda berhasil logout.');
-        return redirect('/login')->with('message', 'Anda berhasil logout.');
+        return redirect($redirectPath)->with('message', 'Anda berhasil logout.');
     }
 
 }
