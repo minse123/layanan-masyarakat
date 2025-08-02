@@ -14,7 +14,9 @@
 
                     <h1 class="text-white mb-4">Sistem Informasi Layanan Masyarakat</h1>
 
-                    <a href="#item-2" class="btn custom-btn smoothscroll me-3">Layanan Konsultasi BumDes</a>                    <a href="#item-3" class="link link--kale smoothscroll">Pengajuan Surat</a> <a href="#item-4" class="link link--kale smoothscroll">Latihan Soal Pelatihan</a>
+                    <a href="#item-2" class="btn custom-btn smoothscroll me-3">Layanan Konsultasi BumDes</a> <a href="#item-3"
+                        class="link link--kale smoothscroll">Pengajuan Surat</a> <a href="#item-4"
+                        class="link link--kale smoothscroll">Latihan Soal Pelatihan</a>
                 </div>
 
                 <div class="hero-image-wrap col-lg-6 col-12 mt-3 mt-lg-0">
@@ -49,8 +51,8 @@
             <div class="row text-center">
                 <div class="col-lg-4 col-12 mb-4" id="item-2">
                     <div class="card border p-3 h-100 d-flex flex-column justify-content-between">
-                        <img src="/frontend/images/interview.png" class="card-img-top mx-auto"
-                            style="max-width:200px;" alt="Layanan Konsultasi BumDes">
+                        <img src="/frontend/images/interview.png" class="card-img-top mx-auto" style="max-width:200px;"
+                            alt="Layanan Konsultasi BumDes">
                         <div class="card-body d-flex flex-column">
                             <button class="btn btn-success w-100 mt-auto" data-bs-toggle="modal"
                                 data-bs-target="#modalKonsultasi">
@@ -102,7 +104,9 @@
                     <div class="col-lg-3 col-md-6 mb-4">
                         <div class="card h-100 shadow-sm border-0 rounded-lg" data-bs-toggle="modal"
                             data-bs-target="#detailModal-{{ $jadwal->id }}" style="cursor: pointer;">
-                            <img src="{{ $jadwal->file_path ? asset('storage/' . $jadwal->file_path) : asset('frontend/images/logo-kementerian.png') }}" class="card-img-top" alt="{{ $jadwal->nama_pelatihan }}" style="height: 200px; object-fit: cover;">
+                            <img src="{{ $jadwal->file_path ? asset('storage/' . $jadwal->file_path) : asset('frontend/images/logo-kementerian.png') }}"
+                                class="card-img-top" alt="{{ $jadwal->nama_pelatihan }}"
+                                style="height: 200px; object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $jadwal->nama_pelatihan }}</h5>
                             </div>
@@ -123,78 +127,80 @@
     </section>
 
     @foreach ($jadwalPelatihan as $item)
-    <!-- Detail Modal -->
-    <div class="modal fade" id="detailModal-{{ $item->id }}" tabindex="-1" role="dialog"
-        aria-labelledby="detailModalLabel-{{ $item->id }}" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailModalLabel-{{ $item->id }}">Detail Jadwal Pelatihan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-2">
-                                <label>Nama Pelatihan:</label>
-                                <p class="mb-1">{{ $item->nama_pelatihan }}</p>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label>Tanggal:</label>
-                                <p class="mb-1">
-                                    {{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d M Y') }} -
-                                    {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
-                                </p>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label>Jam:</label>
-                                <p class="mb-1">{{ $item->jam_mulai }} - {{ $item->jam_selesai }}</p>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label>File:</label>
-                                @if ($item->file_path)
-                                    <p class="mb-1"><a
-                                            href="{{ route('admin.jadwal-pelatihan.file', ['filename' => $item->file_path]) }}"
-                                            target="_blank">Lihat File</a></p>
-                                @else
-                                    <p class="mb-1">Tidak ada file</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-2">
-                                <label>Lokasi:</label>
-                                <p class="mb-1">{{ $item->lokasi }}</p>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label>Jenis Pelatihan:</label>
-                                <p class="mb-1">
-                                    @if ($item->pelatihan_inti)
-                                        {{ str_replace('_', ' ', ucwords($item->pelatihan_inti)) }} (Inti)
-                                    @elseif ($item->pelatihan_pendukung)
-                                        {{ str_replace('_', ' ', ucwords($item->pelatihan_pendukung)) }} (Pendukung)
+        <!-- Detail Modal -->
+        <div class="modal fade" id="detailModal-{{ $item->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="detailModalLabel-{{ $item->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabel-{{ $item->id }}">Detail Jadwal Pelatihan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-2">
+                                    <label><strong>Nama Pelatihan:</strong></label>
+                                    <p class="mb-1">{{ $item->nama_pelatihan }}</p>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label><strong>Tanggal:</strong></label>
+                                    <p class="mb-1">
+                                        {{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d M Y') }} -
+                                        {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
+                                    </p>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label><strong>Jam:</strong></label>
+                                    <p class="mb-1">{{ $item->jam_mulai }} - {{ $item->jam_selesai }}</p>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label><strong>Gambar:</strong></label>
+                                    @if ($item->file_path)
+                                        <div class="mb-1">
+                                            <img src="{{ route('admin.jadwal-pelatihan.file', ['filename' => $item->file_path]) }}"
+                                                alt="Gambar Pelatihan" class="img-fluid"
+                                                style="max-width: 100%; height: auto;">
+                                        </div>
                                     @else
-                                        -
+                                        <p class="mb-1">Tidak ada gambar</p>
                                     @endif
-                                </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-2">
+                                    <label><strong>Lokasi:</strong></label>
+                                    <p class="mb-1">{{ $item->lokasi }}</p>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label><strong>Jenis Pelatihan:</strong></label>
+                                    <p class="mb-1">
+                                        @if ($item->pelatihan_inti)
+                                            {{ str_replace('_', ' ', ucwords($item->pelatihan_inti)) }} (Inti)
+                                        @elseif ($item->pelatihan_pendukung)
+                                            {{ str_replace('_', ' ', ucwords($item->pelatihan_pendukung)) }} (Pendukung)
+                                        @else
+                                            -
+                                        @endif
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <label><strong>Deskripsi:</strong></label>
+                                <p>{{ $item->deskripsi }}</p>
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <label>Deskripsi:</label>
-                            <p>{{ $item->deskripsi }}</p>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
-    </div>
-@endforeach
+    @endforeach
 
     <!-- Modal Konsultasi BumDes -->
     <div class="modal fade" id="modalKonsultasi" tabindex="-1" aria-labelledby="modalKonsultasiLabel"
@@ -234,8 +240,8 @@
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Judul Konsultasi</label>
-                                <input type="text" name="judul_konsultasi" class="form-control rounded-pill"
-                                    required placeholder="Judul Konsultasi">
+                                <input type="text" name="judul_konsultasi" class="form-control rounded-pill" required
+                                    placeholder="Judul Konsultasi">
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Deskripsi</label>
@@ -244,8 +250,8 @@
                             </div>
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Jenis Kategori</label>
-                                <select name="jenis_kategori" id="jenis_kategori"
-                                    class="form-select rounded-pill" required onchange="togglePelatihan()">
+                                <select name="jenis_kategori" id="jenis_kategori" class="form-select rounded-pill"
+                                    required onchange="togglePelatihan()">
                                     <option value="">-- Pilih Kategori --</option>
                                     <option value="inti">Inti</option>
                                     <option value="pendukung">Pendukung</option>
@@ -279,7 +285,7 @@
                                 <i class="bi bi-send me-1"></i> Ajukan Konsultasi
                             </button>
                         </div>
-                    
+
                     </form>
                 </div>
             </div>
@@ -287,14 +293,12 @@
     </div>
 
     <!-- Modal Pengajuan Surat -->
-    <div class="modal fade" id="modalSurat" tabindex="-1" aria-labelledby="modalSuratLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="modalSurat" tabindex="-1" aria-labelledby="modalSuratLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4">
                 <div class="modal-header bg-warning rounded-top-4">
                     <h5 class="modal-title" id="modalSuratLabel">Pengajuan Surat</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-4 py-3">
                     <form action="{{ route('simpan-surat') }}" method="post" enctype="multipart/form-data">
@@ -302,13 +306,11 @@
                         <div class="row g-3">
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Nomor Surat</label>
-                                <input type="text" name="nomor_surat" class="form-control rounded-pill"
-                                    required>
+                                <input type="text" name="nomor_surat" class="form-control rounded-pill" required>
                             </div>
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Tanggal Surat</label>
-                                <input type="date" name="tanggal_surat" class="form-control rounded-pill"
-                                    required>
+                                <input type="date" name="tanggal_surat" class="form-control rounded-pill" required>
                             </div>
                             <div class="col-12 col-md-6">
                                 <label class="form-label">Pengirim</label>
@@ -324,15 +326,14 @@
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Lampiran</label>
-                                <input type="file" name="file" id="file"
-                                    class="form-control rounded-pill" required>
+                                <input type="file" name="file" id="file" class="form-control rounded-pill"
+                                    required>
                             </div>
                         </div>
                         <div class="d-grid mt-4">
-                            <button type="submit"
-                                class="btn btn-warning rounded-pill px-4 py-2 fw-bold">Ajukan</button>
+                            <button type="submit" class="btn btn-warning rounded-pill px-4 py-2 fw-bold">Ajukan</button>
                         </div>
-            
+
                     </form>
                 </div>
             </div>
@@ -542,22 +543,19 @@
 
                     <ul class="social-icon mb-4">
                         <li class="social-icon-item">
-                            <a href="https://www.instagram.com/balatmas.bjm/"
-                                class="social-icon-link bi-instagram"></a>
+                            <a href="https://www.instagram.com/balatmas.bjm/" class="social-icon-link bi-instagram"></a>
                         </li>
                         <li class="social-icon-item">
                             <a href="https://twitter.com/BanjarmasinBlm" class="social-icon-link bi-twitter"></a>
                         </li>
                         <li class="social-icon-item">
-                            <a href="https://www.facebook.com/blm.banjarmasin.9"
-                                class="social-icon-link bi-facebook"></a>
+                            <a href="https://www.facebook.com/blm.banjarmasin.9" class="social-icon-link bi-facebook"></a>
                         </li>
                         <li class="social-icon-item">
                             <a href="https://wa.me/08115000344" class="social-icon-link bi-whatsapp"></a>
                         </li>
                         <li class="social-icon-item">
-                            <a href="https://www.tiktok.com/@bppmddttbanjarmasin"
-                                class="social-icon-link bi-tiktok"></a>
+                            <a href="https://www.tiktok.com/@bppmddttbanjarmasin" class="social-icon-link bi-tiktok"></a>
                         </li>
                         <li class="social-icon-item">
                             <a href="http://www.youtube.com/@bppmddttbanjarmasin6034"
@@ -582,9 +580,12 @@
             <div class="row justify-content-center">
                 @forelse ($videos as $video)
                     <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="card h-100 shadow-sm border-0 rounded-lg" data-bs-toggle="modal" data-bs-target="#videoModal-{{ $video->id }}" style="cursor: pointer;">
+                        <div class="card h-100 shadow-sm border-0 rounded-lg" data-bs-toggle="modal"
+                            data-bs-target="#videoModal-{{ $video->id }}" style="cursor: pointer;">
                             <div class="video-thumbnail-container">
-                                <img src="https://img.youtube.com/vi/{{ $video->youtube_id }}/hqdefault.jpg" class="card-img-top rounded-top" alt="{{ $video->judul }}" style="height: 200px; object-fit: cover;">
+                                <img src="https://img.youtube.com/vi/{{ $video->youtube_id }}/hqdefault.jpg"
+                                    class="card-img-top rounded-top" alt="{{ $video->judul }}"
+                                    style="height: 200px; object-fit: cover;">
                                 <div class="play-button-overlay">
                                     <i class="bi bi-play-circle-fill"></i>
                                 </div>
@@ -614,7 +615,8 @@
 
     @foreach ($videos as $video)
         <!-- Video Modal -->
-        <div class="modal fade" id="videoModal-{{ $video->id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ $video->id }}" aria-hidden="true">
+        <div class="modal fade" id="videoModal-{{ $video->id }}" tabindex="-1"
+            aria-labelledby="videoModalLabel-{{ $video->id }}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -623,48 +625,49 @@
                     </div>
                     <div class="modal-body">
                         <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $video->youtube_id }}" allowfullscreen style="width: 100%; height: 400px;"></iframe>
+                            <iframe class="embed-responsive-item"
+                                src="https://www.youtube.com/embed/{{ $video->youtube_id }}" allowfullscreen
+                                style="width: 100%; height: 400px;"></iframe>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     @endforeach
-
 @endsection
 
 @push('styles')
-<style>
-    .video-thumbnail-container {
-        position: relative;
-        width: 100%;
-        padding-top: 56.25%; /* 16:9 Aspect Ratio */
-        overflow: hidden;
-    }
+    <style>
+        .video-thumbnail-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            /* 16:9 Aspect Ratio */
+            overflow: hidden;
+        }
 
-    .video-thumbnail-container img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+        .video-thumbnail-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-    .play-button-overlay {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 3rem;
-        color: white;
-        opacity: 0.8;
-        transition: opacity 0.3s ease;
-    }
+        .play-button-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: white;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
 
-    .card:hover .play-button-overlay {
-        opacity: 1;
-    }
-</style>
+        .card:hover .play-button-overlay {
+            opacity: 1;
+        }
+    </style>
 @endpush
-

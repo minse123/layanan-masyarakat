@@ -16,7 +16,7 @@ use Exception;
 
 class KonsultasiController extends Controller
 {
-    
+
     public function index()
     {
         $layout = match (auth()->user()->role) {
@@ -47,7 +47,7 @@ class KonsultasiController extends Controller
 
         // If no active filters, fetch all consultations
         $konsultasi = MasterKonsultasi::with(['kategoriPelatihan.jenisPelatihan', 'jawabPelatihan'])->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")->get();
-        return view('admin.konsultasi.index', compact('konsultasi','layout'));
+        return view('admin.konsultasi.index', compact('konsultasi', 'layout'));
     }
 
     public function store(Request $request)
@@ -133,7 +133,10 @@ class KonsultasiController extends Controller
             $data['jawaban'] = null;
             $data['tanggal_dijawab'] = null;
         }
-
+        // \Log::info('Redirecting user', [
+        //     'to' => 'login',
+        //     'user_role' => Auth::check() ? Auth::user()->role : 'Guest',
+        // ]);
         $konsultasi->update($data);
         Alert::success('Berhasil', 'Data Konsultasi berhasil diperbarui!');
         return redirect()->route('admin.konsultasi.index')->with('success', 'Konsultasi berhasil diperbarui.');

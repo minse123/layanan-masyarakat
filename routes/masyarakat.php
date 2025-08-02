@@ -1,6 +1,6 @@
 <?php
 use App\Http\Controllers\MasyarakatController;
-use App\Http\Controllers\KonsultasiController;
+use App\Http\Controllers\ConfigurationController\JadwalPelatihanController;
 use App\Http\Controllers\JawabanController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
@@ -18,3 +18,4 @@ Route::post('/masyarakat/soal/jawaban', [MasyarakatController::class, 'storeSoal
 Route::get('/soal/hasil', [MasyarakatController::class, 'hasil'])->name('masyarakat.soal.hasil');
 
 Route::get('/jadwal-pelatihan', [MasyarakatController::class, 'jadwalPelatihan'])->name('jadwal-pelatihan');
+Route::get('jadwal-pelatihan/file/{filename}', [JadwalPelatihanController::class, 'showFile'])->where('filename', '.*')->name('admin.jadwal-pelatihan.file');

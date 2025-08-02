@@ -58,6 +58,8 @@
                                     <option value="operator" {{ $user->role == 'operator' ? 'selected' : '' }}>Operator
                                     </option>
                                     <option value="psm" {{ $user->role == 'psm' ? 'selected' : '' }}>PSM</option>
+                                    <option value="kasubag" {{ $user->role == 'kasubag' ? 'selected' : '' }}>Kasubag
+                                    </option>
                                     <option value="masyarakat" {{ $user->role == 'masyarakat' ? 'selected' : '' }}>Masyarakat
                                     </option>
                                 </select>

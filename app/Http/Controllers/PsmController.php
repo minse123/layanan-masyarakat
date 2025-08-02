@@ -38,19 +38,6 @@ class PsmController extends Controller
     }
     public function updateProfile(Request $request)
     {
-        \Log::info('Route hit: ' . $request->path());
-        \Log::info('Method: ' . $request->method());
-        \Log::info('User authenticated: ' . (Auth::check() ? 'Yes' : 'No'));
-        \Log::info('Update Profile Called', [
-            'user_id' => Auth::id(),
-            'is_authenticated' => Auth::check(),
-            'request_data' => $request->all()
-        ]);
-
-        if (!Auth::check()) {
-            \Log::error('User not authenticated in updateProfile');
-            return redirect()->route('login');
-        }
         $user = Auth::user();
 
         $request->validate([

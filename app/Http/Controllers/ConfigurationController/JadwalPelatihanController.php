@@ -99,7 +99,6 @@ class JadwalPelatihanController
     public function update(Request $request, $id)
     {
         
-
         $validator = Validator::make($request->all(), [
             'nama_pelatihan' => 'required|string|max:255',
             'tanggal_mulai' => 'required|date',
@@ -156,9 +155,8 @@ class JadwalPelatihanController
         \Log::info("JadwalPelatihan with ID: {$id} updated successfully.");
 
         Alert::success('Selamat', 'Jadwal Pelatihan berhasil diperbarui.');
-        return redirect()->route('admin.jadwal-pelatihan.index');
+        return redirect()->back();
     }
-
 
     public function destroy($id)
     {
@@ -172,7 +170,7 @@ class JadwalPelatihanController
         $jadwal->delete();
 
         Alert::success('Selamat', 'Jadwal Pelatihan berhasil dihapus.');
-        return redirect()->route('admin.jadwal-pelatihan.index');
+        return redirect()->back();
     }
 
 
