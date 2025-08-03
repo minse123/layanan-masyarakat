@@ -3,11 +3,13 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">Master Data Surat</h6>
+            @if(auth()->user()->role !== 'kasubag')
             <div>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#tambahModal">
                     <i class="fas fa-plus"></i> Tambah Data
                 </button>
             </div>
+            @endif
         </div>
         <div class="card-body">
             <!-- Filter Card -->
@@ -298,6 +300,7 @@
                                     </div>
                                 </td>
                                 <td>
+                                    {{-- Kasubag hanya bisa verifikasi (terima/tolak) untuk surat dengan status Proses --}}
                                     @if ($item->status == 'Proses')
                                         <!-- Tombol Terima dengan konfirmasi modal -->
                                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
@@ -377,145 +380,150 @@
                                         </div>
                                     @endif
 
-                                    <!-- Tombol Edit -->
-                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
-                                        data-target="#editModal{{ $item->id_surat }}">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <!-- Tombol Hapus -->
-                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                        data-target="#deleteModal{{ $item->id_surat }}">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    {{-- Admin dapat melakukan semua operasi CRUD, kasubag tidak bisa --}}
+                                    @if(auth()->user()->role !== 'kasubag')
+                                        <!-- Tombol Edit -->
+                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                            data-target="#editModal{{ $item->id_surat }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <!-- Tombol Hapus -->
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                            data-target="#deleteModal{{ $item->id_surat }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
 
-                                    <!-- Modal Konfirmasi Hapus -->
-                                    <div class="modal fade" id="deleteModal{{ $item->id_surat }}" tabindex="-1"
-                                        role="dialog" aria-labelledby="deleteModalLabel{{ $item->id_surat }}"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="deleteModalLabel{{ $item->id_surat }}">
-                                                        Konfirmasi Hapus</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
+                                        <!-- Modal Konfirmasi Hapus -->
+                                        <div class="modal fade" id="deleteModal{{ $item->id_surat }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="deleteModalLabel{{ $item->id_surat }}"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteModalLabel{{ $item->id_surat }}">
+                                                            Konfirmasi Hapus</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Apakah Anda yakin ingin menghapus surat dengan nomor
+                                                        <strong>{{ $item->nomor_surat }}</strong>?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Batal</button>
+                                                        <form action="{{ route('admin.surat.hapus', $item->id_surat) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-danger">Hapus</button>
+                                                            @include('sweetalert::alert')
+                                                        </form>
+                                                    </div>
                                                 </div>
-                                                <div class="modal-body">
-                                                    Apakah Anda yakin ingin menghapus surat dengan nomor
-                                                    <strong>{{ $item->nomor_surat }}</strong>?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Batal</button>
-                                                    <form action="{{ route('admin.surat.hapus', $item->id_surat) }}"
-                                                        method="POST">
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal Edit -->
+                                        <div class="modal fade" id="editModal{{ $item->id_surat }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalLabel">Edit Data Surat</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form action="{{ route('admin.master.surat.update', $item->id_surat) }}"
+                                                        method="POST" enctype="multipart/form-data">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-danger">Hapus</button>
+                                                        @method('PUT')
+                                                        <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label>Nomor Surat</label>
+                                                                        <input type="text" name="nomor_surat"
+                                                                            class="form-control"
+                                                                            value="{{ $item->nomor_surat }}" required>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Tanggal Surat</label>
+                                                                        <input type="date" name="tanggal_surat"
+                                                                            class="form-control"
+                                                                            value="{{ $item->tanggal_surat }}" required>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Pengirim</label>
+                                                                        <input type="text" name="pengirim"
+                                                                            class="form-control"
+                                                                            value="{{ $item->pengirim }}" required>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Telepon</label>
+                                                                        <input type="text" name="telepon"
+                                                                            class="form-control" value="{{ $item->telepon }}"
+                                                                            required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label>Perihal</label>
+                                                                        <textarea name="perihal" class="form-control" required>{{ $item->perihal }}</textarea>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Status</label>
+                                                                        <select name="status" class="form-control">
+                                                                            <option value="Proses"
+                                                                                {{ $item->status == 'Proses' ? 'selected' : '' }}>
+                                                                                Proses</option>
+                                                                            <option value="Terima"
+                                                                                {{ $item->status == 'Terima' ? 'selected' : '' }}>
+                                                                                Terima</option>
+                                                                            <option value="Tolak"
+                                                                                {{ $item->status == 'Tolak' ? 'selected' : '' }}>
+                                                                                Tolak
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Keterangan</label>
+                                                                        <textarea name="keterangan" class="form-control" required>{{ $item->keterangan }}</textarea>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="file">File</label>
+                                                                        <input type="file" class="form-control"
+                                                                            id="file" name="file">
+                                                                        <small class="form-text text-muted">Biarkan kosong jika
+                                                                            tidak
+                                                                            ingin mengubah file.</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Batal</button>
+                                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                                        </div>
                                                         @include('sweetalert::alert')
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-
-                                    <!-- Modal Edit -->
-                                    <div class="modal fade" id="editModal{{ $item->id_surat }}" tabindex="-1"
-                                        role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel">Edit Data Surat</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <form action="{{ route('admin.master.surat.update', $item->id_surat) }}"
-                                                    method="POST" enctype="multipart/form-data">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label>Nomor Surat</label>
-                                                                    <input type="text" name="nomor_surat"
-                                                                        class="form-control"
-                                                                        value="{{ $item->nomor_surat }}" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Tanggal Surat</label>
-                                                                    <input type="date" name="tanggal_surat"
-                                                                        class="form-control"
-                                                                        value="{{ $item->tanggal_surat }}" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Pengirim</label>
-                                                                    <input type="text" name="pengirim"
-                                                                        class="form-control"
-                                                                        value="{{ $item->pengirim }}" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Telepon</label>
-                                                                    <input type="text" name="telepon"
-                                                                        class="form-control" value="{{ $item->telepon }}"
-                                                                        required>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label>Perihal</label>
-                                                                    <textarea name="perihal" class="form-control" required>{{ $item->perihal }}</textarea>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Status</label>
-                                                                    <select name="status" class="form-control">
-                                                                        <option value="Proses"
-                                                                            {{ $item->status == 'Proses' ? 'selected' : '' }}>
-                                                                            Proses</option>
-                                                                        <option value="Terima"
-                                                                            {{ $item->status == 'Terima' ? 'selected' : '' }}>
-                                                                            Terima</option>
-                                                                        <option value="Tolak"
-                                                                            {{ $item->status == 'Tolak' ? 'selected' : '' }}>
-                                                                            Tolak
-                                                                        </option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Keterangan</label>
-                                                                    <textarea name="keterangan" class="form-control" required>{{ $item->keterangan }}</textarea>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="file">File</label>
-                                                                    <input type="file" class="form-control"
-                                                                        id="file" name="file">
-                                                                    <small class="form-text text-muted">Biarkan kosong jika
-                                                                        tidak
-                                                                        ingin mengubah file.</small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-primary">Simpan</button>
-                                                    </div>
-                                                    @include('sweetalert::alert')
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
+            
+            {{-- Modal Tambah hanya untuk non-kasubag --}}
+            @if(auth()->user()->role !== 'kasubag')
             <div class="modal fade" id="tambahModal" tabindex="-1" role="dialog" aria-labelledby="tambahModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -575,60 +583,64 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
-    @endsection
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    @section('script')
-        <script>
-            $(document).ready(function() {
-                $('#dataTable').DataTable();
-            });
+    </div>
+@endsection
 
-            document.addEventListener('DOMContentLoaded', function() {
-                const filterSelect = document.getElementById('filter');
-                const dateInputContainer = document.getElementById('date-input-container');
-                const currentFilter = '{{ request('filter', 'all_time') }}';
-                const currentValue = '{{ request('tanggal', '') }}';
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
-                function updateDateInput(filter, value) {
-                    let inputHtml = '';
-                    const today = new Date().toISOString().slice(0, 10);
-                    switch (filter) {
-                        case 'bulanan':
-                            inputHtml = `<input type="month" name="tanggal" id="tanggal" class="form-control" value="${value || today.slice(0, 7)}" required>`;
-                            break;
-                        case 'tahunan':
-                            const currentYear = new Date().getFullYear();
-                            inputHtml = `<input type="number" name="tanggal" id="tanggal" class="form-control" placeholder="Tahun" value="${value || currentYear}" min="2000" max="${currentYear}" required>`;
-                            break;
-                        case 'harian':
-                        case 'mingguan':
-                            inputHtml = `<input type="date" name="tanggal" id="tanggal" class="form-control" value="${value || today}" required>`;
-                            break;
-                    }
-                    dateInputContainer.innerHTML = inputHtml;
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterSelect = document.getElementById('filter');
+            const dateInputContainer = document.getElementById('date-input-container');
+            const currentFilter = '{{ request('filter', 'all_time') }}';
+            const currentValue = '{{ request('tanggal', '') }}';
+
+            function updateDateInput(filter, value) {
+                let inputHtml = '';
+                const today = new Date().toISOString().slice(0, 10);
+                switch (filter) {
+                    case 'bulanan':
+                        inputHtml = `<input type="month" name="tanggal" id="tanggal" class="form-control" value="${value || today.slice(0, 7)}" required>`;
+                        break;
+                    case 'tahunan':
+                        const currentYear = new Date().getFullYear();
+                        inputHtml = `<input type="number" name="tanggal" id="tanggal" class="form-control" placeholder="Tahun" value="${value || currentYear}" min="2000" max="${currentYear}" required>`;
+                        break;
+                    case 'harian':
+                    case 'mingguan':
+                        inputHtml = `<input type="date" name="tanggal" id="tanggal" class="form-control" value="${value || today}" required>`;
+                        break;
                 }
+                dateInputContainer.innerHTML = inputHtml;
+            }
 
-                filterSelect.addEventListener('change', function() {
-                    if (this.value === 'all_time') {
-                        dateInputContainer.innerHTML = '';
-                    } else {
-                        updateDateInput(this.value, '');
-                    }
-                });
-
-                // Initial call
-                if (currentFilter !== 'all_time') {
-                    updateDateInput(currentFilter, currentValue);
+            filterSelect.addEventListener('change', function() {
+                if (this.value === 'all_time') {
+                    dateInputContainer.innerHTML = '';
+                } else {
+                    updateDateInput(this.value, '');
                 }
             });
-        </script>
-    @endsection
+
+            // Initial call
+            if (currentFilter !== 'all_time') {
+                updateDateInput(currentFilter, currentValue);
+            }
+        });
+    </script>
+@endsection
