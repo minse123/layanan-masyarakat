@@ -53,7 +53,7 @@
             <span>Master Administrasi</span>
         </a>
     </li>
-    <li class="nav-item {{ request()->routeIs('admin.konsultasi.*') ? 'active' : '' }}">
+    <li class="nav-item {{ request()->routeIs('konsultasi.*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ url('admin/konsultasi') }}" title="Master Konsultasi Pelatihan">
             <i class="fas fa-fw fa-comments text-white"></i>
             <span>Master Konsultasi</span>
@@ -135,13 +135,16 @@
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header text-primary">Laporan Administrasi:</h6>
                 <a class="collapse-item {{ request()->route('type') == 'proses' ? 'active' : '' }}"
-                    href="{{ route('admin.surat.report', ['type' => 'proses']) }}"><i class="fas fa-fw fa-sync-alt text-warning"></i> Surat
+                    href="{{ route('admin.surat.report', ['type' => 'proses']) }}"><i
+                        class="fas fa-fw fa-sync-alt text-warning"></i> Surat
                     Proses</a>
                 <a class="collapse-item {{ request()->route('type') == 'terima' ? 'active' : '' }}"
-                    href="{{ route('admin.surat.report', ['type' => 'terima']) }}"><i class="fas fa-fw fa-check-circle text-success"></i>
+                    href="{{ route('admin.surat.report', ['type' => 'terima']) }}"><i
+                        class="fas fa-fw fa-check-circle text-success"></i>
                     Surat Terima</a>
                 <a class="collapse-item {{ request()->route('type') == 'tolak' ? 'active' : '' }}"
-                    href="{{ route('admin.surat.report', ['type' => 'tolak']) }}"><i class="fas fa-fw fa-times-circle text-danger"></i>
+                    href="{{ route('admin.surat.report', ['type' => 'tolak']) }}"><i
+                        class="fas fa-fw fa-times-circle text-danger"></i>
                     Surat Tolak</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header text-primary">Laporan Konsultasi:</h6>

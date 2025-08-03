@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::middleware(['auth', 'role:psm'])->group(function () {
+Route::middleware(['auth', 'role:psm,admin'])->group(function () {
     Route::get('/dashboard', [PsmController::class, 'index'])->name('dashboard');
     Route::put('/profile', [PsmController::class, 'updateProfile'])->name('profile.update');
 

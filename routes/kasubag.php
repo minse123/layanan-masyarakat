@@ -5,7 +5,7 @@ use App\Http\Controllers\SuratController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth', 'role:kasubag'])->group(function () {
+Route::middleware(['auth', 'role:kasubag,admin'])->group(function () {
     Route::get('/dashboard', [KasubagController::class, 'index'])->name('kasubag.dashboard');
     Route::put('/profile', [KasubagController::class, 'updateProfile'])->name('profile.update');
     Route::get('/surat', [SuratController::class, 'Suratindex'])->name('admin.master.surat');

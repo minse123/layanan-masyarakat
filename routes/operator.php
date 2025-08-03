@@ -5,7 +5,7 @@ use App\Http\Controllers\ConfigurationController\JadwalPelatihanController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth', 'role:operator'])->group(function () {
+Route::middleware(['auth', 'role:operator,admin'])->group(function () {
     Route::get('/dashboard', [OperatorController::class, 'operatorIndex'])->name('operator.dashboard');
     Route::put('/profile', [OperatorController::class, 'updateProfile'])->name('profile.update');
 
