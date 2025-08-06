@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/dashboard', [MasyarakatController::class, 'index'])->name('masyarakat.dashboard');
-Route::put('/profile/update', [MasyarakatController::class, 'updateProfile'])->name('profile.update');
+Route::post('/profile/update', [MasyarakatController::class, 'updateProfile'])->name('masyarakat.profile.update');
 Route::get('/video-pelatihan', [MasyarakatController::class, 'semuaVideo'])->name('masyarakat.videopelatihan');
 Route::post('/konsultasi/simpan', [MasyarakatController::class, 'simpanKonsultasi'])->name('simpan-konsultasi');
 

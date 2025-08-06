@@ -1,5 +1,5 @@
 <!-- Topbar -->
-@include('sweetalert::alert')
+{{-- @include('sweetalert::alert') --}}
 <nav class="navbar navbar-expand-lg">
 
     <div class="container">
@@ -17,19 +17,21 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-lg-auto me-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_1">Beranda</a>
+                    <a class="nav-link click-scroll" href="{{ url('/masyarakat/dashboard') }}#section_1">Beranda</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_2">Layanan</a>
+                    <a class="nav-link click-scroll" href="{{ url('/masyarakat/dashboard') }}#section_2">Layanan</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_3">Tentang Kami</a>
+                    <a class="nav-link click-scroll" href="{{ url('/masyarakat/dashboard') }}#section_3">Tentang
+                        Kami</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_4">Kontak</a>
+                    <a class="nav-link click-scroll" href="{{ url('/masyarakat/dashboard') }}#section_4">Kontak</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="{{url('/masyarakat/dashboard')}}#section_video">Video Pelatihan</a>
+                    <a class="nav-link click-scroll" href="{{ url('/masyarakat/dashboard') }}#section_video">Video
+                        Pelatihan</a>
                 </li>
 
                 <div class="d-none d-lg-flex align-items-center ms-lg-3">
@@ -58,7 +60,8 @@
                                     style="width:38px;height:38px;">
                                     <i class="bi bi-person" style="font-size:1.5rem;"></i>
                                 </span>
-                                <span class="ms-2 text-white">{{ Auth::user()->name }}</span>
+                                <span class="ms-2 text-white"
+                                    title="{{ Auth::user()->name }}">{{ \Illuminate\Support\Str::limit(Auth::user()->name, 15) }}</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow animated--fade-in"
                                 aria-labelledby="userDropdown">
@@ -143,7 +146,8 @@
                                     @if ($konsul->status == 'Dijawab' && optional($konsul->jawabPelatihan)->jawaban)
                                         <div class="alert alert-success py-2 px-3 mb-0 mt-2">
                                             <strong>Jawaban:</strong><br>
-                                            <div class="small text-muted">{{ $konsul->jawabPelatihan->created_at->format('d M Y H:i') }}
+                                            <div class="small text-muted">
+                                                {{ $konsul->jawabPelatihan->created_at->format('d M Y H:i') }}
                                             </div>
                                             {{ \Illuminate\Support\Str::limit($konsul->jawabPelatihan->jawaban, 100) }}
                                         </div>
@@ -175,9 +179,8 @@
                     aria-label="Tutup"></button>
             </div>
             <div class="modal-body px-4 py-3">
-                <form action="{{ route('profile.update') }}" method="POST" autocomplete="off">
+                <form action="{{ route('masyarakat.profile.update') }}" method="POST" autocomplete="off">
                     @csrf
-                    @method('PUT')
                     <div class="mb-3">
                         <label class="form-label">Nama</label>
                         <input type="text" name="name" class="form-control rounded-pill"
@@ -207,6 +210,11 @@
                         <label class="form-label">Password Baru <span class="text-muted">(Kosongkan jika tidak ingin
                                 mengubah)</span></label>
                         <input type="password" name="password" class="form-control rounded-pill"
+                            autocomplete="new-password">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Konfirmasi Password Baru</label>
+                        <input type="password" name="password_confirmation" class="form-control rounded-pill"
                             autocomplete="new-password">
                     </div>
                     <div class="d-grid">

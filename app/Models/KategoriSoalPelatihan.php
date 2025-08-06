@@ -9,6 +9,7 @@ class KategoriSoalPelatihan extends Model
     protected $table = 'kategori_soal_pelatihan';
 
     protected $fillable = [
+        'id',
         'nama_kategori',
         'tipe',
     ];

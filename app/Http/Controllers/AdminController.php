@@ -106,6 +106,16 @@ class AdminController extends Controller
     }
     public function authSimpan(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'telepon' => 'required|string|max:15',
+            'nik' => 'required|string|max:16|unique:users',
+            'alamat' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|string',
+        ]);
+
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;

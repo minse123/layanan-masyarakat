@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo-kementerian.png') }}">
 
     <link rel="stylesheet" href="{{ asset('/frontend/css/style.css') }}">
-    <title>Layanan Masyarakat</title>
+    <title>SIMPELMADI</title>
 </head>
 
 <body class="bg-light">
@@ -25,7 +25,7 @@
                 <div class="card shadow-sm ">
                     <div class="card-body">
                         <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-4">Layanan Masyarakat Digital</h1>
+                            <h1 class="h4 text-gray-900 mb-4">Pelayanan Masyarakat Digital</h1>
                         </div>
                         <!-- Form Content -->
                         @yield('content')

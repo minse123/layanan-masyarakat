@@ -1,5 +1,4 @@
 @extends($layout)
-@include('sweetalert::alert')
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -162,69 +161,87 @@
                             <div class="modal fade" id="detailModal{{ $item->id_konsultasi }}" tabindex="-1"
                                 role="dialog" aria-labelledby="detailModalLabel{{ $item->id_konsultasi }}"
                                 aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                     <div class="modal-content">
-                                        <div class="modal-header bg-primary text-white">
+                                        <div class="modal-header">
                                             <h5 class="modal-title" id="detailModalLabel{{ $item->id_konsultasi }}">
                                                 Detail Konsultasi
                                             </h5>
-                                            <button type="button" class="close text-white" data-dismiss="modal"
+                                            <button type="button" class="close" data-dismiss="modal"
                                                 aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <div class="modal-body">
-                                            <dl class="row mb-0">
-                                                <dt class="col-sm-4">Nama</dt>
-                                                <dd class="col-sm-8">{{ $item->nama }}</dd>
-
-                                                <dt class="col-sm-4">Telepon</dt>
-                                                <dd class="col-sm-8">{{ $item->telepon }}</dd>
-
-                                                <dt class="col-sm-4">Email</dt>
-                                                <dd class="col-sm-8">{{ $item->email }}</dd>
-
-                                                <dt class="col-sm-4">Judul Konsultasi</dt>
-                                                <dd class="col-sm-8">{{ $item->judul_konsultasi }}</dd>
-
-                                                <dt class="col-sm-4">Deskripsi</dt>
-                                                <dd class="col-sm-8">{{ $item->deskripsi }}</dd>
-
-                                                <dt class="col-sm-4">Status</dt>
-                                                <dd class="col-sm-8">{{ $item->status }}</dd>
-
-                                                <dt class="col-sm-4">Tanggal Pengajuan</dt>
-                                                <dd class="col-sm-8">
-                                                    {{ optional(optional($item->kategoriPelatihan->first())->jenisPelatihan)->tanggal_pengajuan ?? '-' }}
-                                                </dd>
-
-                                                <dt class="col-sm-4">Jenis Kategori</dt>
-                                                <dd class="col-sm-8">
-                                                    {{ optional($item->kategoriPelatihan->first())->jenis_kategori ?? '-' }}</dd>
-
-                                                <dt class="col-sm-4">Jenis Pelatihan</dt>
-                                                <dd class="col-sm-8">
-                                                    @if (optional($item->kategoriPelatihan->first())->jenis_kategori == 'inti')
-                                                        {{ optional($item->kategoriPelatihan->first()->jenisPelatihan)->pelatihan_inti ?? '-' }}
-                                                    @elseif (optional($item->kategoriPelatihan->first())->jenis_kategori == 'pendukung')
-                                                        {{ optional($item->kategoriPelatihan->first()->jenisPelatihan)->pelatihan_pendukung ?? '-' }}
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </dd>
-
-                                                @if ($item->status == 'Dijawab')
+                                        <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <label>Nama:</label>
+                                                        <p class="mb-1">{{ $item->nama }}</p>
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label>Telepon:</label>
+                                                        <p class="mb-1">{{ $item->telepon }}</p>
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label>Email:</label>
+                                                        <p class="mb-1">{{ $item->email }}</p>
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label>Judul Konsultasi:</label>
+                                                        <p class="mb-1">{{ $item->judul_konsultasi }}</p>
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label>Deskripsi:</label>
+                                                        <p class="mb-1">{{ $item->deskripsi }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <label>Status:</label>
+                                                        <p class="mb-1">{{ $item->status }}</p>
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label>Tanggal Pengajuan:</label>
+                                                        <p class="mb-1">{{ optional(optional($item->kategoriPelatihan->first())->jenisPelatihan)->tanggal_pengajuan ?? '-' }}</p>
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label>Jenis Kategori:</label>
+                                                        <p class="mb-1">{{ optional($item->kategoriPelatihan->first())->jenis_kategori ?? '-' }}</p>
+                                                    </div>
+                                                    <div class="form-group mb-2">
+                                                        <label>Jenis Pelatihan:</label>
+                                                        <p class="mb-1">
+                                                            @if (optional($item->kategoriPelatihan->first())->jenis_kategori == 'inti')
+                                                                {{ optional($item->kategoriPelatihan->first()->jenisPelatihan)->pelatihan_inti ?? '-' }}
+                                                            @elseif (optional($item->kategoriPelatihan->first())->jenis_kategori == 'pendukung')
+                                                                {{ optional($item->kategoriPelatihan->first()->jenisPelatihan)->pelatihan_pendukung ?? '-' }}
+                                                            @else
+                                                                -
+                                                            @endif
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if ($item->status == 'Dijawab')
+                                            <hr>
+                                            <div class="row mt-3">
+                                                <div class="col-12">
                                                     @if (optional($item->jawabPelatihan)->jawaban)
-                                                        <dt class="col-sm-4">Jawaban</dt>
-                                                        <dd class="col-sm-8">{{ $item->jawabPelatihan->jawaban }}</dd>
+                                                        <div class="form-group mb-2">
+                                                            <label>Jawaban:</label>
+                                                            <p class="mb-1">{{ $item->jawabPelatihan->jawaban }}</p>
+                                                        </div>
                                                     @endif
                                                     @if (optional($item->jawabPelatihan)->tanggal_dijawab)
-                                                        <dt class="col-sm-4">Tanggal Dijawab</dt>
-                                                        <dd class="col-sm-8">{{ $item->jawabPelatihan->tanggal_dijawab }}
-                                                        </dd>
+                                                        <div class="form-group mb-2">
+                                                            <label>Tanggal Dijawab:</label>
+                                                            <p class="mb-1">{{ $item->jawabPelatihan->tanggal_dijawab }}</p>
+                                                        </div>
                                                     @endif
-                                                @endif
-                                            </dl>
+                                                </div>
+                                            </div>
+                                            @endif
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -238,76 +255,66 @@
                             <div class="modal fade" id="editModal{{ $item->id_konsultasi }}" tabindex="-1"
                                 role="dialog" aria-labelledby="editModalLabel{{ $item->id_konsultasi }}"
                                 aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-primary text-white">
-                                            <h5 class="modal-title" id="editModalLabel{{ $item->id_konsultasi }}">Edit
-                                                Konsultasi</h5>
-                                            <button type="button" class="close text-white" data-dismiss="modal"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <form action="{{ route('admin.konsultasi.update', $item->id_konsultasi) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label>Nama</label>
-                                                    <input type="text" name="nama" class="form-control"
-                                                        value="{{ $item->nama }}" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Telepon</label>
-                                                    <input type="text" name="telepon" class="form-control"
-                                                        value="{{ $item->telepon }}" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Email</label>
-                                                    <input type="email" name="email" class="form-control"
-                                                        value="{{ $item->email }}" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Judul Konsultasi</label>
-                                                    <input type="text" name="judul_konsultasi" class="form-control"
-                                                        value="{{ $item->judul_konsultasi }}" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Deskripsi</label>
-                                                    <textarea name="deskripsi" class="form-control" required>{{ $item->deskripsi }}</textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="status">Status</label>
-                                                    <select name="status" id="status"
-                                                        onchange="toggleJawabanField()">
-                                                        <option value="Pending"
-                                                            {{ $item->status == 'Pending' ? 'selected' : '' }}>Pending
-                                                        </option>
-                                                        <option value="Dijawab"
-                                                            {{ $item->status == 'Dijawab' ? 'selected' : '' }}>Dijawab
-                                                        </option>
-                                                    </select>
-                                                    <div id="jawabanField"
-                                                        style="display: {{ $item->status == 'Dijawab' ? 'block' : 'none' }};">
-                                                        <label for="jawaban">Jawaban</label>
-                                                        <textarea name="jawaban" id="jawaban">{{ optional($item->konsultasiDijawab)->jawaban ?? '' }}</textarea>
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                    <form action="{{ route('admin.konsultasi.update', $item->id_konsultasi) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editModalLabel{{ $item->id_konsultasi }}">Edit
+                                                    Konsultasi</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Nama</label>
+                                                            <input type="text" name="nama" class="form-control"
+                                                                value="{{ $item->nama }}" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Telepon</label>
+                                                            <input type="text" name="telepon" class="form-control"
+                                                                value="{{ $item->telepon }}" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Email</label>
+                                                            <input type="email" name="email" class="form-control"
+                                                                value="{{ $item->email }}" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Judul Konsultasi</label>
+                                                            <input type="text" name="judul_konsultasi" class="form-control"
+                                                                value="{{ $item->judul_konsultasi }}" required>
+                                                        </div>
                                                     </div>
-                                                    <script>
-                                                        function toggleJawabanField() {
-                                                            const status = document.getElementById('status').value;
-                                                            const jawabanField = document.getElementById('jawabanField');
-                                                            const jawabanInput = document.getElementById('jawaban');
-
-                                                            if (status === 'Dijawab') {
-                                                                jawabanField.style.display = 'block';
-                                                            } else {
-                                                                jawabanField.style.display = 'none';
-                                                                jawabanInput.value = ''; // Hapus nilai jawaban jika tidak diperlukan
-                                                            }
-                                                        }
-                                                        toggleJawabanField();
-                                                    </script>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Deskripsi</label>
+                                                            <textarea name="deskripsi" class="form-control" rows="4" required>{{ $item->deskripsi }}</textarea>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="status_{{ $item->id_konsultasi }}">Status</label>
+                                                            <select name="status" id="status_{{ $item->id_konsultasi }}" class="form-control"
+                                                                onchange="toggleJawabanField('{{ $item->id_konsultasi }}')">
+                                                                <option value="Pending"
+                                                                    {{ $item->status == 'Pending' ? 'selected' : '' }}>Pending
+                                                                </option>
+                                                                <option value="Dijawab"
+                                                                    {{ $item->status == 'Dijawab' ? 'selected' : '' }}>Dijawab
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div id="jawabanField_{{ $item->id_konsultasi }}" style="display: none;">
+                                                            <label for="jawaban_{{ $item->id_konsultasi }}">Jawaban</label>
+                                                            <textarea name="jawaban" id="jawaban_{{ $item->id_konsultasi }}" class="form-control">{{ optional($item->konsultasiDijawab)->jawaban ?? '' }}</textarea>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -315,8 +322,8 @@
                                                     data-dismiss="modal">Batal</button>
                                                 <button type="submit" class="btn btn-primary">Simpan</button>
                                             </div>
-                                        </form>
-                                    </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
 
@@ -326,10 +333,10 @@
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                        <div class="modal-header bg-primary text-white">
+                                        <div class="modal-header">
                                             <h5 class="modal-title" id="deleteModalLabel{{ $item->id_konsultasi }}">
                                                 Konfirmasi Hapus</h5>
-                                            <button type="button" class="close text-white" data-dismiss="modal"
+                                            <button type="button" class="close" data-dismiss="modal"
                                                 aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -392,16 +399,16 @@
             <div class="modal fade" id="tambahModal" tabindex="-1" role="dialog" aria-labelledby="tambahModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header bg-primary text-white">
-                            <h5 class="modal-title" id="tambahModalLabel">Tambah Data Konsultasi</h5>
-                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="{{ route('admin.konsultasi.store') }}" method="POST">
-                            @csrf
-                            <div class="modal-body">
+                    <form action="{{ route('admin.konsultasi.store') }}" method="POST">
+                        @csrf
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="tambahModalLabel">Tambah Data Konsultasi</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -474,10 +481,10 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="submit" class="btn btn-success">Simpan</button>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -486,8 +493,34 @@
 
 @section('script')
     <script>
+        function toggleJawabanField(id) {
+            const statusSelect = document.getElementById('status_' + id);
+            const jawabanField = document.getElementById('jawabanField_' + id);
+            const jawabanInput = document.getElementById('jawaban_' + id);
+
+            if (statusSelect && jawabanField) {
+                if (statusSelect.value === 'Dijawab') {
+                    jawabanField.style.display = 'block';
+                } else {
+                    jawabanField.style.display = 'none';
+                    if (jawabanInput) {
+                        jawabanInput.value = ''; // Clear jawaban value if not needed
+                    }
+                }
+            }
+        }
+
         $(document).ready(function() {
             $('#dataTable').DataTable();
+
+            // Initialize the display for all edit modals on page load
+            $('[id^=editModal]').each(function() {
+                var idWithPrefix = this.id;
+                var id = idWithPrefix.replace('editModal', '');
+                if (id) {
+                    toggleJawabanField(id);
+                }
+            });
         });
     </script>
 @endsection

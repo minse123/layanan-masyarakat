@@ -1,6 +1,4 @@
 @extends($layout)
-@include('sweetalert::alert')
-
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -50,13 +48,14 @@
                             <div class="modal fade" id="modalEditKategori{{ $row->id }}" tabindex="-1" role="dialog"
                                 aria-labelledby="modalEditLabel{{ $row->id }}" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
-                                    <form action="{{ route('admin.kategori-soal-pelatihan.update', $row->id) }}"
+                                    <form action="{{ route('psm.kategori-soal-pelatihan.update', $row->id) }}"
                                         method="POST">
                                         @csrf
                                         @method('PUT')
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="modalEditLabel{{ $row->id }}">Edit Kategori
+                                                <h5 class="modal-title" id="modalEditLabel{{ $row->id }}">Edit
+                                                    Kategori
                                                     Soal</h5>
                                                 <button type="button" class="close" data-dismiss="modal"
                                                     aria-label="Close">
@@ -94,7 +93,7 @@
                             <div class="modal fade" id="modalDeleteKategori{{ $row->id }}" tabindex="-1"
                                 role="dialog" aria-labelledby="modalDeleteLabel{{ $row->id }}" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
-                                    <form action="{{ route('admin.kategori-soal-pelatihan.destroy', $row->id) }}"
+                                    <form action="{{ route('psm.kategori-soal-pelatihan.destroy', $row->id) }}"
                                         method="POST">
                                         @csrf
                                         @method('DELETE')
@@ -136,7 +135,7 @@
     <div class="modal fade" id="modalTambahKategori" tabindex="-1" role="dialog" aria-labelledby="modalTambahLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form action="{{ route('admin.kategori-soal-pelatihan.store') }}" method="POST">
+            <form action="{{ route('psm.kategori-soal-pelatihan.store') }}" method="POST">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">

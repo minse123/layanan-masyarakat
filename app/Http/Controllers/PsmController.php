@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\HasilPelatihan;
+use App\Models\KategoriSoalPelatihan;
 use App\Models\MasterKonsultasi;
+use App\Models\SoalPelatihan;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Log;
 
 class PsmController extends Controller
 {
@@ -17,15 +21,23 @@ class PsmController extends Controller
             'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
             default => 'layouts.default',
         };
+
+        // Data Konsultasi
         $totalKonsultasi = MasterKonsultasi::count();
         $totalKonsultasiPending = MasterKonsultasi::where('status', 'Pending')->count();
         $totalKonsultasiDijawab = MasterKonsultasi::where('status', 'Dijawab')->count();
+
+        // Data Ujian & Pelatihan
+        $totalSoal = SoalPelatihan::count();
+        $totalKategoriSoal = KategoriSoalPelatihan::count();
+        $totalHasilPelatihan = HasilPelatihan::count();
 
         // Data for Charts
         $konsultasiStatusData = MasterKonsultasi::select('status', \Illuminate\Support\Facades\DB::raw('count(*) as total'))->groupBy('status')->pluck('total', 'status')->toArray();
 
         // Data for Recent Activities
         $recentKonsultasi = MasterKonsultasi::orderBy('created_at', 'desc')->limit(5)->get();
+        $recentSoal = SoalPelatihan::with('kategori')->orderBy('created_at', 'desc')->limit(5)->get();
 
         return view('admin.dashboard.psm', compact(
             'layout',
@@ -33,7 +45,11 @@ class PsmController extends Controller
             'totalKonsultasiPending',
             'totalKonsultasiDijawab',
             'konsultasiStatusData',
-            'recentKonsultasi'
+            'recentKonsultasi',
+            'totalSoal',
+            'totalKategoriSoal',
+            'totalHasilPelatihan',
+            'recentSoal'
         ));
     }
     public function updateProfile(Request $request)
@@ -42,7 +58,7 @@ class PsmController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
             'telepon' => 'nullable|string|max:15',
             'current_password' => 'nullable|string',
             'new_password' => 'nullable|string|min:8|confirmed',
@@ -64,6 +80,7 @@ class PsmController extends Controller
         $user->save();
 
         Alert::success('Berhasil', 'Profil berhasil diperbarui.');
+
         return back();
     }
 }

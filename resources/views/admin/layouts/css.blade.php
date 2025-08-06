@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-    <title>Layanan Masyarakat</title>
+    <title>SIMPELMADI</title>
     <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo-kementerian.png') }}">
     <!-- Custom fonts for this template-->
     <link href="{{ asset('/backend/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">

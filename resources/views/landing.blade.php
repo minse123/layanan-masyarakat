@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ asset('frontend/images/logo-kementerian.png') }}">
-    <title>Layanan Masyarakat</title>
+    <title>SIMPELMADI</title>
 
     <!-- Include CSS -->
     @include('guest/layouts.css')
@@ -28,11 +28,14 @@
                             Selamat Datang di
                         </h6>
 
-                        <h1 class="text-white mb-4">Sistem Informasi Layanan Masyarakat</h1>
+                        <h1 class="text-white mb-4">Sistem Informasi Pelayanan Masyarakat Digital</h1>
 
                         <a href="{{ route('login') }}" class="btn custom-btn me-3">Layanan Konsultasi BumDes</a>
 
                         <a href="{{ route('login') }}" class="link link--kale">Pengajuan Surat</a>
+
+                        <a href="{{ route('login') }}" class="link link--kale">Latihan Soal Pelatihan</a>
+
                     </div>
 
                     <div class="hero-image-wrap col-lg-6 col-12 mt-3 mt-lg-0">
@@ -317,18 +320,21 @@
                     <div class="col-lg-3 col-md-6 mb-4">
                         <div class="card border shadow-sm h-100">
                             <a href="{{ route('login') }}">
-                                <img src="https://img.youtube.com/vi/kxEvmyriwfA/0.jpg" class="card-img-top" alt="Video Thumbnail">
+                                <img src="https://img.youtube.com/vi/kxEvmyriwfA/0.jpg" class="card-img-top"
+                                    alt="Video Thumbnail">
                             </a>
                             <div class="card-body">
                                 <h6 class="card-title mb-2">Video Pelatihan</h6>
-                                <p class="card-text small">Tonton video pelatihan kami untuk meningkatkan pengetahuan Anda.</p>
+                                <p class="card-text small">Tonton video pelatihan kami untuk meningkatkan pengetahuan
+                                    Anda.</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-4">
                         <div class="card border shadow-sm h-100">
                             <a href="{{ route('login') }}">
-                                <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" class="card-img-top" alt="Video Thumbnail">
+                                <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" class="card-img-top"
+                                    alt="Video Thumbnail">
                             </a>
                             <div class="card-body">
                                 <h6 class="card-title mb-2">Video Lainnya</h6>
@@ -339,8 +345,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12 text-center mt-3">
-                        <a href="{{ route('login') }}"
-                            class="btn btn-success rounded-pill px-4 py-2 fw-bold">
+                        <a href="{{ route('login') }}" class="btn btn-success rounded-pill px-4 py-2 fw-bold">
                             Lihat Selengkapnya
                         </a>
                     </div>

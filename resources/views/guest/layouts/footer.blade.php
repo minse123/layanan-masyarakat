@@ -4,7 +4,7 @@
         <div class="row">
             <!-- About Section -->
             <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
-                <h5 class="font-weight-bold text-uppercase text-primary mb-4">Layanan Masyarakat Digital</h5>
+                <h5 class="font-weight-bold text-uppercase text-primary mb-4">Pelayanan Masyarakat Digital</h5>
                 <p class="text-muted pr-3">Platform digital untuk mempermudah layanan administrasi dan konsultasi bagi
                     masyarakat. Kami berkomitmen memberikan pelayanan terbaik, transparan, dan efisien.</p>
             </div>
@@ -53,7 +53,7 @@
         <hr class="my-4">
         <div class="row align-items-center">
             <div class="col-md-6 text-center text-md-left">
-                <p class="text-muted mb-0">&copy; {{ date('Y') }} <strong>Layanan Masyarakat Digital</strong>. All
+                <p class="text-muted mb-0">&copy; {{ date('Y') }} <strong>Pelayanan Masyarakat Digital</strong>. All
                     Rights Reserved.</p>
             </div>
             <div class="col-md-6 text-center text-md-right">

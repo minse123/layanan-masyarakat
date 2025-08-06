@@ -1,6 +1,4 @@
 @extends('masyarakat.app')
-@include('sweetalert::alert')
-
 @section('content')
     <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
         <div class="container">
@@ -12,7 +10,7 @@
                         Selamat Datang, <span class="fw-bold text-white">{{ Auth::user()->name }}</span> di
                     </h6>
 
-                    <h1 class="text-white mb-4">Sistem Informasi Layanan Masyarakat</h1>
+                    <h1 class="text-white mb-4">Sistem Informasi Pelayanan Masyarakat Digital</h1>
 
                     <a href="#item-2" class="btn custom-btn smoothscroll me-3">Layanan Konsultasi BumDes</a> <a href="#item-3"
                         class="link link--kale smoothscroll">Pengajuan Surat</a> <a href="#item-4"
@@ -56,7 +54,7 @@
                         <div class="card-body d-flex flex-column">
                             <button class="btn btn-success w-100 mt-auto" data-bs-toggle="modal"
                                 data-bs-target="#modalKonsultasi">
-                                Layanan Konsultasi BumDes
+                                Layanan Konsultasi Pelatihan
                             </button>
                         </div>
                     </div>
@@ -209,7 +207,7 @@
             <div class="modal-content border-0 shadow-lg rounded-4">
                 <div class="modal-header bg-success rounded-top-4">
                     <h5 class="modal-title text-white" id="modalKonsultasiLabel">
-                        <i class="bi bi-chat-dots me-2"></i> Layanan Konsultasi BumDes
+                        <i class="bi bi-chat-dots me-2"></i> Layanan Konsultasi Pelatihan
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Tutup"></button>

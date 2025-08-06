@@ -13,7 +13,7 @@
                 <form method="POST" action="{{ url('/register-process') }}">
                     @csrf
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <input required type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Nama">
+                        <input required type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Nama" value="{{ old('name') }}">
                         <div class="form-control-icon">
                             <i class="bi bi-person"></i>
                         </div>
@@ -35,7 +35,7 @@
                         @enderror
                     </div> --}}
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <textarea required name="alamat" class="form-control @error('alamat') is-invalid @enderror" placeholder="Alamat"></textarea>
+                        <textarea required name="alamat" class="form-control @error('alamat') is-invalid @enderror" placeholder="Alamat">{{ old('alamat') }}</textarea>
                         <div class="form-control-icon">
                             <i class="bi bi-geo-alt"></i>
                         </div>
@@ -48,7 +48,7 @@
                     <div class="form-group position-relative has-icon-left mb-3">
                         <input required type="text" name="telepon" class="form-control @error('telepon') is-invalid @enderror" placeholder="Nomor Telepon"
                             data-parsley-type="number"
-                            data-parsley-error-message="Masukkan format nomor telepon yang valid.">
+                            data-parsley-error-message="Masukkan format nomor telepon yang valid." value="{{ old('telepon') }}">
                         <div class="form-control-icon">
                             <i class="bi bi-telephone"></i>
                         </div>
@@ -59,11 +59,22 @@
                         @enderror
                     </div>
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <input required type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email">
+                        <input required type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" value="{{ old('email') }}">
                         <div class="form-control-icon">
                             <i class="bi bi-envelope"></i>
                         </div>
                         @error('email')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="form-group position-relative has-icon-left mb-3">
+                        <input required type="text" name="nik" class="form-control @error('nik') is-invalid @enderror" placeholder="NIK" value="{{ old('nik') }}">
+                        <div class="form-control-icon">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                        @error('nik')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -83,7 +94,7 @@
                         @enderror
                     </div>
                     <div class="form-group position-relative has-icon-left mb-3">
-                        <input required type="password" name="password_confirm" class="form-control @error('password_confirm') is-invalid @enderror"
+                        <input required type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror"
                             placeholder="Konfirmasi Password" data-parsley-equalto="#password"
                             data-parsley-error-message="Kata sandi tidak cocok.">
                         <div class="form-control-icon">

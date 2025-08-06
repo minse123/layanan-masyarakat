@@ -104,7 +104,7 @@ class SesiController extends Controller
             'telepon' => 'required',
             'alamat' => 'required',
             'nik' => 'required',
-            'password' => 'required|min:8',
+            'password' => 'required|min:8|confirmed',
         ]);
 
         User::create([
@@ -113,7 +113,7 @@ class SesiController extends Controller
             'telepon' => $request->telepon,
             'alamat' => $request->alamat,
             'nik' => $request->nik,
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
             'role' => 'masyarakat', // Default role
         ]);
 

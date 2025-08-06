@@ -33,7 +33,8 @@
     <!-- Manajemen Soal Pelatihan -->
     @php
         $isSoalMenu =
-            request()->routeIs('psm.kategori-soal-pelatihan.*') ||
+            request()->is('psm/dashboard') ||
+            request()->Is('psm/kategori-soal-pelatihan') ||
             request()->routeIs('psm.soal-pelatihan.*') ||
             request()->routeIs('psm.rekap-nilai.*') ||
             request()->routeIs('psm.statistik-soal.*');
@@ -50,8 +51,8 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header text-primary">Kelola Ujian:</h6>
-                <a class="collapse-item {{ request()->routeIs('psm.kategori-soal-pelatihan.*') ? 'active' : '' }}"
-                    href="{{ route('psm.kategori-soal-pelatihan.index') }}">
+                <a class="collapse-item {{ request()->Is('psm/kategori-soal-pelatihan') ? 'active' : '' }}"
+                    href="{{ url('psm/kategori-soal-pelatihan') }}">
                     <i class="fas fa-fw fa-tags text-primary"></i> Kategori Soal
                 </a>
                 <a class="collapse-item {{ request()->routeIs('psm.soal-pelatihan.*') ? 'active' : '' }}"
@@ -75,6 +76,7 @@
     <div class="sidebar-heading text-light">Laporan</div>
     @php
         $isReportMenu =
+            request()->is('psm/dashboard') ||
             request()->routeIs('konsultasi.inti.report') ||
             request()->routeIs('konsultasi.pendukung.report') ||
             request()->routeIs('report-soal-pelatihan') ||
@@ -123,7 +125,7 @@
     </li>
     <hr class="sidebar-divider d-none d-md-block">
     <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle" title="Toggle Sidebar"></button>
+        <button class="rounded-circle border-0" id="sidebarToggle" title="Toggle Sidebar"></button
     </div>
 </ul>
 <!-- End of Sidebar -->

@@ -30,10 +30,23 @@
                                     placeholder="Nomor telepon" required>
                             </div>
                             <div class="form-group">
+                                <label for="nik" class="font-weight-bold">NIK <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nik" name="nik" placeholder="Nomor Induk Kependudukan" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="alamat" class="font-weight-bold">Alamat <span class="text-danger">*</span></label>
+                                <textarea name="alamat" id="alamat" rows="4" class="form-control" placeholder="Alamat lengkap" required></textarea>
+                            </div>
+                            <div class="form-group">
                                 <label for="password" class="font-weight-bold">Password <span
                                         class="text-danger">*</span></label>
                                 <input type="password" class="form-control" id="password" name="password"
                                     placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password_confirmation" class="font-weight-bold">Konfirmasi Password <span
+                                        class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi password" required>
                             </div>
                             <div class="form-group">
                                 <label for="role" class="font-weight-bold">Role <span

@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class KonsultasiDijawab extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'id_dijawab';
+    protected $primaryKey = 'id_jawab';
 
-    protected $table = 'konsultasi_dijawab'; // Nama tabel jika berbeda dari konvensi
+    protected $table = 'jawab_konsultasi'; // Nama tabel jika berbeda dari konvensi
     protected $fillable = [
         'id_konsultasi',
         'jawaban',

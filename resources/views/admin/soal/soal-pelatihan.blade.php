@@ -1,5 +1,4 @@
 @extends($layout)
-@include('sweetalert::alert')
 @section('content')
     <!-- Filter Form -->
     <div class="card shadow mb-4">

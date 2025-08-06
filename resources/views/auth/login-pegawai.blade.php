@@ -1,5 +1,4 @@
 @extends('auth.auth')
-@include('sweetalert::alert')
 @section('content')
     <div class="row justify-content-center h-100">
         <div class="col-lg-9 col-12">

@@ -139,7 +139,7 @@ class KonsultasiController extends Controller
         // ]);
         $konsultasi->update($data);
         Alert::success('Berhasil', 'Data Konsultasi berhasil diperbarui!');
-        return redirect()->route('admin.konsultasi.index')->with('success', 'Konsultasi berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Konsultasi berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -147,7 +147,7 @@ class KonsultasiController extends Controller
         $konsultasi = MasterKonsultasi::findOrFail($id);
         $konsultasi->delete();
         Alert::success('Berhasil', 'Data Konsultasi berhasil dihapus!');
-        return redirect()->route('admin.konsultasi.index')->with('success', 'Konsultasi berhasil dihapus.');
+        return redirect()->back()->with('success', 'Konsultasi berhasil dihapus.');
     }
 
     public function answer(Request $request, $id)
@@ -201,6 +201,9 @@ class KonsultasiController extends Controller
     }
     public function filter(Request $request)
     {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',};
         $filter = $request->filter;
         $tanggal = $request->tanggal;
         $minggu = $request->minggu;
@@ -259,7 +262,7 @@ class KonsultasiController extends Controller
         if ($konsultasi->isEmpty()) {
             $message = 'Tidak ada data yang ditemukan untuk filter yang dipilih.';
         }
-        return view('admin.konsultasi.index', compact('konsultasi', 'message'));
+        return view('admin.konsultasi.index', compact('konsultasi', 'message','layout'));
     }
     public function resetfilter(Request $request)
     {

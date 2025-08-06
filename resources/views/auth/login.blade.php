@@ -40,7 +40,7 @@
 
                 <div class="text-center mt-3">
                     <p class="text-gray-600">Belum memiliki akun? <a href="/register" class="font-bold">Daftar</a>.</p>
-                    <p><a class="font-bold" href="/login-pegawai">Login sebagai Pegawai</a></p>
+                    {{-- <p><a class="font-bold" href="/login-pegawai">Login sebagai Pegawai</a></p> --}}
                     <p><a class="font-bold" href="/">Kembali Kehalaman Awal</a></p>
                 </div>
             </div>

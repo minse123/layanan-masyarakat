@@ -43,4 +43,9 @@ class MasterSurat extends Model
     {
         return $this->hasMany(SuratTolak::class, 'id_surat');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }

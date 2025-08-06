@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\SuratProses;
 use App\Models\SuratTerima;
@@ -18,10 +19,18 @@ class KasubagController extends Controller
             'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
             default => 'layouts.default',
         };
+
+        // Data Surat
         $totalSuratProses = SuratProses::count();
         $totalSuratTerima = SuratTerima::count();
         $totalSuratTolak = SuratTolak::count();
         $totalMasterSurat = MasterSurat::count();
+        $recentSurat = MasterSurat::latest()->take(5)->get();
+        $suratStatusData = [
+            'Proses' => $totalSuratProses,
+            'Diterima' => $totalSuratTerima,
+            'Ditolak' => $totalSuratTolak,
+        ];
 
         return view('admin.dashboard.kasubag', compact(
             'layout',
@@ -29,6 +38,8 @@ class KasubagController extends Controller
             'totalSuratTerima',
             'totalSuratTolak',
             'totalMasterSurat',
+            'recentSurat',
+            'suratStatusData'
         ));
     }
 
