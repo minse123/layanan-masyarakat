@@ -1,8 +1,6 @@
 <?php
 use App\Http\Controllers\MasyarakatController;
 use App\Http\Controllers\ConfigurationController\JadwalPelatihanController;
-use App\Http\Controllers\JawabanController;
-use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -10,6 +8,8 @@ Route::get('/dashboard', [MasyarakatController::class, 'index'])->name('masyarak
 Route::post('/profile/update', [MasyarakatController::class, 'updateProfile'])->name('masyarakat.profile.update');
 Route::get('/video-pelatihan', [MasyarakatController::class, 'semuaVideo'])->name('masyarakat.videopelatihan');
 Route::post('/konsultasi/simpan', [MasyarakatController::class, 'simpanKonsultasi'])->name('simpan-konsultasi');
+
+Route::post('/surat', [MasyarakatController::class, 'storeSurat'])->name('simpan-surat');
 
 Route::get('/masyarakat/soal/kategori', [MasyarakatController::class, 'kategori'])->name('masyarakat.soal.kategori');
 Route::get('/masyarakat/soal/{kategori}', [MasyarakatController::class, 'latihan'])->name('masyarakat.soal.latihan');

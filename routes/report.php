@@ -2,10 +2,6 @@
 
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CetakPDFController;
-use App\Http\Controllers\SuratController;
-use App\Http\Controllers\ConfigurationController\VideoController;
-use App\Http\Controllers\ConfigurationController\JadwalPelatihanController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/report/tamu/cetak-pdf', [CetakPDFController::class, 'tamucetakPDF'])->name('report.tamu.cetak-pdf');

@@ -39,6 +39,13 @@
                                 class="card-img-top rounded-top" alt="..." style="height: 200px; object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title text-truncate">{{ $jadwal->nama_pelatihan }}</h5>
+                                <div class="my-2">
+                                    @if ($jadwal->pelatihan_inti)
+                                        <span class="badge bg-primary">{{ str_replace('_', ' ', ucwords($jadwal->pelatihan_inti)) }}</span>
+                                    @elseif ($jadwal->pelatihan_pendukung)
+                                        <span class="badge bg-info">{{ str_replace('_', ' ', ucwords($jadwal->pelatihan_pendukung)) }}</span>
+                                    @endif
+                                </div>
                                 <p class="card-text text-muted"><small>
                                         <i class="bi bi-calendar me-1"></i>{{ \Carbon\Carbon::parse($jadwal->tanggal_mulai)->format('d M Y') }}
                                         - {{ \Carbon\Carbon::parse($jadwal->tanggal_selesai)->format('d M Y') }}</small></p>

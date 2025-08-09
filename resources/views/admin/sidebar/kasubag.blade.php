@@ -18,6 +18,11 @@
             <span class="font-weight-bold">Dashboard</span>
         </a>
     </li>
+
+    @section('breadcrumb')
+        <li class="breadcrumb-item"><a href="{{ route('kasubag.dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ ucfirst(str_replace('.', ' ', Route::currentRouteName())) }}</li>
+    @endsection
     <hr class="sidebar-divider">
 
     <!-- Master Data -->

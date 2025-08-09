@@ -7,7 +7,7 @@
     </button>
 
     <!-- Topbar Search (Desktop) -->
-    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+    {{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
             <input type="text" class="form-control bg-light border-0 small" placeholder="Cari data..."
                 aria-label="Search" aria-describedby="basic-addon2">
@@ -17,7 +17,27 @@
                 </button>
             </div>
         </div>
-    </form>
+    </form> --}}
+
+    <!-- Breadcrumb -->
+    <div class="d-none d-md-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100">
+        <ol class="breadcrumb breadcrumb-links bg-transparent p-0 m-0">
+            @yield('breadcrumb')
+        </ol>
+    </div>
+
+    <!-- Topbar Search (Desktop) -->
+    {{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        <div class="input-group">
+            <input type="text" class="form-control bg-light border-0 small" placeholder="Cari data..."
+                aria-label="Search" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </div>
+        </div>
+    </form> --}}
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
 
@@ -108,14 +128,14 @@
                     <i class="fas fa-user-circle fa-sm fa-fw mr-2 text-primary"></i>
                     Profil Saya
                 </a>
-                <a class="dropdown-item" href="#">
+                {{-- <a class="dropdown-item" href="#">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-success"></i>
                     Pengaturan
                 </a>
                 <a class="dropdown-item" href="#">
                     <i class="fas fa-history fa-sm fa-fw mr-2 text-info"></i>
                     Log Aktivitas
-                </a>
+                </a> --}}
                 <div class="dropdown-divider"></div>
                 <form action="{{ route('logout') }}" method="POST" id="logout-form" style="display: none;">
                     @csrf

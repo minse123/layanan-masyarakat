@@ -107,8 +107,7 @@
                         @enderror
                     </div>
 
-                    <!-- Role input hidden, default value 'user' -->
-                    <input type="hidden" name="role" value="user">
+                    
 
                     <button type="submit" class="btn btn-primary btn-block shadow-lg mt-3">Daftar</button>
                     <hr>

@@ -1,21 +1,14 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CetakPDFController;
 use App\Http\Controllers\ConfigurationController\JadwalPelatihanController;
 use App\Http\Controllers\ConfigurationController\VideoController;
-use App\Http\Controllers\KasubagController;
 use App\Http\Controllers\KonsultasiController;
-use App\Http\Controllers\OperatorController;
-use App\Http\Controllers\PsmController;
-use App\Http\Controllers\MasyarakatController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SoalController\KategoriSoalPelatihanController;
 use App\Http\Controllers\SoalController\RekapNilaiController;
 use App\Http\Controllers\SoalController\SoalPelatihanController;
 use App\Http\Controllers\SoalController\StatistikSoalController;
 use App\Http\Controllers\SuratController;
-use App\Http\Controllers\JawabanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,13 +56,19 @@ $registerSoalRoutes = function () {
 
 // --- ADMIN ---
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    Route::get('/auth', [AdminController::class, 'authIndex'])->name('admin.akun');
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/auth', [AdminController::class, 'authIndex'])->name('admin.auth.index');
     Route::get('/auth-formTambah', [AdminController::class, 'authTambah'])->name('admin.auth.tambah');
     Route::post('/auth-formSimpan', [AdminController::class, 'authSimpan'])->name('admin.auth.simpan');
     Route::get('/auth-formEdit/{id}', [AdminController::class, 'authEdit'])->name('admin.auth.edit');
     Route::post('/auth/update/{id}', [AdminController::class, 'authUpdate'])->name('admin.auth.update');
     Route::post('/auth/hapus', [AdminController::class, 'authHapus'])->name('admin.auth.hapus');
+
+    // Verifikasi Masyarakat
+    Route::get('/verifikasi-masyarakat', [AdminController::class, 'verifikasiMasyarakatIndex'])->name('admin.verifikasi-masyarakat');
+    Route::post('/verifikasi-masyarakat/{id}/verifikasi', [AdminController::class, 'verifikasiMasyarakat'])->name('admin.verifikasi-masyarakat.verifikasi');
+    Route::post('/verifikasi-masyarakat/{id}/tolak', [AdminController::class, 'tolakVerifikasiMasyarakat'])->name('admin.verifikasi-masyarakat.tolak');
+    Route::put('/verifikasi-masyarakat/{id}/update', [AdminController::class, 'updateVerifikasiMasyarakat'])->name('admin.verifikasi-masyarakat.update');
 
     //surat
     Route::get('/surat', [SuratController::class, 'Suratindex'])->name('admin.master.surat');

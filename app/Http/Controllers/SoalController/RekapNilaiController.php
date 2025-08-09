@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\SoalPelatihan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RekapNilaiController
 {
@@ -184,6 +185,7 @@ class RekapNilaiController
             return redirect()->back()
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+        Alert::success('Rekap nilai berhasil dihapus.');
     }
 
     public function getByKategori($kategoriId, Request $request)

@@ -588,9 +588,8 @@
                                     <i class="bi bi-play-circle-fill"></i>
                                 </div>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
                                 <h6 class="card-title mb-2">{{ $video->judul }}</h6>
-                                <p class="card-text small">{{ $video->deskripsi }}</p>
                             </div>
                         </div>
                     </div>
@@ -627,6 +626,7 @@
                                 src="https://www.youtube.com/embed/{{ $video->youtube_id }}" allowfullscreen
                                 style="width: 100%; height: 400px;"></iframe>
                         </div>
+                        <p class="mt-3">{{ $video->deskripsi }}</p>
                     </div>
                 </div>
             </div>
@@ -666,6 +666,14 @@
 
         .card:hover .play-button-overlay {
             opacity: 1;
+        }
+
+        .video-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </style>
 @endpush

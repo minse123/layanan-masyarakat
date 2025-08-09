@@ -33,8 +33,12 @@ class SesiController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            // Redirect berdasarkan role
             if ($user->role === 'masyarakat') {
+                if ($user->status_verifikasi !== 'terverifikasi') {
+                    Auth::logout();
+                    alert()->error('Login Gagal', 'Akun Anda belum diverifikasi oleh Admin.');
+                    return back()->withInput();
+                }
                 alert()->success('Login Berhasil', 'Selamat datang di dashboard!');
                 return redirect('/masyarakat/dashboard');
             }
@@ -115,6 +119,7 @@ class SesiController extends Controller
             'nik' => $request->nik,
             'password' => Hash::make($request->password),
             'role' => 'masyarakat', // Default role
+            'status_verifikasi' => 'belum_verifikasi', // Set default verification status
         ]);
 
         alert()->success('Registrasi berhasil!', 'Silakan login.');

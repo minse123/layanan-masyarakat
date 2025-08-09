@@ -18,6 +18,11 @@
             <span class="font-weight-bold">Dashboard</span>
         </a>
     </li>
+
+    @section('breadcrumb')
+        <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ ucfirst(str_replace('.', ' ', Request::route()->getName())) }}</li>
+    @endsection
     <hr class="sidebar-divider">
 
     <!-- Konfigurasi -->
@@ -181,11 +186,28 @@
 
     <!-- Akun Pengguna -->
     <div class="sidebar-heading text-light">Manajemen Akun</div>
-    <li class="nav-item {{ request()->is('admin/auth') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.akun') }}" title="Akun Pengguna">
+    @php $isAccountManagement = request()->routeIs('admin.auth.*') || request()->is('admin/verifikasi-masyarakat'); @endphp
+    <li class="nav-item {{ $isAccountManagement ? 'active' : '' }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#accountManagementCollapse"
+            aria-expanded="{{ $isAccountManagement ? 'true' : 'false' }}" aria-controls="accountManagementCollapse"
+            title="Manajemen Akun">
             <i class="fas fa-fw fa-users-cog text-white"></i>
-            <span>Akun Pengguna</span>
+            <span>Manajemen Akun</span>
         </a>
+        <div id="accountManagementCollapse" class="collapse {{ $isAccountManagement ? 'show' : '' }}"
+            aria-labelledby="headingAccount" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header text-primary">Kelola Akun:</h6>
+                <a class="collapse-item {{ request()->routeIs('admin.auth.*') ? 'active' : '' }}"
+                    href="{{ route('admin.auth.index') }}">
+                    <i class="fas fa-fw fa-user-friends text-primary"></i> Akun Pengguna
+                </a>
+                <a class="collapse-item {{ request()->is('admin/verifikasi-masyarakat') ? 'active' : '' }}"
+                    href="{{ route('admin.verifikasi-masyarakat') }}">
+                    <i class="fas fa-fw fa-user-check text-primary"></i> Verifikasi Masyarakat
+                </a>
+            </div>
+        </div>
     </li>
 
     <hr class="sidebar-divider d-none d-md-block">

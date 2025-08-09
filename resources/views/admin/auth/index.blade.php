@@ -1,24 +1,40 @@
 @extends($layout)
 
 @section('content')
-    <div class="container-fluid">
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Data Akun Pengguna</h3>
+                    <p class="text-subtitle text-muted">Daftar semua akun pengguna yang terdaftar.</p>
+                </div>
+                {{-- <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Data Akun Pengguna</li>
+                        </ol>
+                    </nav>
+                </div> --}}
             </div>
-        @endif
+        </div>
 
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Data Akun Pengguna</h6>
-                <a href={{ url('admin/auth-formTambah') }} class="btn btn-success btn-sm">
-                    <i class="fas fa-plus"></i> Tambah Akun
-                </a>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead class="bg-primary text-white">
+        <section class="section">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">Data Akun Pengguna</h4>
+                    <a href={{ url('admin/auth-formTambah') }} class="btn btn-success btn-sm">
+                        <i class="fas fa-plus"></i> Tambah Akun
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    <table class="table table-striped" id="table1">
+                        <thead>
                             <tr>
                                 <th scope="col">No.</th>
                                 <th scope="col">Nama</th>
@@ -43,8 +59,8 @@
                                     <td>
                                         <a href="{{ url('admin/auth-formEdit', $user->id) }}"
                                             class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                            data-target="#modalDeleteUser{{ $user->id }}">
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#modalDeleteUser{{ $user->id }}">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
@@ -59,13 +75,12 @@
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $user->id }}">
                                             <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalDeleteLabel{{ $user->id }}">
+                                                <div class="modal-header bg-danger">
+                                                    <h5 class="modal-title text-white"
+                                                        id="modalDeleteLabel{{ $user->id }}">
                                                         Konfirmasi Hapus</h5>
-                                                    <button type="button" class="close text-white" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     Apakah Anda yakin ingin menghapus akun
@@ -73,7 +88,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Batal</button>
+                                                        data-bs-dismiss="modal">Batal</button>
                                                     <button type="submit" class="btn btn-danger">Hapus</button>
                                                 </div>
                                             </div>
@@ -85,17 +100,16 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 @endsection
 
 @section('script')
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable();
+            $('#table1').DataTable();
         });
     </script>
 @endsection
 
 @include('sweetalert::alert')
-

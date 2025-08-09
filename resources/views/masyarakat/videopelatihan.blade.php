@@ -74,6 +74,7 @@
                         <div class="embed-responsive embed-responsive-16by9">
                             <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $video->youtube_id }}" allowfullscreen style="width: 100%; height: 400px;"></iframe>
                         </div>
+                        <p class="mt-3">{{ $video->deskripsi }}</p>
                     </div>
                 </div>
             </div>
@@ -115,4 +116,3 @@
     }
 </style>
 @endpush
-

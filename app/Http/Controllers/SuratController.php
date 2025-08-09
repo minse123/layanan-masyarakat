@@ -8,10 +8,9 @@ use App\Models\SuratProses;
 use App\Models\SuratTolak;
 use App\Models\MasterSurat;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class SuratController extends Controller
 {

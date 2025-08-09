@@ -1,4 +1,10 @@
 @extends($layout)
+
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Administrator</li>
+@endsection
+
 @section('content')
     <div class="container-fluid">
         <!-- Page Heading -->

@@ -166,6 +166,51 @@ class AdminController extends Controller
         return redirect(route('admin.akun'))->with('status', 'Data Berhasil Dihapus');
     }
 
+    public function verifikasiMasyarakatIndex()
+    {
+        $layout = match (auth()->user()->role) {
+            'admin', 'psm', 'kasubag', 'operator' => 'admin.layouts.app',
+            default => 'layouts.default',
+        };
+        $masyarakatUsers = User::where('role', 'masyarakat')->orderBy('status_verifikasi')->get();
+        return view('admin.auth.verifikasi-masyarakat', compact('masyarakatUsers', 'layout'));
+    }
+
+    public function verifikasiMasyarakat(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->status_verifikasi = 'terverifikasi';
+        $user->save();
+
+        Alert::success('Berhasil', 'Akun masyarakat berhasil diverifikasi!');
+        return redirect()->route('admin.verifikasi-masyarakat')->with('success', 'Akun masyarakat berhasil diverifikasi!');
+    }
+
+    public function tolakVerifikasiMasyarakat(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->status_verifikasi = 'ditolak';
+        $user->save();
+
+        Alert::error('Ditolak', 'Verifikasi akun masyarakat ditolak!');
+        return redirect()->route('admin.verifikasi-masyarakat')->with('error', 'Verifikasi akun masyarakat ditolak!');
+    }
+
+    public function updateVerifikasiMasyarakat(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->telepon = $request->telepon;
+        $user->nik = $request->nik;
+        $user->alamat = $request->alamat;
+        $user->status_verifikasi = $request->status_verifikasi;
+        $user->save();
+
+        Alert::success('Berhasil', 'Data masyarakat berhasil diperbarui!');
+        return redirect()->route('admin.verifikasi-masyarakat')->with('success', 'Data masyarakat berhasil diperbarui!');
+    }
+
 
 }
 
