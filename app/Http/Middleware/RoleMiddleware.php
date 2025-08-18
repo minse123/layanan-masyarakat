@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function Laravel\Prompts\alert;
+
 class RoleMiddleware
 {
     /**
@@ -41,6 +43,7 @@ class RoleMiddleware
         }
 
         // Jika user belum login atau tidak ada route dashboard yang sesuai, redirect ke halaman login
+        alert()->success('', '');
         return redirect()->route('login')->with('salah', 'Akses ditolak. Silakan login terlebih dahulu.');
     }
 }

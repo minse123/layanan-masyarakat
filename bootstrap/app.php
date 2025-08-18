@@ -10,8 +10,6 @@ return Application::configure(basePath: dirname(__DIR__))
         web: __DIR__.'/../routes/web.php',
         then: function () {
             Route::middleware(['web', 'auth'])->group(function () {
-                require base_path('routes/admin.php');
-
                 Route::middleware(['role:admin'])
                     ->prefix('admin')
                     ->group(function () {
