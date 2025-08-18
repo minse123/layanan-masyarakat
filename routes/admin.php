@@ -22,37 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$registerSuratRoutes = function () {
-    Route::get('/surat', [SuratController::class, 'Suratindex'])->name('master.surat');
-    Route::put('/surat/update/{id}', [SuratController::class, 'MasterUpdate'])->name('master.surat.update');
-    Route::post('/surat/store', [SuratController::class, 'store'])->name('surat.store');
-    Route::post('/surat/terima/{id}', [SuratController::class, 'terimaSurat'])->name('surat.terima');
-    Route::post('/surat/tolak/{id}', [SuratController::class, 'tolakSurat'])->name('surat.tolak');
-    Route::post('/surat/hapus/{id}', [SuratController::class, 'delete'])->name('surat.hapus');
-};
 
-$registerKonsultasiRoutes = function (bool $isAdmin = false) {
-    Route::get('/konsultasi', [KonsultasiController::class, 'index'])->name('konsultasi.index');
-    if ($isAdmin) {
-        Route::post('/konsultasi/store', [KonsultasiController::class, 'store'])->name('konsultasi.store');
-    }
-    Route::get('/konsultasi/filter', [KonsultasiController::class, 'filter'])->name('konsultasi.filter');
-    Route::get('/konsultasi/resetfilter', [KonsultasiController::class, 'resetfilter'])->name('konsultasi.resetfilter');
-    Route::get('/konsultasi/{id}', [KonsultasiController::class, 'show'])->name('konsultasi.show');
-    Route::put('/konsultasi/update/{id}', [KonsultasiController::class, 'update'])->name('konsultasi.update');
-    if ($isAdmin) {
-        Route::delete('/konsultasi/destroy/{id}', [KonsultasiController::class, 'destroy'])->name('konsultasi.destroy');
-    }
-    Route::post('/konsultasi/{id}/answer', [KonsultasiController::class, 'answer'])->name('konsultasi.answer');
-    if ($isAdmin) {
-        Route::get('/konsultasi/cetak-pdf', [KonsultasiController::class, 'cetakPDF'])->name('konsultasi.cetak-pdf');
-    }
-};
-
-
-$registerSoalRoutes = function () {
-
-};
 
 // --- ADMIN ---
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -113,9 +83,4 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('hasil-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'store'])->name('admin.hasil-pelatihan.store');
     Route::post('hasil-pelatihan/by-kategori/{kategori}', [RekapNilaiController::class, 'update'])->name('admin.hasil-pelatihan.update');
     Route::get('statistik-soal', [StatistikSoalController::class, 'index'])->name('admin.statistik-soal.index');
-});
-
-// --- PSM ---
-Route::prefix('psm')->middleware(['auth', 'role:psm'])->name('psm.')->group(function () use ($registerKonsultasiRoutes, $registerSoalRoutes) {
-
 });

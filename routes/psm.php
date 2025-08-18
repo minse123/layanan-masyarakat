@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\SoalController\KategoriSoalPelatihanController;
 use App\Http\Controllers\SoalController\SoalPelatihanController;
 use App\Http\Controllers\SoalController\RekapNilaiController;

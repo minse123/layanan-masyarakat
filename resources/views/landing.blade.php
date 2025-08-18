@@ -9,7 +9,44 @@
 
     <!-- Include CSS -->
     @include('guest/layouts.css')
+    <style>
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+        }
 
+        .video-thumbnail-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            /* 16:9 Aspect Ratio */
+            overflow: hidden;
+        }
+
+        .video-thumbnail-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-button-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: white;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover .play-button-overlay {
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
@@ -108,6 +145,41 @@
         <section class="py-lg-5"></section>
         <section class="py-lg-5"></section>
 
+        <section id="jadwal-pelatihan" class="pt-5">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-lg-12 col-12">
+                        <h6 style="font-size: 1.5rem;">Jadwal Pelatihan</h6>
+                        <h2 class="mb-5" style="font-size: 2.5rem;">Ikuti Pelatihan Kami</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    @forelse ($jadwalPelatihan as $jadwal)
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <a href="{{ route('login') }}" class="card-link">
+                                <div class="card h-100 shadow-sm border-0 rounded-lg">
+                                    <img src="{{ $jadwal->file_path ? asset('storage/' . $jadwal->file_path) : asset('frontend/images/logo-kementerian.png') }}"
+                                        class="card-img-top" alt="{{ $jadwal->nama_pelatihan }}"
+                                        style="height: 200px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $jadwal->nama_pelatihan }}</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @empty
+                        <div class="col-12">
+                            <p class="text-center">Belum ada jadwal pelatihan yang tersedia.</p>
+                        </div>
+                    @endforelse
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center mt-3">
+                        <a href="{{ route('login') }}" class="btn btn-primary">Lihat Seluruh Jadwal</a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <section id="section_3">
             <div class="container">
@@ -317,31 +389,29 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="card border shadow-sm h-100">
-                            <a href="{{ route('login') }}">
-                                <img src="https://img.youtube.com/vi/kxEvmyriwfA/0.jpg" class="card-img-top"
-                                    alt="Video Thumbnail">
+                    @forelse ($videos as $video)
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <a href="{{ route('login') }}" class="card-link">
+                                <div class="card h-100 shadow-sm border-0 rounded-lg">
+                                    <div class="video-thumbnail-container">
+                                        <img src="https://img.youtube.com/vi/{{ $video->youtube_id }}/hqdefault.jpg"
+                                            class="card-img-top rounded-top" alt="{{ $video->judul }}"
+                                            style="height: 200px; object-fit: cover;">
+                                        <div class="play-button-overlay">
+                                            <i class="bi bi-play-circle-fill"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <h6 class="card-title mb-2">{{ $video->judul }}</h6>
+                                    </div>
+                                </div>
                             </a>
-                            <div class="card-body">
-                                <h6 class="card-title mb-2">Video Pelatihan</h6>
-                                <p class="card-text small">Tonton video pelatihan kami untuk meningkatkan pengetahuan
-                                    Anda.</p>
-                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="card border shadow-sm h-100">
-                            <a href="{{ route('login') }}">
-                                <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" class="card-img-top"
-                                    alt="Video Thumbnail">
-                            </a>
-                            <div class="card-body">
-                                <h6 class="card-title mb-2">Video Lainnya</h6>
-                                <p class="card-text small">Berbagai video lain tersedia untuk Anda setelah login.</p>
-                            </div>
+                    @empty
+                        <div class="col-12">
+                            <p>Belum ada video pelatihan yang tersedia.</p>
                         </div>
-                    </div>
+                    @endforelse
                 </div>
                 <div class="row">
                     <div class="col-12 text-center mt-3">

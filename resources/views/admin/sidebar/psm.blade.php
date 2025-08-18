@@ -21,7 +21,8 @@
 
     @section('breadcrumb')
         <li class="breadcrumb-item"><a href="{{ url('psm/dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ ucfirst(str_replace('.', ' ', Route::currentRouteName())) }}</li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ ucfirst(str_replace('.', ' ', Route::currentRouteName())) }}</li>
     @endsection
     <hr class="sidebar-divider">
 
@@ -57,7 +58,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header text-primary">Kelola Ujian:</h6>
                 <a class="collapse-item {{ request()->Is('psm/kategori-soal-pelatihan') ? 'active' : '' }}"
-                    href="{{ url('psm/kategori-soal-pelatihan') }}">
+                    href="{{ route('psm.kategori-soal-pelatihan.index') }}">
                     <i class="fas fa-fw fa-tags text-primary"></i> Kategori Soal
                 </a>
                 <a class="collapse-item {{ request()->routeIs('psm.soal-pelatihan.*') ? 'active' : '' }}"
@@ -130,7 +131,7 @@
     </li>
     <hr class="sidebar-divider d-none d-md-block">
     <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle" title="Toggle Sidebar"></button
+        <button class="rounded-circle border-0" id="sidebarToggle" title="Toggle Sidebar"></button>
     </div>
 </ul>
 <!-- End of Sidebar -->

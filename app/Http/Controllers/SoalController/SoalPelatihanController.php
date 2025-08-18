@@ -10,6 +10,7 @@ use App\Exports\SoalExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+
 class SoalPelatihanController
 {
     public function index(Request $request)
@@ -56,7 +57,7 @@ class SoalPelatihanController
     {
         $soal = SoalPelatihan::findOrFail($id);
         $kategoriList = KategoriSoalPelatihan::orderBy('nama_kategori')->get();
-        
+
         return view('admin.soal.edit-soal', compact('soal', 'kategoriList'));
     }
 
@@ -89,7 +90,7 @@ class SoalPelatihanController
     {
         $soal = SoalPelatihan::findOrFail($id);
         $soal->delete();
-        alert()->success('Berhasil','Soal berhasil dihapus!');
+        alert()->success('Berhasil', 'Soal berhasil dihapus!');
         return redirect()->back()->with('success', 'Soal berhasil dihapus.');
     }
 

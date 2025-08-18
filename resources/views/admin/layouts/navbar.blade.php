@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
     <!-- Sidebar Toggle (Topbar) -->
@@ -151,7 +150,8 @@
 </nav>
 
 <!-- Edit Profile Modal -->
-<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -175,15 +175,18 @@
                     @endif
                     <div class="form-group">
                         <label for="name">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ Auth::user()->name }}" required>
+                        <input type="text" class="form-control" id="name" name="name"
+                            value="{{ Auth::user()->name }}" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Alamat Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ Auth::user()->email }}" required>
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ Auth::user()->email }}" required>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="telepon">No Telepon</label>
-                        <input type="text" class="form-control" id="telepon" name="telepon" value="{{ Auth::user()->telepon ?? '' }}">
+                        <input type="text" class="form-control" id="telepon" name="telepon"
+                            value="{{ Auth::user()->telepon ?? '' }}">
                     </div>
                     <hr>
                     <p class="text-muted">Ubah Password</p>
@@ -198,7 +201,8 @@
                     </div>
                     <div class="form-group">
                         <label for="new_password_confirmation">Konfirmasi Password Baru</label>
-                        <input type="password" class="form-control" id="new_password_confirmation" name="new_password_confirmation">
+                        <input type="password" class="form-control" id="new_password_confirmation"
+                            name="new_password_confirmation">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -208,4 +212,5 @@
             </form>
         </div>
     </div>
+    {{-- @include('sweetalert::alert') --}}
 </div>
